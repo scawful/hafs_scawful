@@ -9,6 +9,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional
@@ -51,12 +52,19 @@ class GigaleakDataGenerator(DataGenerator):
 
     GIGALEAK_KB_PATH = Path.home() / ".context" / "knowledge" / "gigaleak" / "symbols.json"
 
-    def __init__(self):
+    def __init__(self, kb_path: Optional[Path] = None):
         super().__init__(
             name="GigaleakDataGenerator",
             domain="gigaleak",
             teacher_tier="coding",
         )
+        env_path = os.environ.get("HAFS_GIGALEAK_KB_PATH")
+        if kb_path is not None:
+            self._kb_path = Path(kb_path).expanduser()
+        elif env_path:
+            self._kb_path = Path(env_path).expanduser()
+        else:
+            self._kb_path = self.GIGALEAK_KB_PATH
         self._symbols: dict[str, dict] = {}
         self._orchestrator = None
 
@@ -65,11 +73,11 @@ class GigaleakDataGenerator(DataGenerator):
         await super().setup()
 
         # Load Gigaleak symbols.json
-        if not self.GIGALEAK_KB_PATH.exists():
-            logger.error(f"Gigaleak KB not found: {self.GIGALEAK_KB_PATH}")
-            raise FileNotFoundError(f"Missing Gigaleak KB: {self.GIGALEAK_KB_PATH}")
+        if not self._kb_path.exists():
+            logger.error(f"Gigaleak KB not found: {self._kb_path}")
+            raise FileNotFoundError(f"Missing Gigaleak KB: {self._kb_path}")
 
-        with open(self.GIGALEAK_KB_PATH) as f:
+        with open(self._kb_path) as f:
             self._symbols = json.load(f)
 
         logger.info(f"Loaded {len(self._symbols)} Gigaleak symbols")

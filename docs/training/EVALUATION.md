@@ -406,7 +406,7 @@ def ab_test_models(models, test_set, num_samples=100):
 Set up automated evaluation on each training run:
 
 ```toml
-# config/training_medical_mechanica.toml (template; copy to your plugin config/training.toml)
+# config/training_medical_mechanica.toml.example (copy to your plugin config/training_medical_mechanica.toml)
 
 [evaluation]
 enabled = true

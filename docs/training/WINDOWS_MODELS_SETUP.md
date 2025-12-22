@@ -156,7 +156,7 @@ python D:\hafs_training\scripts\setup_finetuning_models.py --models recommended
 
 ## Hybrid Campaign with Model Routing
 
-Update `config/training_medical_mechanica.toml` (template; copy into your plugin first):
+Update `config/training_medical_mechanica.toml.example` (copy into your plugin first):
 
 ```toml
 [gpu.models]

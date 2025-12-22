@@ -57,7 +57,7 @@ PYTHONPATH=src .venv/bin/python -m hafs_scawful.scripts.training.generate_campai
 
 ## Configuration
 
-**File:** `config/training_medical_mechanica.toml` (template; copy into your plugin)
+**File:** `config/training_medical_mechanica.toml.example` (copy into your plugin)
 
 ```toml
 [campaign]
@@ -205,7 +205,7 @@ Once dataset is generated:
 
 ## Config Files
 
-- `config/training_medical_mechanica.toml` - GPU server template (copy into your plugin)
+- `config/training_medical_mechanica.toml.example` - GPU server template (copy into your plugin)
 - `hafs.toml` - Main config with node definitions
 - `~/.context/training/quality_feedback.json` - Quality tracking
 - `~/.context/training/*_checkpoint.json` - Resume points

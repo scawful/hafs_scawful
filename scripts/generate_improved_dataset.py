@@ -13,10 +13,10 @@ Target: 1000+ samples with <20% rejection rate
 """
 
 import asyncio
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+from hafs_scawful.scripts.bootstrap import ensure_hafs_on_path
+
+ensure_hafs_on_path()
 
 from agents.training.curator import DataCurator
 

@@ -63,7 +63,7 @@ The model registry provides:
 
    [hosts.medical-mechanica]
    hostname = "your-windows-host"
-   username = "Administrator"
+   username = "starw"
    platform = "windows"
    ssh_key = "~/.ssh/id_rsa"
    ```
@@ -74,7 +74,7 @@ The model registry provides:
    ls ~/Mounts/mm-d/hafs_training
 
    # Test SSH
-   ssh Administrator@your-windows-host
+   ssh starw@your-windows-host  # Use Administrator for elevated tasks
    ```
 
 ---
@@ -311,7 +311,7 @@ exists = resolver.check_remote_path("medical-mechanica", "D:/hafs_training/model
 
 # Convert remote to local mount
 local = resolver.remote_to_local("D:/hafs_training/models/oracle-farore")
-# Returns: /Users/scawful/Mounts/mm-d/hafs_training/models/oracle-farore
+# Returns: ~/Mounts/mm-d/hafs_training/models/oracle-farore
 
 # Build SSH command with proper escaping
 ssh_cmd = resolver.build_ssh_command(
@@ -322,8 +322,8 @@ ssh_cmd = resolver.build_ssh_command(
 
 # Build SCP command
 scp_cmd = resolver.build_scp_command(
-    source="Administrator@host:/d/hafs_training/models/oracle-farore",
-    dest="/Users/scawful/Code/hafs/models/oracle-farore",
+    source="starw@host:/d/hafs_training/models/oracle-farore",
+    dest="~/.context/models/oracle-farore",
     remote_host="medical-mechanica",
     recursive=True
 )
@@ -482,10 +482,10 @@ mount -t smbfs //hostname/share ~/Mounts/mm-d
 **SSH fails:**
 ```bash
 # Test SSH connection
-ssh Administrator@hostname
+ssh starw@hostname  # Use Administrator if needed
 
 # Check SSH key
-ssh -i ~/.ssh/id_rsa Administrator@hostname
+ssh -i ~/.ssh/id_rsa starw@hostname
 
 # Update ~/.config/hafs/sync.toml with correct hostname/key
 ```

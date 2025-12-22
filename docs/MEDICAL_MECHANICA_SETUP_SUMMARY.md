@@ -237,7 +237,7 @@ C:\hafs\.venv\Scripts\python.exe -c "import hafs"
 
 ```bash
 # Via SSH
-ssh Administrator@medical-mechanica
+ssh starw@medical-mechanica  # Use Administrator for elevated tasks
 
 # Via mounted drives
 ls ~/Mounts/mm-c/hafs
@@ -255,10 +255,10 @@ cp ~/Code/hafs/new_file.py ~/Mounts/mm-c/hafs/src/
 python -m hafs_scawful.scripts.training.generate_campaign --target 34500
 
 # 2. Train model (on Windows GPU)
-python -m agents.training.scripts.train_model `
-    --dataset D:\hafs_training\datasets\alttp_yaze_full_34500_asm.jsonl `
-    --model-name oracle-rauru-assembler `
-    --output-dir D:\hafs_training\models\oracle-rauru-assembler
+$env:HAFS_DATASET_PATH = "D:\hafs_training\datasets\<asm_dataset>"
+$env:HAFS_MODEL_NAME = "oracle-rauru-assembler"
+$env:HAFS_MODEL_OUTPUT_DIR = "D:\hafs_training\models\oracle-rauru-assembler"
+python -m hafs_scawful.scripts.train_model_windows $env:HAFS_DATASET_PATH
 
 # 3. Test model
 python -m hafs.cli chat --model D:\hafs_training\models\oracle-rauru-assembler

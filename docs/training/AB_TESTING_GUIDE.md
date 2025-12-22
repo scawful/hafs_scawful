@@ -397,7 +397,7 @@ After A/B test shows improvement:
 ### 1. Update Generator Default
 
 ```python
-# src/agents/training/generators/asm_generator.py
+# generators/asm_generator.py
 class AsmDataGenerator(DataGenerator):
     def __init__(self, use_enhanced_prompts: bool = True):  # Changed default
         # ...
@@ -407,11 +407,9 @@ class AsmDataGenerator(DataGenerator):
 
 ```bash
 # Launch full campaign with enhanced prompts
-python scripts/run_training_campaign.py \
-  --generator asm \
+python -m hafs_scawful.scripts.training.generate_campaign \
   --target 24000 \
-  --use-enhanced \
-  --checkpoint-interval 500
+  --resume
 ```
 
 ### 3. Monitor Quality Metrics

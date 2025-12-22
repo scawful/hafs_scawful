@@ -167,7 +167,10 @@ def register_generators(curator):
         if gigaleak_path and gigaleak_path.exists():
             try:
                 GigaleakGen = get_gigaleak_generator()
-                gigaleak_gen = GigaleakGen()
+                gigaleak_symbols = gigaleak_path
+                if gigaleak_path.is_dir():
+                    gigaleak_symbols = gigaleak_path / "symbols.json"
+                gigaleak_gen = GigaleakGen(kb_path=gigaleak_symbols)
                 await gigaleak_gen.setup()
                 curator.register_generator("gigaleak", gigaleak_gen)
                 logger.info(f"Registered: gigaleak ({gigaleak_path})")
@@ -191,6 +194,7 @@ def register_generators(curator):
             yaze_path = Path(yaze_path).expanduser()
         if yaze_path and yaze_path.exists():
             try:
+                os.environ.setdefault("HAFS_YAZE_ROOT", str(yaze_path))
                 CppGen = get_cpp_generator()
                 cpp_gen = CppGen()
                 cpp_gen.yaze_path = Path(yaze_path)  # Override path

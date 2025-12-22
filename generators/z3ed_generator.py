@@ -8,6 +8,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -63,7 +64,14 @@ class Z3edToolGenerator(DataGenerator):
             teacher_tier="coding",
         )
         self._orchestrator = None
-        self._doc_path = Path.home() / "Code/yaze/docs/public/reference/z3ed-command-reference.md"
+        doc_override = os.environ.get("HAFS_Z3ED_DOC_PATH")
+        yaze_root = os.environ.get("HAFS_YAZE_ROOT")
+        if doc_override:
+            self._doc_path = Path(doc_override).expanduser()
+        elif yaze_root:
+            self._doc_path = Path(yaze_root).expanduser() / "docs/public/reference/z3ed-command-reference.md"
+        else:
+            self._doc_path = Path.home() / "Code/yaze/docs/public/reference/z3ed-command-reference.md"
 
     async def setup(self):
         await super().setup()

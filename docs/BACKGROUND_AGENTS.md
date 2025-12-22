@@ -363,14 +363,14 @@ Test-Path \\halext\Code\hafs
 
 ```bash
 # Check agent status
-ssh Administrator@medical-mechanica 'powershell Get-ScheduledTask -TaskName "hafs-*"'
+ssh starw@medical-mechanica 'powershell Get-ScheduledTask -TaskName "hafs-*"'
 
 # View logs
-ssh Administrator@medical-mechanica 'powershell Get-Content D:\.context\logs\explorer\latest.log -Tail 50'
+ssh starw@medical-mechanica 'powershell Get-Content D:\.context\logs\explorer\latest.log -Tail 50'
 
 # Start/stop agents
-ssh Administrator@medical-mechanica 'powershell Start-ScheduledTask -TaskName "hafs-explorer"'
-ssh Administrator@medical-mechanica 'powershell Stop-ScheduledTask -TaskName "hafs-explorer"'
+ssh starw@medical-mechanica 'powershell Start-ScheduledTask -TaskName "hafs-explorer"'
+ssh starw@medical-mechanica 'powershell Stop-ScheduledTask -TaskName "hafs-explorer"'
 ```
 
 ### From Mac via Mounted Drives

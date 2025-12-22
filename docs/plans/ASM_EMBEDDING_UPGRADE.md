@@ -54,7 +54,7 @@ Model the memory map as a hierarchy in the graph.
 
 ## Implementation Status
 
-1.  **Prototype Preprocessor:** [Complete] `src/agents/knowledge/asm_preprocessor.py`
-2.  **Hardware Definitions:** [Complete] `src/hafs/data/snes_hardware.json`
-3.  **Graph Builder Update:** [Complete] `src/agents/knowledge/graph.py`
+1.  **Prototype Preprocessor:** [Complete] `hafs/src/agents/knowledge/asm_preprocessor.py`
+2.  **Hardware Definitions:** [Complete] `hafs/src/hafs/data/snes_hardware.json`
+3.  **Graph Builder Update:** [Complete] `hafs/src/agents/knowledge/graph.py`
 4.  **Generation Validation:** [Complete] `hafs_scawful/validators/asar_validator.py` (Integrated via plugin registration)

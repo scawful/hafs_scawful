@@ -31,8 +31,8 @@ These scripts contain hardcoded hostnames and should be user-specific:
 
 #### config/training_medical_mechanica.toml
 - **Issue:** Filename includes specific machine name
-- **Action:** Move to `~/.config/hafs/plugins/hafs_scawful/config/training.toml`
-- **Replace with:** `config/training.toml.example` template
+- **Action:** Move to `~/.config/hafs/plugins/hafs_scawful/config/training_medical_mechanica.toml`
+- **Replace with:** `config/training_medical_mechanica.toml.example` template
 
 #### config/windows_background_agents.toml
 - **Issue:** Windows-specific configuration
@@ -124,15 +124,18 @@ mv ~/Code/hafs/scripts/remote_install_training.sh \
 # Create config directory
 mkdir -p ~/.config/hafs/plugins/hafs_scawful/config
 
-# Move machine-specific configs
-mv ~/Code/hafs/config/training_medical_mechanica.toml \
-   ~/.config/hafs/plugins/hafs_scawful/config/training.toml
+# Copy machine-specific configs from templates
+cp ~/Code/hafs/config/training_medical_mechanica.toml.example \
+   ~/.config/hafs/plugins/hafs_scawful/config/training_medical_mechanica.toml
 
-mv ~/Code/hafs/config/windows_background_agents.toml \
-   ~/.config/hafs/plugins/hafs_scawful/config/background_agents.toml
+cp ~/Code/hafs/config/windows_background_agents.toml.example \
+   ~/.config/hafs/plugins/hafs_scawful/config/windows_background_agents.toml
 
-mv ~/Code/hafs/config/windows_filesystem_agents.toml \
-   ~/.config/hafs/plugins/hafs_scawful/config/filesystem_agents.toml
+cp ~/Code/hafs/config/windows_filesystem_agents.toml.example \
+   ~/.config/hafs/plugins/hafs_scawful/config/windows_filesystem_agents.toml
+
+cp ~/Code/hafs/config/website_monitoring_agents.toml.example \
+   ~/.config/hafs/plugins/hafs_scawful/config/website_monitoring_agents.toml
 
 # Check models.toml for hardcoded paths
 # If present, move to plugin

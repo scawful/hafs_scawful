@@ -1,112 +1,357 @@
-# Training Configuration for medical-mechanica (GPU Server)
-# Use D drive for large datasets and model storage
+# hafs Training Configuration
+# Single source of truth for all training settings
 
-[paths]
-# D drive paths (Windows)
-datasets = "D:/hafs_training/datasets"
-checkpoints = "D:/hafs_training/checkpoints"
-logs = "D:/hafs_training/logs"
-models = "D:/hafs_training/models"
-temp = "D:/hafs_training/temp"
+[metadata]
+schema_version = 1
+updated = "2025-12-22"
 
-# Source code and knowledge bases (C drive is fine)
-knowledge_bases = "C:/Users/Administrator/.context/knowledge"
-embeddings = "C:/Users/Administrator/.context/embeddings"
+# =============================================================================
+# Hardware Profiles
+# =============================================================================
 
-[campaign]
-# Default campaign settings
-target_samples = 34500
-quality_threshold = 0.7  # Overridden by per-domain thresholds (use None for auto)
-checkpoint_interval = 100  # Save every N samples
-parallel_workers = 100  # Increased for maximum throughput (Gemini API: 1000 RPM)
-max_concurrent_generations = 100  # Parallel generation streams
+[hardware.mac-mps]
+name = "Mac M1/M2/M3 with MPS"
+device = "mps"
+available_memory_gb = 20  # Effective MPS memory
+max_batch_size = 1
+max_sequence_length = 1024
+supports_fp16 = true
+supports_bf16 = false
+supports_gradient_checkpointing = false  # Incompatible with LoRA on MPS
+max_lora_rank = 8
+recommended_gradient_accumulation = 2
 
-# Domain-specific thresholds (validated 2025-12-21)
-[campaign.thresholds]
-asm = 0.4
-gigaleak = 0.45
-oracle = 0.4
-yaze = 0.5
-cpp = 0.5
-errors = 0.3
-text = 0.6
-
-[training]
-# Model training settings (when training on medical-mechanica)
-base_model = "Qwen/Qwen2.5-Coder-14B-Instruct"
-use_lora = true
-lora_r = 64
-lora_alpha = 128
-batch_size = 4
-gradient_accumulation_steps = 4
-learning_rate = 2e-4
-num_epochs = 3
-warmup_steps = 100
-
-# Hardware settings
+[hardware.windows-rtx-5060]
+name = "Windows RTX 5060 Ti 16GB"
 device = "cuda"
-fp16 = true
-gradient_checkpointing = true
+available_memory_gb = 16
+max_batch_size = 2
+max_sequence_length = 2048
+supports_fp16 = true
+supports_bf16 = true
+supports_gradient_checkpointing = true
+max_lora_rank = 16
+recommended_gradient_accumulation = 4
+status = "available"  # ✓ Now supported with PyTorch 2.9.1+cu128
+python_path = "D:\\pytorch_env\\Scripts\\python.exe"
+notes = "Requires PyTorch 2.9.1+ with CUDA 12.8 (cu128)"
 
-[monitoring]
-# Health check and cleanup
-auto_checkpoint_cleanup = true
-max_checkpoint_age_days = 7
-disk_alert_threshold_gb = 50
-memory_alert_threshold_percent = 85
+[hardware.cloud-rtx-4090]
+name = "Cloud RTX 4090 24GB"
+device = "cuda"
+available_memory_gb = 24
+max_batch_size = 4
+max_sequence_length = 4096
+supports_fp16 = true
+supports_bf16 = true
+supports_gradient_checkpointing = true
+max_lora_rank = 32
+recommended_gradient_accumulation = 2
+cost_per_hour = 0.60
 
-[api]
-# API rate limits for generation
-gemini_rpm = 1000  # Requests per minute
-gemini_tpm = 4000000  # Tokens per minute
-max_retries = 3
-retry_delay_seconds = 5
+[hardware.cloud-a100-40gb]
+name = "Cloud A100 40GB"
+device = "cuda"
+available_memory_gb = 40
+max_batch_size = 8
+max_sequence_length = 8192
+supports_fp16 = true
+supports_bf16 = true
+supports_gradient_checkpointing = true
+max_lora_rank = 64
+recommended_gradient_accumulation = 1
+cost_per_hour = 1.20
 
-[gpu]
-# GPU acceleration settings (medical-mechanica)
-enabled = true
-use_local_models = true  # Use Ollama on GPU instead of Gemini
-ollama_host = "100.104.53.21"  # Tailscale IP
-ollama_port = 11434  # Standard Ollama port
+# =============================================================================
+# Oracle Expert Configurations
+# =============================================================================
 
-# Available models (after installation completes)
-models = [
-    "qwen2.5-coder:14b",    # Best for C++/Python code
-    "deepseek-coder:6.7b",  # Best for ASM
-    "qwen2.5-coder:7b",     # Fast alternative
-    "phi3.5:latest",        # Very fast
-    "gemma2:9b",            # Latest Gemma
-    "codegemma:7b",         # Code-specialized Gemma
-    "qwen3-14b",            # Fallback (already installed)
-    "deepseek-r1:14b",      # Reasoning
-]
+[experts.oracle-rauru-assembler]
+display_name = "Oracle: Rauru Assembler"
+role = "asm"
+group = "rom-tooling"
+base_model = "Qwen/Qwen2.5-Coder-1.5B"
+context_window = 32768
+specialization = "65816 assembly, ALTTP routines, ROM patching"
+prompt_template = """Below is an instruction for 65816 assembly{context}. Write a response.
 
-# Domain-specific model routing for optimal quality
-[gpu.routing]
-asm = "deepseek-coder:6.7b"        # ASM needs low-level specialist
-cpp = "qwen2.5-coder:14b"          # C++ general code
-yaze = "qwen2.5-coder:14b"         # C++ emulator code
-gigaleak = "deepseek-coder:6.7b"   # Original SNES source
-oracle = "qwen2.5-coder:14b"       # ROM hack mix
-text = "gemma2:9b"                 # Natural language
-errors = "deepseek-r1:14b"         # Error reasoning
+### Instruction:
+{instruction}
+{input_section}
+### Response:
+{output}"""
 
-# Fallback chain if primary model unavailable
-fallback = ["qwen3-14b", "phi3.5:latest", "gemma2:9b"]
+[experts.oracle-sheik-debugger]
+display_name = "Oracle: Sheik Debugger"
+role = "debug"
+group = "rom-tooling"
+base_model = "Qwen/Qwen2.5-Coder-1.5B"
+context_window = 32768
+specialization = "Crash triage, trace reading, root cause analysis"
 
-# Fallback to Gemini if GPU unavailable
-fallback_to_gemini = true
+[experts.oracle-yaze-expert]
+display_name = "Oracle: Yaze Expert"
+role = "yaze"
+group = "rom-tooling"
+base_model = "Qwen/Qwen2.5-Coder-1.5B"
+context_window = 32768
+specialization = "YAZE C++ API, ROM editor workflows"
 
-[hybrid]
-# Hybrid GPU + API mode (RECOMMENDED)
-# Intelligently routes between GPU (free) and API (paid) based on GPU load
-enabled = true
-gpu_threshold_low = 30.0   # Below this %: prefer GPU (lowered to use more API)
-gpu_threshold_high = 60.0  # Above this %: prefer API (lowered for faster response)
-monitor_interval_sec = 5   # GPU status cache TTL
+[experts.oracle-farore-secrets]
+display_name = "Oracle: Farore Secrets"
+role = "general"
+group = "rom-tooling"
+base_model = "Qwen/Qwen2.5-Coder-1.5B"
+context_window = 32768
+specialization = "Multi-domain ALTTP expertise: ASM, C++, vanilla disassembly, documentation"
+prompt_template = """Below is an instruction for ALTTP ROM hacking{context}. Write a response.
 
-# Expected cost savings: 30-50% vs API-only (balanced for speed)
-# GPU utilization thresholds:
-#   <30%: Route to GPU (FREE) - use when idle
-#   30-60%: Mix GPU + API based on load - prefer API for speed
-#   >60%: Route to API (faster response, prevent overload)
+### Instruction:
+{instruction}
+{input_section}
+### Response:
+{output}"""
+
+# =============================================================================
+# Training Hyperparameters
+# =============================================================================
+
+[hyperparameters.default]
+num_epochs = 1
+learning_rate = 2e-4
+warmup_steps = 50
+weight_decay = 0.01
+lr_scheduler = "linear"
+logging_steps = 10
+save_steps = 50
+save_total_limit = 2
+eval_strategy = "no"
+
+[hyperparameters.quick-test]
+# For rapid iteration
+num_epochs = 1
+learning_rate = 3e-4
+max_steps = 100
+logging_steps = 5
+save_steps = 25
+
+[hyperparameters.production]
+# For final models
+num_epochs = 3
+learning_rate = 2e-4
+warmup_steps = 100
+eval_strategy = "steps"
+eval_steps = 100
+save_steps = 100
+
+# =============================================================================
+# LoRA Configurations
+# =============================================================================
+
+[lora.minimal]
+# For memory-constrained systems (Mac MPS)
+r = 8
+lora_alpha = 8
+target_modules = ["q_proj", "k_proj", "v_proj", "o_proj"]
+lora_dropout = 0.05
+bias = "none"
+
+[lora.standard]
+# Balanced configuration
+r = 16
+lora_alpha = 16
+target_modules = ["q_proj", "k_proj", "v_proj", "o_proj"]
+lora_dropout = 0.05
+bias = "none"
+
+[lora.full]
+# Maximum quality (requires more VRAM)
+r = 32
+lora_alpha = 32
+target_modules = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+lora_dropout = 0.05
+bias = "none"
+
+# =============================================================================
+# Dataset Configurations
+# =============================================================================
+
+[datasets.alttp_yaze_full]
+path = "~/.context/training/datasets/alttp_yaze_full_1000_20251221_195746"
+description = "ALTTP + YAZE full campaign (504 samples)"
+train_split = "train.jsonl"
+val_split = "val.jsonl"
+test_split = "test.jsonl"
+quality_threshold = 0.5
+domains = ["asm", "gigaleak", "oracle", "yaze", "errors"]
+
+[datasets.oracle_farore_improved]
+path = "~/.context/training/datasets/oracle_farore_improved_20251222_040629"
+description = "Improved diverse dataset - Phase 1+2 diversity features (400 samples, 86.7% acceptance)"
+train_split = "train.jsonl"
+val_split = "val.jsonl"
+test_split = "test.jsonl"
+quality_threshold = 0.7
+domains = ["oracle", "asm", "gigaleak"]
+notes = "Oracle secrets system, ASM hooks, gigaleak comparisons - FIXED to use correct generators"
+
+# =============================================================================
+# Training Presets
+# =============================================================================
+
+[presets.oracle-rauru-mac]
+# Train oracle-rauru-assembler on Mac MPS
+expert = "oracle-rauru-assembler"
+hardware = "mac-mps"
+dataset = "alttp_yaze_full"
+hyperparameters = "default"
+lora = "minimal"
+sequence_length = 1024
+batch_size = 1
+gradient_accumulation = 2
+
+[presets.oracle-rauru-windows]
+# Train oracle-rauru-assembler on Windows RTX 5060 Ti
+expert = "oracle-rauru-assembler"
+hardware = "windows-rtx-5060"
+dataset = "alttp_yaze_full"
+hyperparameters = "default"
+lora = "standard"
+sequence_length = 2048
+batch_size = 2
+gradient_accumulation = 4
+
+[presets.oracle-rauru-cloud]
+# Train oracle-rauru-assembler on cloud GPU
+expert = "oracle-rauru-assembler"
+hardware = "cloud-rtx-4090"
+dataset = "alttp_yaze_full"
+hyperparameters = "production"
+lora = "standard"
+sequence_length = 2048
+batch_size = 4
+gradient_accumulation = 2
+
+[presets.oracle-farore-windows]
+# Train oracle-farore-secrets on Windows RTX 5060 Ti
+expert = "oracle-farore-secrets"
+hardware = "windows-rtx-5060"
+dataset = "oracle_farore_improved"
+hyperparameters = "default"
+lora = "standard"
+sequence_length = 4096
+batch_size = 2
+gradient_accumulation = 4
+
+[presets.oracle-sheik-mac]
+# Train oracle-sheik-debugger on Mac MPS
+expert = "oracle-sheik-debugger"
+hardware = "mac-mps"
+dataset = "alttp_yaze_full"
+hyperparameters = "default"
+lora = "minimal"
+sequence_length = 1024
+batch_size = 1
+gradient_accumulation = 2
+
+# =============================================================================
+# Sample Generation - Provider Rotation
+# =============================================================================
+
+# Provider rotation enables multi-model sample generation for diversity
+# Set `preset` to use a predefined configuration, or define custom providers
+
+[generation.provider_rotation]
+# Preset options: "gemini_only", "balanced", "local_heavy", "diverse", "cost_optimized"
+preset = "gemini_only"  # Default for current generation
+
+# Custom provider configuration (overrides preset if defined)
+# Uncomment and modify to use custom rotation
+# [[generation.provider_rotation.providers]]
+# name = "gemini"
+# weight = 2.0
+# model = "gemini-3-flash-preview"  # Released Dec 17, 2025
+# enabled = true
+# fallback_order = 1
+
+# [[generation.provider_rotation.providers]]
+# name = "anthropic"
+# weight = 2.0
+# model = "claude-opus-4-5-20251101"  # Released Nov 24, 2025
+# enabled = true
+# fallback_order = 2
+
+# [[generation.provider_rotation.providers]]
+# name = "openai"
+# weight = 1.5
+# model = "gpt-5.2-codex"  # Released Dec 2025 - best for coding
+# enabled = true
+# fallback_order = 3
+
+# [[generation.provider_rotation.providers]]
+# name = "llamacpp"
+# weight = 1.0
+# model = "qwen2.5-coder-7b"
+# enabled = false  # Enable when local model is running
+# fallback_order = 4
+
+[generation.quality]
+# Quality thresholds per domain (minimum score to accept sample)
+default_threshold = 0.4
+asm_threshold = 0.4
+oracle_threshold = 0.4
+gigaleak_threshold = 0.45
+cross_domain_threshold = 0.5
+
+# Similarity thresholds for deduplication (lower = more strict)
+# Samples with similarity above this are rejected as duplicates
+[generation.dedup]
+default_similarity = 0.88
+asm_similarity = 0.85
+oracle_similarity = 0.85
+gigaleak_similarity = 0.88
+text_similarity = 0.82
+cpp_similarity = 0.88
+errors_similarity = 0.80
+
+# Knowledge graph validation settings
+[generation.kg_validation]
+# Minimum fraction of mentioned entities that must exist in KG
+min_entity_coverage = 0.5  # Increased from 0.3
+asm_entity_coverage = 0.5
+oracle_entity_coverage = 0.5
+gigaleak_entity_coverage = 0.4  # More lenient - less complete KB
+text_entity_coverage = 0.6     # Higher for text
+
+# Hallucination detection
+[generation.hallucination]
+max_risk = 0.5              # Max acceptable hallucination risk score
+enable_multi_model = true   # Use multi-model validation for code (experimental)
+
+[generation.targets]
+# Sample targets per run
+asm_samples = 1300
+oracle_samples = 1300
+cross_domain_samples = 200
+total_target = 2600
+
+# =============================================================================
+# Output Configuration
+# =============================================================================
+
+[output]
+models_dir = "~/Code/hafs/models"
+logs_dir = "~/.context/training/logs"
+checkpoints_dir = "~/.context/training/checkpoints"
+
+# Naming format: oracle-<name>-<role>-<base>-<date>
+name_template = "oracle-{name}-{role}-{base_short}-{date}"
+date_format = "%Y%m%d"
+
+# Metadata to save with trained models
+[output.metadata]
+include_dataset_stats = true
+include_training_duration = true
+include_hardware_info = true
+include_hyperparameters = true
+include_git_commit = true

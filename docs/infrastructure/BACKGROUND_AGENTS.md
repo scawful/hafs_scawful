@@ -367,14 +367,14 @@ Test-Path \\your-mac-host\Code\hafs
 
 ```bash
 # Check agent status
-ssh Administrator@GPU_HOST 'powershell Get-ScheduledTask -TaskName "hafs-*"'
+ssh starw@GPU_HOST 'powershell Get-ScheduledTask -TaskName "hafs-*"'
 
 # View logs
-ssh Administrator@GPU_HOST 'powershell Get-Content D:\.context\logs\explorer\latest.log -Tail 50'
+ssh starw@GPU_HOST 'powershell Get-Content D:\.context\logs\explorer\latest.log -Tail 50'
 
 # Start/stop agents
-ssh Administrator@GPU_HOST 'powershell Start-ScheduledTask -TaskName "hafs-explorer"'
-ssh Administrator@GPU_HOST 'powershell Stop-ScheduledTask -TaskName "hafs-explorer"'
+ssh starw@GPU_HOST 'powershell Start-ScheduledTask -TaskName "hafs-explorer"'
+ssh starw@GPU_HOST 'powershell Stop-ScheduledTask -TaskName "hafs-explorer"'
 ```
 
 ### From Mac via Mounted Drives

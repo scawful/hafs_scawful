@@ -152,18 +152,16 @@ python -m hafs.cli training status
 
 ```powershell
 # Train oracle-rauru-assembler on ALTTP ASM dataset
-python -m agents.training.scripts.train_model `
-    --dataset D:\hafs_training\datasets\alttp_yaze_full_*_asm `
-    --model-name oracle-rauru-assembler `
-    --output-dir D:\hafs_training\models\oracle-rauru-assembler `
-    --config config\training_medical_mechanica.toml  # template; copy and customize
+$env:HAFS_DATASET_PATH = "D:\hafs_training\datasets\<asm_dataset>"
+$env:HAFS_MODEL_NAME = "oracle-rauru-assembler"
+$env:HAFS_MODEL_OUTPUT_DIR = "D:\hafs_training\models\oracle-rauru-assembler"
+python -m hafs_scawful.scripts.train_model_windows $env:HAFS_DATASET_PATH
 
 # Train oracle-yaze-expert on YAZE dataset
-python -m agents.training.scripts.train_model `
-    --dataset D:\hafs_training\datasets\alttp_yaze_full_*_yaze `
-    --model-name oracle-yaze-expert `
-    --output-dir D:\hafs_training\models\oracle-yaze-expert `
-    --config config\training_medical_mechanica.toml  # template; copy and customize
+$env:HAFS_DATASET_PATH = "D:\hafs_training\datasets\<yaze_dataset>"
+$env:HAFS_MODEL_NAME = "oracle-yaze-expert"
+$env:HAFS_MODEL_OUTPUT_DIR = "D:\hafs_training\models\oracle-yaze-expert"
+python -m hafs_scawful.scripts.train_model_windows $env:HAFS_DATASET_PATH
 ```
 
 ## Background Services (Optional)
@@ -208,7 +206,13 @@ From Mac terminal:
 
 ```bash
 # SSH into GPU_HOST
-ssh Administrator@GPU_HOST
+ssh starw@GPU_HOST  # Use Administrator for elevated tasks
+
+# Helper scripts (recommended)
+scripts/ssh_windows.sh --ps "Get-Process python"
+scripts/start_campaign_ssh.sh 34500
+scripts/start_training_ssh.sh D:/hafs_training/datasets/latest oracle-rauru-assembler
+scripts/tail_windows_log.sh campaign
 
 # Or use mounted drives (already configured)
 ls ~/Mounts/mm-c/hafs

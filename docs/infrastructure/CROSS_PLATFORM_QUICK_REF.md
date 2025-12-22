@@ -17,7 +17,7 @@ vim ~/.config/hafs/sync.toml
 
 # 3. Test connectivity
 ls ~/Mounts/mm-d/hafs_training  # Test mount
-ssh Administrator@hostname      # Test SSH
+ssh starw@hostname              # Test SSH (use Administrator for elevated tasks)
 ```
 
 ---
@@ -90,6 +90,28 @@ hafs models test oracle-farore-v1 ollama
 ollama run oracle-farore "Write a DMA transfer in 65816 assembly"
 ```
 
+### Windows SSH Helpers
+
+```bash
+# Mount/unmount SMB shares
+scripts/mount_windows.sh
+scripts/mount_windows.sh unmount
+
+# Sync code to Windows
+scripts/sync_windows.sh
+
+# Start dataset generation + training over SSH
+scripts/start_campaign_ssh.sh 34500
+scripts/start_training_ssh.sh D:/hafs_training/datasets/latest oracle-rauru-assembler
+
+# Tail the latest log (campaign or training)
+scripts/tail_windows_log.sh campaign
+scripts/tail_windows_log.sh training
+
+# Run a one-off PowerShell command
+scripts/ssh_windows.sh --ps "Get-Process python"
+```
+
 ---
 
 ## Complete Workflow
@@ -136,7 +158,7 @@ ls ~/Mounts/mm-d  # Check mount
 ### SSH fails
 
 ```bash
-ssh Administrator@hostname  # Test connection
+ssh starw@hostname          # Test connection (use Administrator if needed)
 # Update ~/.config/hafs/sync.toml if needed
 ```
 

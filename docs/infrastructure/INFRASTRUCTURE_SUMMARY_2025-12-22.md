@@ -172,12 +172,12 @@ remote_path = "D:/hafs_training"
 
 [hosts.medical-mechanica]
 hostname = "HOSTNAME"
-username = "Administrator"
+username = "starw"  # Use Administrator for elevated tasks
 platform = "windows"
 ssh_key = "~/.ssh/id_rsa"
 
 [deployment]
-local_models_dir = "~/Code/hafs/models"
+local_models_dir = "~/.context/models"
 ollama_models_dir = "~/.ollama/models"
 llama_cpp_dir = "~/Code/llama.cpp"
 

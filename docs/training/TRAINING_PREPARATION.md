@@ -73,18 +73,16 @@ effective_batch = 8
 # Disadvantages: Slower, limited to 14B model
 
 # Agent 1: ALTTP ASM (24K samples)
-python -m agents.training.scripts.train_agent \
-    --model qwen2.5-coder:14b \
-    --dataset alttp_asm_24k \
-    --output alttp_asm_agent \
-    --hours 8-12
+HAFS_DATASET_PATH="D:/hafs_training/datasets/alttp_asm_24k" \
+HAFS_MODEL_NAME="alttp-asm-agent" \
+HAFS_MODEL_OUTPUT_DIR="D:/hafs_training/models/alttp-asm-agent" \
+python -m hafs_scawful.scripts.train_model_windows "$HAFS_DATASET_PATH"
 
 # Agent 2: YAZE Tools (7K samples)
-python -m agents.training.scripts.train_agent \
-    --model qwen2.5-coder:14b \
-    --dataset yaze_tools_7k \
-    --output yaze_tool_agent \
-    --hours 3-5
+HAFS_DATASET_PATH="D:/hafs_training/datasets/yaze_tools_7k" \
+HAFS_MODEL_NAME="yaze-tool-agent" \
+HAFS_MODEL_OUTPUT_DIR="D:/hafs_training/models/yaze-tool-agent" \
+python -m hafs_scawful.scripts.train_model_windows "$HAFS_DATASET_PATH"
 
 # Total: 12-16 hours
 ```
@@ -764,13 +762,12 @@ python -m hafs.scripts.test_openrouter
 
 ### Train with Auto-Recovery
 ```bash
-# Start training with automatic checkpointing
-python -m agents.training.scripts.train_resilient \
-    --dataset alttp_asm_24k \
-    --model qwen2.5-coder:14b \
-    --output hyrule-asm-v1 \
-    --checkpoint-interval 100 \
-    --resume-from-latest  # Auto-resume if interrupted
+# Start training with checkpointing + resume support
+HAFS_DATASET_PATH="D:/hafs_training/datasets/alttp_asm_24k" \
+HAFS_MODEL_NAME="hyrule-asm-v1" \
+HAFS_MODEL_OUTPUT_DIR="D:/hafs_training/models/hyrule-asm-v1" \
+HAFS_RESUME_FROM=latest \
+python -m hafs_scawful.scripts.train_model_windows "$HAFS_DATASET_PATH"
 ```
 
 ### Deploy MoE System

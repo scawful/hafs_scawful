@@ -95,6 +95,10 @@ class AsmDataGenerator(DataGenerator):
                 
         self._preprocessor = AsmPreprocessor(symbol_map)
 
+        # Initialize Asar Validator
+        from hafs_scawful.validators.asar_validator import AsarValidator
+        self._asar_validator = AsarValidator()
+
         # Use orchestrator from unified KB
         self._orchestrator = self._unified_kb._orchestrator
 
@@ -159,7 +163,24 @@ class AsmDataGenerator(DataGenerator):
                     )
                 )
 
-        logger.info(f"Extracted {len(items)} ASM routines")
+        # Inject routines from master library if present
+        master_lib = Path("/Users/scawful/Code/master_routines_library.json")
+        if master_lib.exists():
+            try:
+                with open(master_lib, 'r') as f:
+                    scanned = json.load(f)
+                    for item in scanned:
+                        items.append(AsmSourceItem(
+                            name=item['name'],
+                            content=item['code'],
+                            source=f"library_{item.get('file', 'unknown')}",
+                            code=item['code']
+                        ))
+                logger.info(f"Injected {len(scanned)} routines from master library")
+            except Exception as e:
+                logger.error(f"Failed to inject routines from master library: {e}")
+
+        logger.info(f"Extracted total of {len(items)} ASM routines")
         return items
 
     def get_teacher_prompt(self, item: SourceItem) -> str:
@@ -230,6 +251,8 @@ class AsmDataGenerator(DataGenerator):
                 "       - Hardware timing considerations\n"
                 "   ```\n\n"
                 "QUALITY REQUIREMENTS:\n"
+                "- ALWAYS use the provided semantic labels in brackets for all hex addresses (e.g., LDA $2100 [INIDISP]).\n"
+                "- Maintain the Register Width (M/X) context shown in comments (e.g., ; M=8, X=16).\n"
                 "- Use proper 65816 syntax and mnemonics (LDA, STA, JSL, RTL, PHP, PLP, etc.)\n"
                 "- Include all addressing modes correctly (.b for 8-bit, .w for 16-bit, # for immediate)\n"
                 "- Explain hardware register access with full addresses ($2100-$21FF PPU, $4200-$43FF CPU)\n"
@@ -315,7 +338,7 @@ class AsmDataGenerator(DataGenerator):
                 else:
                     kg_entities.append(str(m))
 
-            return TrainingSample(
+            sample = TrainingSample(
                 instruction=instruction,
                 input=input_text,
                 output=output,
@@ -325,6 +348,19 @@ class AsmDataGenerator(DataGenerator):
                 teacher_prompt=str(prompt),
                 kg_entities=kg_entities,
             )
+
+            # Validate ASM syntax
+            if hasattr(self, "_asar_validator") and self._asar_validator:
+                val_result = await self._asar_validator.validate(sample)
+                if not val_result.valid:
+                    logger.warning(f"Asar validation failed for {item.name}: {val_result.errors}")
+                    # For now, just mark it. Self-correction comes later.
+                    sample.kg_validated = False
+                else:
+                    sample.kg_validated = True
+                    sample.quality_score = 1.0
+
+            return sample
 
         except asyncio.TimeoutError:
             logger.warning(f"Timeout generating for {item.name}")

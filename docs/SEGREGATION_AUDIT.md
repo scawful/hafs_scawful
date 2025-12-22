@@ -23,7 +23,7 @@ The codebase is **correctly segregated** between:
 - Tests (`tests/`)
 
 **Key Principle:** No hardcoded user-specific:
-- Usernames (no "scawful", "Administrator" unless in TEMPLATE comment)
+- Usernames (no "scawful", "starw", "Administrator" unless in TEMPLATE comment)
 - Paths (no `/Users/scawful`, `C:/Users/Administrator` unless example)
 - Hostnames (no "medical-mechanica", "GPU_HOST" unless placeholder)
 - URLs (no halext.org, alttphacking.net unless example)
@@ -55,7 +55,7 @@ The codebase is **correctly segregated** between:
 | `config/website_monitoring_agents.toml` | TEMPLATE | Has comment directing users to copy to plugin |
 | `config/windows_background_agents.toml` | TEMPLATE | Generic `C:/hafs` paths, `Administrator` placeholder |
 | `config/windows_filesystem_agents.toml` | TEMPLATE | Generic paths |
-| `config/training_medical_mechanica.toml` | TEMPLATE | Generic `D:/hafs_training` paths |
+| `config/training_medical_mechanica.toml.example` | TEMPLATE | Generic `D:/hafs_training` paths |
 | `config/training.toml` | CONFIG | Hardware profiles, expert definitions - generic |
 | `scripts/deploy_training_*.sh` | TEMPLATE | Uses `GPU_HOST`, `Administrator` placeholders |
 | `scripts/sync_training_to_windows.sh` | GENERIC | Reads config from `~/.config/hafs/sync.toml` |
@@ -100,7 +100,7 @@ CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/hafs/sync.toml"
 
 # Use placeholders in templates
 REMOTE_HOST="GPU_HOST"  # User replaces in their config
-REMOTE_USER="Administrator"  # User replaces in their config
+REMOTE_USER="WINDOWS_USER"  # User replaces in their config
 ```
 
 ## Scripts Pattern

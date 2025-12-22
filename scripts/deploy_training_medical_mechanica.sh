@@ -22,12 +22,12 @@ HAFS_ROOT="${HAFS_ROOT:-$HOME/Code/hafs}"
 LOCAL_CONTEXT="${HAFS_CONTEXT:-$HOME/.context}"
 
 REMOTE_HOST="${HAFS_WINDOWS_HOST:-medical-mechanica}"
-REMOTE_USER="${HAFS_WINDOWS_USER:-Administrator}"
+REMOTE_USER="${HAFS_WINDOWS_USER:-starw}"
 REMOTE_DIR="${HAFS_WINDOWS_CODE_DIR:-C:/hafs}"
 D_DRIVE_DIR="${HAFS_WINDOWS_TRAINING:-D:/hafs_training}"
 WINDOWS_CONTEXT="${HAFS_WINDOWS_CONTEXT:-D:/.context}"
 WINDOWS_PLUGIN_DIR="${HAFS_WINDOWS_PLUGIN_DIR:-C:/hafs_scawful}"
-TRAINING_CONFIG_PATH="${WINDOWS_PLUGIN_DIR}/config/training.toml"
+TRAINING_CONFIG_PATH="${WINDOWS_PLUGIN_DIR}/config/training_medical_mechanica.toml"
 SYNC_METHOD="${HAFS_CODE_SYNC_METHOD:-git}"
 REPO_URL="${HAFS_REPO_URL:-$(git -C "$HAFS_ROOT" config --get remote.origin.url 2>/dev/null)}"
 
@@ -45,19 +45,7 @@ COMMAND=${1:-status}
 case "$COMMAND" in
   setup)
     echo "[1/3] Setting up directories on D drive..."
-    ssh "$REMOTE_USER@$REMOTE_HOST" << 'EOF'
-      # Create D drive directories
-      mkdir -p "D:/hafs_training/datasets"
-      mkdir -p "D:/hafs_training/checkpoints"
-      mkdir -p "D:/hafs_training/logs"
-      mkdir -p "D:/hafs_training/models"
-      mkdir -p "D:/hafs_training/temp"
-
-      echo "✓ D drive directories created"
-
-      # Check disk space
-      wmic logicaldisk get name,freespace,size | findstr "D:"
-EOF
+    ssh "$REMOTE_USER@$REMOTE_HOST" "powershell -NoProfile -Command \"New-Item -ItemType Directory -Force -Path 'D:/hafs_training/datasets' | Out-Null; New-Item -ItemType Directory -Force -Path 'D:/hafs_training/checkpoints' | Out-Null; New-Item -ItemType Directory -Force -Path 'D:/hafs_training/logs' | Out-Null; New-Item -ItemType Directory -Force -Path 'D:/hafs_training/models' | Out-Null; New-Item -ItemType Directory -Force -Path 'D:/hafs_training/temp' | Out-Null; Write-Output '✓ D drive directories created'; Get-PSDrive -Name D | Select-Object Name,Free,Used\""
 
     echo ""
     echo "[2/3] Syncing code to ${REMOTE_HOST}..."
@@ -113,6 +101,8 @@ EOF
 
   generate)
     TARGET=${2:-34500}
+    TS="$(date +%Y%m%d_%H%M%S)"
+    LOG_FILE="${D_DRIVE_DIR}/logs/campaign_${TARGET}_${TS}.log"
 
     echo "Launching dataset generation campaign..."
     echo "Target: $TARGET samples"
@@ -120,31 +110,14 @@ EOF
     echo ""
 
     # Launch campaign on GPU host
-    ssh "$REMOTE_USER@$REMOTE_HOST" << EOF
-      cd C:/hafs
-
-      # Set environment variables
-      set HAFS_SCAWFUL_ROOT=${WINDOWS_PLUGIN_DIR}
-      set PYTHONPATH=src;%HAFS_SCAWFUL_ROOT%\\..
-      set TRAINING_OUTPUT_DIR=${D_DRIVE_DIR}/datasets
-      set TRAINING_CHECKPOINT_DIR=${D_DRIVE_DIR}/checkpoints
-      set TRAINING_LOG_DIR=${D_DRIVE_DIR}/logs
-
-      # Launch campaign in background (Windows)
-      start /B .venv/Scripts/python.exe -m hafs_scawful.scripts.training.generate_campaign \
-        --target $TARGET \
-        --export \
-        --resume \
-        > ${D_DRIVE_DIR}/logs/campaign_${TARGET}_\$(date +%Y%m%d_%H%M%S).log 2>&1
-
-      echo "✓ Campaign launched on ${REMOTE_HOST}"
-      echo "Monitor with: ssh $REMOTE_USER@$REMOTE_HOST 'tail -f ${D_DRIVE_DIR}/logs/campaign_*.log'"
-EOF
+    ssh "$REMOTE_USER@$REMOTE_HOST" "powershell -NoProfile -Command \"\$env:HAFS_SCAWFUL_ROOT='${WINDOWS_PLUGIN_DIR}'; \$env:PYTHONPATH='${REMOTE_DIR}/src;${WINDOWS_PLUGIN_DIR}/..'; \$env:TRAINING_OUTPUT_DIR='${D_DRIVE_DIR}/datasets'; \$env:TRAINING_CHECKPOINT_DIR='${D_DRIVE_DIR}/checkpoints'; \$env:TRAINING_LOG_DIR='${D_DRIVE_DIR}/logs'; Start-Process -FilePath '${REMOTE_DIR}/.venv/Scripts/python.exe' -ArgumentList '-m','hafs_scawful.scripts.training.generate_campaign','--target','${TARGET}','--export','--resume' -RedirectStandardOutput '${LOG_FILE}' -RedirectStandardError '${LOG_FILE}' -WorkingDirectory '${REMOTE_DIR}' -NoNewWindow; Write-Output '✓ Campaign launched'; Write-Output 'LOG:${LOG_FILE}'\""
     ;;
 
   train)
-    DATASET=${2:-"D:/hafs_training/datasets/alttp_yaze_full_*_asm"}
+    DATASET=${2:-"${D_DRIVE_DIR}/datasets/latest"}
     MODEL_NAME=${3:-"oracle-rauru-assembler"}
+    TS="$(date +%Y%m%d_%H%M%S)"
+    LOG_FILE="${D_DRIVE_DIR}/logs/training_${MODEL_NAME}_${TS}.log"
 
     echo "Launching model training..."
     echo "Dataset: $DATASET"
@@ -152,52 +125,14 @@ EOF
     echo "Output: $D_DRIVE_DIR/models/$MODEL_NAME"
     echo ""
 
-    ssh "$REMOTE_USER@$REMOTE_HOST" << EOF
-      cd C:/hafs
-
-      # Set environment variables
-      set HAFS_SCAWFUL_ROOT=${WINDOWS_PLUGIN_DIR}
-      set PYTHONPATH=src;%HAFS_SCAWFUL_ROOT%\\..
-      set CUDA_VISIBLE_DEVICES=0
-
-      # Launch training
-      .venv/Scripts/python.exe -m agents.training.scripts.train_model \
-        --dataset "$DATASET" \
-        --model-name "$MODEL_NAME" \
-        --output-dir "${D_DRIVE_DIR}/models/$MODEL_NAME" \
-        --config "${TRAINING_CONFIG_PATH}" \
-        > ${D_DRIVE_DIR}/logs/training_${MODEL_NAME}_\$(date +%Y%m%d_%H%M%S).log 2>&1 &
-
-      echo "✓ Training launched on ${REMOTE_HOST}"
-EOF
+    ssh "$REMOTE_USER@$REMOTE_HOST" "powershell -NoProfile -Command \"\$env:HAFS_SCAWFUL_ROOT='${WINDOWS_PLUGIN_DIR}'; \$env:PYTHONPATH='${REMOTE_DIR}/src;${WINDOWS_PLUGIN_DIR}/..'; \$env:CUDA_VISIBLE_DEVICES='0'; \$env:HAFS_DATASET_PATH='${DATASET}'; \$env:HAFS_MODEL_NAME='${MODEL_NAME}'; \$env:HAFS_MODEL_OUTPUT_DIR='${D_DRIVE_DIR}/models/${MODEL_NAME}'; Start-Process -FilePath '${REMOTE_DIR}/.venv/Scripts/python.exe' -ArgumentList '-m','hafs_scawful.scripts.train_model_windows','${DATASET}' -RedirectStandardOutput '${LOG_FILE}' -RedirectStandardError '${LOG_FILE}' -WorkingDirectory '${REMOTE_DIR}' -NoNewWindow; Write-Output '✓ Training launched'; Write-Output 'LOG:${LOG_FILE}'\""
     ;;
 
   status)
     echo "Checking ${REMOTE_HOST} status..."
     echo ""
 
-    ssh "$REMOTE_USER@$REMOTE_HOST" << 'EOF'
-      echo "=== D Drive Space ==="
-      wmic logicaldisk where "DeviceID='D:'" get FreeSpace,Size
-
-      echo ""
-      echo "=== Datasets ==="
-      ls -lh D:/hafs_training/datasets/ 2>/dev/null || echo "No datasets yet"
-
-      echo ""
-      echo "=== Models ==="
-      ls -lh D:/hafs_training/models/ 2>/dev/null || echo "No models yet"
-
-      echo ""
-      echo "=== Running Processes ==="
-      tasklist | findstr python || echo "No Python processes running"
-
-      echo ""
-      echo "=== Latest Log ==="
-      if [ -f D:/hafs_training/logs/campaign_*.log ]; then
-        tail -20 D:/hafs_training/logs/campaign_*.log | head -1
-      fi
-EOF
+    ssh "$REMOTE_USER@$REMOTE_HOST" "powershell -NoProfile -Command \"Write-Output '=== D Drive Space ==='; Get-PSDrive -Name D | Select-Object Name,Free,Used; Write-Output ''; Write-Output '=== Datasets ==='; Get-ChildItem -Path 'D:/hafs_training/datasets' -ErrorAction SilentlyContinue | Select-Object Name,Length,LastWriteTime; Write-Output ''; Write-Output '=== Models ==='; Get-ChildItem -Path 'D:/hafs_training/models' -ErrorAction SilentlyContinue | Select-Object Name,LastWriteTime; Write-Output ''; Write-Output '=== Running Processes ==='; Get-Process python -ErrorAction SilentlyContinue | Select-Object Id,ProcessName,CPU -First 10; Write-Output ''; Write-Output '=== Latest Log ==='; \$log=Get-ChildItem -Path 'D:/hafs_training/logs' -Filter 'campaign_*.log' | Sort-Object LastWriteTime -Descending | Select-Object -First 1; if (\$log) { Get-Content -Path \$log.FullName -Tail 1 }\""
     ;;
 
   monitor)

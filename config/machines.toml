@@ -7,6 +7,8 @@ hostname = "100.104.53.21"
 tailscale_name = "medical-mechanica"
 username = "starw"
 ssh = "starw@100.104.53.21"
+admin_username = "Administrator"
+admin_ssh = "Administrator@100.104.53.21"
 
 [machines.medical-mechanica.paths]
 # Windows paths (D: drive for storage)
