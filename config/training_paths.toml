@@ -1,0 +1,25 @@
+# Training resource paths for hafs_scawful plugin
+# These are machine-specific paths and should NOT be in the main hafs repo
+
+[paths]
+# Zelda3 vanilla disassembly
+zelda3_disasm = "~/Code/zelda3"
+
+# YAZE editor source
+yaze = "~/Code/yaze"
+
+# Oracle-of-Secrets ROM hack
+oracle_of_secrets = "~/Code/Oracle-of-Secrets"
+
+# Gigaleak source (if available)
+# gigaleak = "~/Code/gigaleak"
+
+# Curated hacks config (relative to plugin)
+curated_hacks_config = "config/curated_hacks.toml"
+
+[knowledge_bases]
+# ALTTP vanilla knowledge base
+alttp = "~/.context/knowledge/alttp"
+
+# Oracle-of-Secrets knowledge base
+oracle = "~/.context/knowledge/oracle-of-secrets"
