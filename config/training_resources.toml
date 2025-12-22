@@ -4,17 +4,21 @@
 [resource_discovery]
 # Zelda/ALTTP disassembly and ROM hacking resources
 resource_roots = [
-    "~/Code/zelda3",                      # Zelda3 C++ port
-    "~/Code/Oracle-of-Secrets",           # Oracle ROM hack
-    "~/Code/alttp-hacker-workspace",      # Personal hacking workspace
-    "~/Code/AsarUSALTTPDisassembly",      # Asar vanilla disassembly
-    "~/Code/Assembly",                    # Assembly projects
-    "~/Code/ZScreamDungeon",              # ALTTP dungeon editor (C/C++)
-    "~/Code/hmagic",                      # ALTTP hacking tool (C#)
-    "~/Code/book-of-mudora",              # Oracle documentation
-    "~/Code/hyrule-historian",            # ROM hack guides
-    "~/Code/docs/zelda",                  # Personal Zelda docs
-    "~/Documents/Zelda",                  # Additional Zelda resources
+    "~/Code/usdasm",                          # USDASM disassembly (golden source)
+    "~/Code/Oracle-of-Secrets",               # Oracle ROM hack
+    "~/Code/alttp-hacker-workspace",          # Personal hacking workspace
+    "~/Code/Assembly/AsarUSALTTPDisassembly", # Asar/MathOnNapkins disassembly (readable)
+    "~/Code/Assembly",                        # Legacy hack archive (analysis/triage)
+    "~/Code/poltergeist",                     # Curated hack (All Hallows Eve)
+    "~/Code/asar",                            # Asar assembler + docs
+    "~/Code/zAsar",                           # zAsar toolchain + docs
+    "~/Code/yaze",                            # YAZE editor code + docs
+    "~/Code/ZScreamDungeon",                  # ALTTP dungeon editor (C/C++)
+    "~/Code/hmagic",                          # ALTTP hacking tool (C#)
+    "~/Code/book-of-mudora",                  # Oracle documentation
+    "~/Code/hyrule-historian",                # ROM hack guides
+    "~/Code/docs/zelda",                      # Personal Zelda docs
+    "~/Documents/Zelda",                      # Additional Zelda resources
 ]
 
 # File patterns to search for
@@ -31,6 +35,8 @@ search_patterns = [
     "**/*.cpp",   # C++ source files
     "**/*.cs",    # C# source files
     "**/*.pdf",   # PDF documentation
+    "**/*.sym",   # Symbol maps
+    "**/*.map",   # Linker maps
 ]
 
 # Patterns to exclude

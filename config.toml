@@ -1,0 +1,48 @@
+[env]
+HAFS_ROOT = "/Users/scawful/Code/hafs"
+HAFS_CONFIG = "/Users/scawful/.config/hafs"
+HAFS_CONTEXT = "/Users/scawful/.context"
+HAFS_VENV = "/Users/scawful/Code/hafs/.venv"
+
+HAFS_WINDOWS_HOST = "medical-mechanica"
+HAFS_WINDOWS_USER = "Administrator"
+HAFS_WINDOWS_IP = "100.104.53.21"
+HAFS_WINDOWS_CONTEXT = "D:/.context"
+HAFS_WINDOWS_CODE_DIR = "C:/hafs"
+HAFS_WINDOWS_TRAINING = "D:/hafs_training"
+HAFS_WINDOWS_PLUGIN_DIR = "C:/hafs_scawful"
+HAFS_CODE_SYNC_METHOD = "git"
+
+HAFS_MOUNT_MMC = "/Users/scawful/Mounts/mm-c"
+HAFS_MOUNT_MMD = "/Users/scawful/Mounts/mm-d"
+HAFS_MOUNT_MME = "/Users/scawful/Mounts/mm-e"
+HAFS_TRAINING_MOUNT = "/Users/scawful/Mounts/mm-d/hafs_training"
+
+[sync]
+halext_host = "halext-server"
+halext_dir = "/home/halext/hafs_scawful"
+halext_mount = "/Users/scawful/Mounts/halext"
+
+windows_host = "medical-mechanica"
+windows_dir = "C:/hafs_scawful"
+windows_mount_c = "/Users/scawful/Mounts/mm-c"
+
+use_mounts = true
+sync_items = ["config", "docs", "config.toml", "aliases.sh", "scripts"]
+sync_all = false
+
+[ollama]
+local_url = "http://localhost:11434"
+windows_url = "http://100.104.53.21:11434"
+
+[notify.halext]
+enabled = true
+api_base = "https://api.halext.org"
+sender_username = "hafs-agent"
+target_username = "scawful"
+token_env = "HALEXT_AGENT_TOKEN"
+
+[notify.terminal_mail]
+enabled = true
+command = "mail"
+to = "scawful"
