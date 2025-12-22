@@ -146,7 +146,7 @@ The **CampaignLauncher** agent:
 
 **Campaign command**:
 ```bash
-python -m agents.training.scripts.generate_campaign \
+python -m hafs_scawful.scripts.training.generate_campaign \
     --target 34500 \
     --output-name full_campaign_34500 \
     --parallel \

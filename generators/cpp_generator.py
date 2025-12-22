@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 from agents.training.base import DataGenerator, SourceItem, TrainingSample
-from agents.training.generators.prompt_templates import PromptTemplateRotator
+from hafs_scawful.generators.prompt_templates import PromptTemplateRotator
 from config.prompts import get_prompt
 
 logger = logging.getLogger(__name__)

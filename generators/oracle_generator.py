@@ -15,7 +15,7 @@ from typing import Any, Optional
 
 from agents.training.base import DataGenerator, SourceItem, TrainingSample
 from agents.training.json_utils import extract_json_from_response
-from agents.training.generators.prompt_templates import PromptTemplateRotator
+from hafs_scawful.generators.prompt_templates import PromptTemplateRotator
 from config.prompts import get_prompt
 
 logger = logging.getLogger(__name__)
@@ -175,7 +175,7 @@ class OracleDataGenerator(DataGenerator):
 
         # Use enhanced prompts if enabled
         if self.use_enhanced_prompts:
-            from agents.training.generators.enhanced_prompts import get_enhanced_oracle_prompt
+            from hafs_scawful.generators.enhanced_prompts import get_enhanced_oracle_prompt
 
             return get_enhanced_oracle_prompt(
                 routine_name=item.name,

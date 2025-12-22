@@ -130,7 +130,7 @@ EOF
       set TRAINING_LOG_DIR=${D_DRIVE_DIR}/logs
 
       # Launch campaign in background (Windows)
-      start /B .venv/Scripts/python.exe -m agents.training.scripts.generate_campaign \
+      start /B .venv/Scripts/python.exe -m hafs_scawful.scripts.training.generate_campaign \
         --target $TARGET \
         --export \
         --resume \

@@ -19,7 +19,7 @@ async def main():
     print("✓ Curator initialized")
 
     # Just use ASM generator with templates
-    from agents.training.generators.asm_generator import AsmDataGenerator
+    from hafs_scawful.generators.asm_generator import AsmDataGenerator
     asm_gen = AsmDataGenerator(use_template_variation=True)
     await asm_gen.setup()
     curator.register_generator("asm", asm_gen)
@@ -27,7 +27,7 @@ async def main():
 
     # Try Zelda3 generator
     try:
-        from agents.training.generators.zelda3_generator import Zelda3DisasmGenerator
+        from hafs_scawful.generators.zelda3_generator import Zelda3DisasmGenerator
         zelda3_gen = Zelda3DisasmGenerator(use_template_variation=True)
         await zelda3_gen.setup()
         curator.register_generator("zelda3", zelda3_gen)

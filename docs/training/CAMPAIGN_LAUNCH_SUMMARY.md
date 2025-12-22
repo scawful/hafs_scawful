@@ -291,7 +291,7 @@ kill 13516  # Current PID
 ### Resume After Interruption
 ```bash
 # Campaign auto-resumes from latest checkpoint
-cd ~/Code/hafs && PYTHONPATH=src .venv/bin/python -m agents.training.scripts.generate_campaign \
+cd ~/Code/hafs && PYTHONPATH=src .venv/bin/python -m hafs_scawful.scripts.training.generate_campaign \
   --target 34500 \
   --export \
   --resume  # Key flag for resuming

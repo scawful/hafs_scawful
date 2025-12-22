@@ -15,7 +15,8 @@ from typing import Any, Optional
 
 from agents.training.base import DataGenerator, SourceItem, TrainingSample
 from agents.training.json_utils import extract_json_from_response
-from agents.training.generators.prompt_templates import PromptTemplateRotator
+from hafs_scawful.generators.prompt_templates import PromptTemplateRotator
+from agents.knowledge.asm_preprocessor import AsmPreprocessor
 from config.prompts import get_prompt
 
 logger = logging.getLogger(__name__)
@@ -58,6 +59,7 @@ class AsmDataGenerator(DataGenerator):
         )
         self._unified_kb = None
         self._orchestrator = None
+        self._preprocessor = None
         self.use_enhanced_prompts = use_enhanced_prompts
         self.use_template_variation = use_template_variation
 
@@ -74,6 +76,24 @@ class AsmDataGenerator(DataGenerator):
 
         self._unified_kb = UnifiedALTTPKnowledge()
         await self._unified_kb.setup()
+        
+        # Build combined symbol map for preprocessor
+        symbol_map = {}
+        if self._unified_kb._vanilla_kb:
+            for sym in self._unified_kb._vanilla_kb._symbols.values():
+                # Handle both object and dict access
+                addr = getattr(sym, "address", None) or sym.get("address")
+                name = getattr(sym, "name", None) or sym.get("name")
+                if addr:
+                    symbol_map[addr] = name
+        if self._unified_kb._hack_kb:
+            for sym in self._unified_kb._hack_kb._symbols.values():
+                addr = getattr(sym, "address", None) or sym.get("address")
+                name = getattr(sym, "name", None) or sym.get("name")
+                if addr:
+                    symbol_map[addr] = name
+                
+        self._preprocessor = AsmPreprocessor(symbol_map)
 
         # Use orchestrator from unified KB
         self._orchestrator = self._unified_kb._orchestrator
@@ -149,7 +169,7 @@ class AsmDataGenerator(DataGenerator):
 
         # Use enhanced prompts if enabled
         if self.use_enhanced_prompts:
-            from agents.training.generators.enhanced_prompts import get_enhanced_asm_prompt
+            from hafs_scawful.generators.enhanced_prompts import get_enhanced_asm_prompt
 
             return get_enhanced_asm_prompt(
                 routine_name=item.name,
@@ -162,6 +182,11 @@ class AsmDataGenerator(DataGenerator):
 
         # Original baseline prompt
         memory_context = ", ".join(item.memory_access) if item.memory_access else "None specified"
+        
+        # Enrich code with semantic symbols
+        enriched_code = item.code
+        if self._preprocessor:
+            enriched_code = self._preprocessor.enrich(item.code)
 
         # Use template variation for instruction diversity
         instruction_prefix = "Generate high-quality training data for this assembly routine"
@@ -181,7 +206,7 @@ class AsmDataGenerator(DataGenerator):
                 "DESCRIPTION: {description}\n"
                 "MEMORY ACCESS: {memory_context}\n"
                 "ADDRESS: {address}\n\n"
-                "CODE:\n```asm\n{code}\n```\n\n"
+                "CODE (Enriched with Symbols):\n```asm\n{code}\n```\n\n"
                 "Generate a JSON object with:\n\n"
                 "1. \"instruction\": A clear, technical request for this assembly code. Make it specific and varied:\n"
                 "   - Request code for a specific game mechanic or system\n"
@@ -235,7 +260,7 @@ class AsmDataGenerator(DataGenerator):
             description=item.description,
             memory_context=memory_context,
             address=item.address,
-            code=item.code,
+            code=enriched_code,
         )
 
     async def generate_sample(self, item: SourceItem) -> Optional[TrainingSample]:

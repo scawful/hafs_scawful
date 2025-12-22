@@ -29,7 +29,7 @@ cd ~/Code/hafs
 
 ```bash
 cd ~/Code/hafs
-PYTHONPATH=src .venv/bin/python -m agents.training.scripts.medical_mechanica_accelerator \
+PYTHONPATH=src .venv/bin/python -m hafs_scawful.scripts.training.medical_mechanica_accelerator \
   --target 34500
 ```
 
@@ -44,7 +44,7 @@ PYTHONPATH=src .venv/bin/python -m agents.training.scripts.medical_mechanica_acc
 
 ```bash
 cd ~/Code/hafs
-PYTHONPATH=src .venv/bin/python -m agents.training.scripts.generate_campaign \
+PYTHONPATH=src .venv/bin/python -m hafs_scawful.scripts.training.generate_campaign \
   --target 34500 \
   --resume
 ```
@@ -114,7 +114,7 @@ else:
 ```bash
 # Test connection to medical-mechanica
 cd ~/Code/hafs
-PYTHONPATH=src .venv/bin/python -m agents.training.scripts.medical_mechanica_accelerator --test
+PYTHONPATH=src .venv/bin/python -m hafs_scawful.scripts.training.medical_mechanica_accelerator --test
 
 # Check Ollama status
 hafs llamacpp status

@@ -38,14 +38,14 @@ async def main():
     print("[2/5] Registering improved generators...")
 
     # ASM generator with template variation
-    from agents.training.generators.asm_generator import AsmDataGenerator
+    from hafs_scawful.generators.asm_generator import AsmDataGenerator
     asm_gen = AsmDataGenerator(use_template_variation=True)
     await asm_gen.setup()
     curator.register_generator("asm", asm_gen)
     print("✓ ASM generator (with prompt templates)")
 
     # Documentation generator (NEW - Phase 1.2)
-    from agents.training.generators.documentation_generator import DocumentationGenerator
+    from hafs_scawful.generators.documentation_generator import DocumentationGenerator
     doc_gen = DocumentationGenerator()
     await doc_gen.setup()
     curator.register_generator("documentation", doc_gen)
@@ -53,7 +53,7 @@ async def main():
 
     # Oracle generator with template variation (if available)
     try:
-        from agents.training.generators.oracle_generator import OracleDataGenerator
+        from hafs_scawful.generators.oracle_generator import OracleDataGenerator
         oracle_gen = OracleDataGenerator(use_template_variation=True)
         await oracle_gen.setup()
         curator.register_generator("oracle", oracle_gen)
@@ -76,7 +76,7 @@ async def main():
 
     # C++ generator with template variation
     try:
-        from agents.training.generators.cpp_generator import CppDataGenerator
+        from hafs_scawful.generators.cpp_generator import CppDataGenerator
         cpp_gen = CppDataGenerator(use_template_variation=True)
         if cpp_gen.yaze_path.exists():
             await cpp_gen.setup()

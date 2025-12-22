@@ -16,7 +16,7 @@ from typing import Any, Optional
 
 from agents.training.base import DataGenerator, SourceItem, TrainingSample
 from agents.training.json_utils import extract_json_from_response
-from agents.training.generators.prompt_templates import PromptTemplateRotator
+from hafs_scawful.generators.prompt_templates import PromptTemplateRotator
 from agents.training.resource_discovery import ZeldaResourceIndexer
 from config.prompts import get_prompt
 

@@ -156,7 +156,7 @@ Lower is better:
 
 ```python
 from agents.training.ab_testing import ABTestRunner, PromptVersion
-from agents.training.generators.asm_generator import AsmDataGenerator
+from hafs_scawful.generators.asm_generator import AsmDataGenerator
 
 # Create runner
 runner = ABTestRunner()

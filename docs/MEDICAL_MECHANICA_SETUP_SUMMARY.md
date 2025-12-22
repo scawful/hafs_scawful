@@ -190,7 +190,7 @@ Background agents configured but implementation files need to be created:
    ```powershell
    cd C:\hafs
    .\.venv\Scripts\Activate.ps1
-   python -m agents.training.scripts.generate_campaign --target 100  # Small test
+   python -m hafs_scawful.scripts.training.generate_campaign --target 100  # Small test
    ```
 
 5. **Setup Mac-Windows Sync**
@@ -252,7 +252,7 @@ cp ~/Code/hafs/new_file.py ~/Mounts/mm-c/hafs/src/
 
 ```powershell
 # 1. Generate dataset (on Windows or Mac)
-python -m agents.training.scripts.generate_campaign --target 34500
+python -m hafs_scawful.scripts.training.generate_campaign --target 34500
 
 # 2. Train model (on Windows GPU)
 python -m agents.training.scripts.train_model `

@@ -255,7 +255,7 @@ curl http://100.104.53.21:11435/api/generate -d '{
 Test from hybrid campaign:
 
 ```bash
-PYTHONPATH=src .venv/bin/python -m agents.training.scripts.hybrid_campaign --pilot --target 10
+PYTHONPATH=src .venv/bin/python -m hafs_scawful.scripts.training.hybrid_campaign --pilot --target 10
 ```
 
 ## Troubleshooting

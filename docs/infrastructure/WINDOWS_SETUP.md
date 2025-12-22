@@ -126,7 +126,7 @@ cd C:\hafs
 .\.venv\Scripts\Activate.ps1
 
 # Generate 34,500 samples (8-12 hours)
-python -m agents.training.scripts.generate_campaign `
+python -m hafs_scawful.scripts.training.generate_campaign `
     --target 34500 `
     --export `
     --output-dir D:\hafs_training\datasets
