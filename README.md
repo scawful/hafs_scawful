@@ -32,6 +32,16 @@ PYTHONPATH=src .venv/bin/python -m agents.background.website_health_monitor \
     --config ~/Code/hafs_scawful/config/website_monitoring_agents.toml
 ```
 
+## Sync to Hosts
+
+Push plugin configs/docs to halext-server and the Windows GPU host:
+
+```bash
+~/Code/hafs_scawful/scripts/publish_plugin_configs.sh
+```
+
+Set `SYNC_ALL=1` to include scripts.
+
 ## Notes
 
 - Keep this repo private.
