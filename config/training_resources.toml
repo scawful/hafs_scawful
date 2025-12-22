@@ -1,0 +1,38 @@
+# Scawful-specific training resource configuration
+# These paths are specific to @scawful's development environment
+
+[resource_discovery]
+# Zelda/ALTTP disassembly and ROM hacking resources
+resource_roots = [
+    "~/Code/zelda3",                      # Zelda3 C++ port
+    "~/Code/Oracle-of-Secrets",           # Oracle ROM hack
+    "~/Code/alttp-hacker-workspace",      # Personal hacking workspace
+    "~/Code/AsarUSALTTPDisassembly",      # Asar vanilla disassembly
+    "~/Code/Assembly",                    # Assembly projects
+    "~/Code/book-of-mudora",              # Oracle documentation
+    "~/Code/hyrule-historian",            # ROM hack guides
+    "~/Code/docs/zelda",                  # Personal Zelda docs
+    "~/Documents/Zelda",                  # Additional Zelda resources
+]
+
+# File patterns to search for
+search_patterns = [
+    "**/*.asm",   # Assembly files
+    "**/*.md",    # Markdown documentation
+    "**/*.txt",   # Text files
+    "**/*.inc",   # Include files (constants, macros)
+    "**/*.s",     # Assembly files (alternative extension)
+    "**/*.65s",   # 65816 assembly files
+    "**/*.65c",   # 65816 assembly files
+]
+
+# Patterns to exclude
+exclude_patterns = [
+    "**/node_modules/**",
+    "**/.git/**",
+    "**/build/**",
+    "**/dist/**",
+    "**/__pycache__/**",
+    "**/venv/**",
+    "**/.venv/**",
+]
