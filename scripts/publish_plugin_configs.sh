@@ -35,7 +35,7 @@ done
 echo "==> Syncing to Windows host: $WINDOWS_HOST:$WINDOWS_DIR"
 ssh "$WINDOWS_HOST" "powershell -Command \"New-Item -ItemType Directory -Force -Path '$WINDOWS_DIR' | Out-Null\""
 for item in "${items[@]}"; do
-  rsync -av "$SOURCE_DIR/$item" "$WINDOWS_HOST:$WINDOWS_DIR/"
+  scp -r "$SOURCE_DIR/$item" "$WINDOWS_HOST:$WINDOWS_DIR/"
 done
 
 echo "Done."
