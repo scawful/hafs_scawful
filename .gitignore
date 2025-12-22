@@ -1,0 +1,15 @@
+# Secrets and tokens
+.env
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# OS cruft
+.DS_Store
+
+# Logs and temp
+*.log
+logs/
+.tmp/
