@@ -56,8 +56,24 @@ Current training focuses on Domain Knowledge (ASM, ROM hacking). We need to add 
     *   Output: `hafs-cli history search "database migration"`
     *   Method: Added specific tools for history, context, memory, and Hyrule Historian.
 
+## 5. Model Targeting Strategy
+With the new `tool-use` datasets (`hafs_tooling` and `z3ed_tooling`), we can target specific models for fine-tuning.
+
+**Primary Targets:**
+*   **Qwen2.5-Coder (14B/7B):** Best all-rounder for code + tool use. The 14B model should be the primary target for the "Commander" agent that uses these tools.
+*   **DeepSeek-Coder-V2:** Strong alternative, particularly for the ASM/ROM hacking context due to its larger context window and logic capabilities.
+
+**Secondary Targets (Efficient/Edge):**
+*   **Gemma-2-9b-It:** Excellent instruction following for its size. Good candidate for a fast, local "Tool Selector" agent.
+*   **Phi-3.5-mini:** Potential for a dedicated "CLI Assistant" that runs strictly on the CPU/NPU for rapid command syntax help.
+
+## 6. Architecture Updates (Porting)
+*   **Status:** `HafsSystemGenerator` has been ported from `hafs_scawful` to the main `hafs` repository (`src/agents/training/generators/hafs_generator.py`).
+*   **Reasoning:** HAFS tooling is generic infrastructure, not user-specific.
+*   **Action:** The generator is now available as a core component, allowing any HAFS user to generate training data for their own system usage patterns.
+
 ## Implementation Steps
 1.  **Analyze Sources:** [Complete] Scan `hafs` scripts and `aliases.sh` to inventory capabilities.
-2.  **Build Generator:** [Complete] Implement `HafsSystemGenerator` in `hafs_scawful`.
+2.  **Build Generator:** [Complete] Implement `HafsSystemGenerator` (Ported to Core).
 3.  **Generate Samples:** [Complete] Run generator to create `hafs_tooling_dataset.jsonl` (26 samples).
 4.  **Train:** [Pending] Fine-tune the model (e.g., Qwen-Coder) on this new dataset.

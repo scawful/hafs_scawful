@@ -271,7 +271,7 @@ class GigaleakDataGenerator(DataGenerator):
                 output=output,
                 domain="gigaleak",
                 source=item.source,
-                teacher_model="gemini-2.0-flash",
+                teacher_model="gemini-3-flash-preview",
                 teacher_prompt=prompt,
                 kg_entities=kg_entities,
             )

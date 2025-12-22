@@ -11,8 +11,8 @@ yaze = "~/Code/yaze"
 # Oracle-of-Secrets ROM hack
 oracle_of_secrets = "~/Code/Oracle-of-Secrets"
 
-# Gigaleak source (if available)
-# gigaleak = "~/Code/gigaleak"
+# Gigaleak source (knowledge base path)
+gigaleak = "~/.context/knowledge/gigaleak"
 
 # Curated hacks config (relative to plugin)
 curated_hacks_config = "config/curated_hacks.toml"

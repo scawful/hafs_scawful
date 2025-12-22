@@ -1,0 +1,39 @@
+# Machine configurations for hafs training infrastructure
+# Auto-generated - edit with caution
+
+[machines.medical-mechanica]
+description = "Windows GPU training machine (RTX 5060 Ti 16GB)"
+hostname = "100.104.53.21"
+tailscale_name = "medical-mechanica"
+username = "starw"
+ssh = "starw@100.104.53.21"
+
+[machines.medical-mechanica.paths]
+# Windows paths (D: drive for storage)
+training_root = "D:/hafs_training"
+datasets = "D:/hafs_training/datasets"
+models = "D:/hafs_training/models"
+checkpoints = "D:/hafs_training/checkpoints"
+logs = "D:/hafs_training/logs"
+context = "D:/hafs_training/context"
+
+[machines.medical-mechanica.mounts]
+# Mac mount points via SSHFS
+c_drive = "~/Mounts/mm-c"
+d_drive = "~/Mounts/mm-d"
+e_drive = "~/Mounts/mm-e"
+mount_command = "~/.local/bin/mount-remotes mm"
+unmount_command = "~/.local/bin/mount-remotes unmount-mm"
+
+[machines.oracle-book]
+description = "Mac development machine"
+hostname = "localhost"
+username = "scawful"
+
+[machines.oracle-book.paths]
+context = "~/.context"
+knowledge = "~/.context/knowledge"
+embeddings = "~/.context/embedding_service"
+datasets = "~/.context/training/datasets"
+hafs = "~/Code/hafs"
+hafs_scawful = "~/Code/hafs_scawful"

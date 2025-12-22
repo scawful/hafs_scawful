@@ -41,17 +41,19 @@ class Z3edToolGenerator(DataGenerator):
     Filters based on the 2025-12-22 codebase audit.
     """
 
-    # Validated stable categories/commands from codebase audit
+    # Validated stable categories/commands from codebase audit & docs
     STABLE_ALLOWLIST = {
-        "resource": ["list", "search"],
-        "dungeon": ["list-sprites", "describe-room", "export-room", "list-objects", "get-room-tiles"],
-        "overworld": ["find-tile", "describe-map", "list-warps", "list-sprites", "get-entrance", "tile-stats"],
-        "hex": ["read", "write"],  # Basic hex ops are stable
-        "palette": ["export", "list"],
-        "sprite": ["list", "export"],
-        "music": ["list", "play"],
-        "dialogue": ["list", "search"],
-        "emulator": ["run", "pause", "step", "reset"], # gRPC based
+        "rom": ["read", "write", "validate", "snapshot", "restore", "info", "load"],
+        "editor": {
+            "dungeon": ["place-object", "set-property", "list-objects", "validate-room"],
+            "overworld": ["set-tile", "place-entrance", "modify-sprite"],
+            "batch": ["*"] # All batch ops
+        },
+        "query": ["rom-info", "available-commands", "find-tiles", "find-unused-space", "find-duplicates"],
+        "test": ["run", "generate", "record", "baseline", "report"],
+        "build": ["*"],
+        "ci": ["*"],
+        "ai": ["chat", "suggest", "analyze", "review", "apply"],
     }
 
     def __init__(self):
@@ -68,24 +70,40 @@ class Z3edToolGenerator(DataGenerator):
         from core.orchestrator_v2 import UnifiedOrchestrator
         self._orchestrator = UnifiedOrchestrator()
 
-    def _is_stable(self, command_str: str) -> bool:
-        """Check if command is in the stable allowlist."""
-        parts = command_str.split()
-        if len(parts) < 3: # z3ed <category> <action>
+    def _is_stable(self, command_parts: list[str]) -> bool:
+        """Check if command is in the stable allowlist.
+        Args:
+            command_parts: ['z3ed', 'rom', 'read'] or ['z3ed', 'editor', 'dungeon', 'place-object']
+        """
+        if len(command_parts) < 2: 
             return False
         
         # parts[0] is z3ed
-        category = parts[1]
-        action = parts[2]
-
-        if category in self.STABLE_ALLOWLIST:
-            allowed_actions = self.STABLE_ALLOWLIST[category]
-            # Check for direct match or wildcard
-            if "*" in allowed_actions:
-                return True
-            if action in allowed_actions:
-                return True
+        category = command_parts[1]
         
+        if category not in self.STABLE_ALLOWLIST:
+            return False
+            
+        allowed = self.STABLE_ALLOWLIST[category]
+        
+        # Simple list (e.g. "rom": ["read"])
+        if isinstance(allowed, list):
+            action = command_parts[2] if len(command_parts) > 2 else ""
+            if "*" in allowed: return True
+            return action in allowed
+            
+        # Nested dict (e.g. "editor": {"dungeon": [...]})
+        if isinstance(allowed, dict):
+            if len(command_parts) < 3: return False
+            subcat = command_parts[2]
+            if subcat not in allowed: return False
+            
+            sub_allowed = allowed[subcat]
+            if "*" in sub_allowed: return True
+            
+            action = command_parts[3] if len(command_parts) > 3 else ""
+            return action in sub_allowed
+            
         return False
 
     async def extract_source_items(self) -> list[Z3edSourceItem]:
@@ -94,39 +112,65 @@ class Z3edToolGenerator(DataGenerator):
             return []
 
         items: list[Z3edSourceItem] = []
-        
-        # 1. Parse Markdown Documentation
-        # We look for headers like `### `z3ed <command>`
         content = self._doc_path.read_text()
         
-        # Regex to find command headers and their descriptions
-        # Matches: ### `z3ed category action` \n Description...
-        pattern = re.compile(r"### `(z3ed [a-z0-9-]+ [a-z0-9-]+)`\n(.*?)(?=\n###|\n##|$)", re.DOTALL)
+        # Strategy: Split by "### `z3ed" to find main blocks
+        sections = re.split(r"(?=### `z3ed)", content)
         
-        matches = pattern.findall(content)
-        
-        for cmd_str, desc_block in matches:
-            cmd_str = cmd_str.strip()
-            desc = desc_block.strip().split('\n')[0] # First line is usually the summary
+        for section in sections:
+            if not section.strip().startswith("### `z3ed"):
+                continue
+                
+            # Extract the command from the header
+            # Header: ### `z3ed rom read`
+            header_match = re.match(r"### `(.*?)`", section)
+            if not header_match:
+                continue
+                
+            full_cmd_str = header_match.group(1).strip()
+            parts = full_cmd_str.split()
             
-            # Categorize
-            parts = cmd_str.split()
-            category = parts[1] if len(parts) > 1 else "misc"
+            # Extract description (text after header until next header or code block)
+            desc_match = re.search(r"`\n(.*?)(?=\n\*\*|\n`|\n#)", section, re.DOTALL)
+            desc = desc_match.group(1).strip() if desc_match else "No description"
+            desc = desc.replace("\n", " ").strip()
             
-            # Filter for stability
-            if self._is_stable(cmd_str):
+            # Check stability
+            if self._is_stable(parts):
                 items.append(Z3edSourceItem(
-                    name=cmd_str,
-                    content=f"Command: {cmd_str}\nDescription: {desc}",
+                    name=full_cmd_str,
+                    content=f"Command: {full_cmd_str}\nDescription: {desc}",
                     source="z3ed-doc",
-                    command=cmd_str,
+                    command=full_cmd_str,
                     description=desc,
-                    category=category,
-                    usage=cmd_str,
-                    is_stable=True
+                    category=parts[1],
+                    usage=full_cmd_str
                 ))
-            else:
-                logger.debug(f"Skipping unstable/unknown command: {cmd_str}")
+            
+            # Look for subcommands (#### `action`) within this section
+            # This handles 'z3ed editor dungeon' -> 'place-object'
+            sub_matches = re.findall(r"#### `(.*?)`\n(.*?)(?=\n####|\n\*\*|\n`|$)", section, re.DOTALL)
+            logger.info(f"Checking subsection: {full_cmd_str}. Found {len(sub_matches)} subcommands.")
+            
+            for sub_action, sub_desc in sub_matches:
+                # Construct full command: parent command + sub action
+                # But parent command might already have args?
+                # Usually parent is "z3ed editor dungeon" and sub is "place-object"
+                # So we join them.
+                sub_full_cmd = f"{full_cmd_str} {sub_action}"
+                sub_parts = sub_full_cmd.split()
+                
+                if self._is_stable(sub_parts):
+                    clean_desc = sub_desc.strip().split('\n')[0]
+                    items.append(Z3edSourceItem(
+                        name=sub_full_cmd,
+                        content=f"Command: {sub_full_cmd}\nDescription: {clean_desc}",
+                        source="z3ed-doc-sub",
+                        command=sub_full_cmd,
+                        description=clean_desc,
+                        category=parts[1], # Keep top level category
+                        usage=sub_full_cmd
+                    ))
 
         # 2. Add manual entries for known stable workflows not explicitly in command ref headers
         # (e.g. from usage guide or verified workflows)
