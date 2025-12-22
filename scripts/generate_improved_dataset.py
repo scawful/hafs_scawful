@@ -63,7 +63,7 @@ async def main():
 
     # Curated hack generator (allowlist)
     try:
-        from agents.training.generators.curated_hack_generator import CuratedHackGenerator
+        from hafs_scawful.generators.curated_hack_generator import CuratedHackGenerator
         curated_gen = CuratedHackGenerator()
         await curated_gen.setup()
         if curated_gen.has_hacks:
