@@ -124,7 +124,8 @@ EOF
       cd C:/hafs
 
       # Set environment variables
-      set PYTHONPATH=src
+      set HAFS_SCAWFUL_ROOT=${WINDOWS_PLUGIN_DIR}
+      set PYTHONPATH=src;%HAFS_SCAWFUL_ROOT%\\..
       set TRAINING_OUTPUT_DIR=${D_DRIVE_DIR}/datasets
       set TRAINING_CHECKPOINT_DIR=${D_DRIVE_DIR}/checkpoints
       set TRAINING_LOG_DIR=${D_DRIVE_DIR}/logs
@@ -155,7 +156,8 @@ EOF
       cd C:/hafs
 
       # Set environment variables
-      set PYTHONPATH=src
+      set HAFS_SCAWFUL_ROOT=${WINDOWS_PLUGIN_DIR}
+      set PYTHONPATH=src;%HAFS_SCAWFUL_ROOT%\\..
       set CUDA_VISIBLE_DEVICES=0
 
       # Launch training
