@@ -9,6 +9,8 @@ resource_roots = [
     "~/Code/alttp-hacker-workspace",      # Personal hacking workspace
     "~/Code/AsarUSALTTPDisassembly",      # Asar vanilla disassembly
     "~/Code/Assembly",                    # Assembly projects
+    "~/Code/ZScreamDungeon",              # ALTTP dungeon editor (C/C++)
+    "~/Code/hmagic",                      # ALTTP hacking tool (C#)
     "~/Code/book-of-mudora",              # Oracle documentation
     "~/Code/hyrule-historian",            # ROM hack guides
     "~/Code/docs/zelda",                  # Personal Zelda docs
@@ -24,6 +26,11 @@ search_patterns = [
     "**/*.s",     # Assembly files (alternative extension)
     "**/*.65s",   # 65816 assembly files
     "**/*.65c",   # 65816 assembly files
+    "**/*.c",     # C source files
+    "**/*.h",     # C header files
+    "**/*.cpp",   # C++ source files
+    "**/*.cs",    # C# source files
+    "**/*.pdf",   # PDF documentation
 ]
 
 # Patterns to exclude
