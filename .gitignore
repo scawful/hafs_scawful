@@ -13,3 +13,5 @@
 *.log
 logs/
 .tmp/
+__pycache__/
+*.pyc
