@@ -44,6 +44,7 @@ Options:
 - `DRY_RUN=1` to preview changes
 - `SYNC_ITEMS=config,docs` to choose what syncs
 - `SYNC_ALL=1` to include scripts
+- `USE_MOUNTS=1` to copy via `~/Mounts` (default), set `USE_MOUNTS=0` for SSH
 
 ## Notes
 
