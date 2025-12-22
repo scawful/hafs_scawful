@@ -56,6 +56,14 @@ def get_cpp_generator():
     from hafs_scawful.generators.cpp_generator import CppDataGenerator
     return CppDataGenerator
 
+def get_hafs_generator():
+    from hafs_scawful.generators.hafs_generator import HafsSystemGenerator
+    return HafsSystemGenerator
+
+def get_z3ed_tool_generator():
+    from hafs_scawful.generators.z3ed_generator import Z3edToolGenerator
+    return Z3edToolGenerator
+
 
 # Registration function for plugin discovery
 def register_generators(curator):
@@ -140,6 +148,26 @@ def register_generators(curator):
             except Exception as e:
                 logger.warning(f"Failed to register yaze generator: {e}")
 
+        # HAFS System generator (Tool Use)
+        try:
+            HafsGen = get_hafs_generator()
+            hafs_gen = HafsGen()
+            await hafs_gen.setup()
+            curator.register_generator("hafs_tooling", hafs_gen)
+            logger.info("Registered: hafs_tooling (CLI, Scripts, Aliases)")
+        except Exception as e:
+            logger.warning(f"Failed to register hafs generator: {e}")
+
+        # Z3ed Tooling generator (Stable CLI)
+        try:
+            Z3edToolGen = get_z3ed_tool_generator()
+            z3ed_tool_gen = Z3edToolGen()
+            await z3ed_tool_gen.setup()
+            curator.register_generator("z3ed_tooling", z3ed_tool_gen)
+            logger.info("Registered: z3ed_tooling (Stable CLI commands)")
+        except Exception as e:
+            logger.warning(f"Failed to register z3ed_tooling generator: {e}")
+
     asyncio.run(_register())
 
 
@@ -152,4 +180,6 @@ __all__ = [
     "get_gigaleak_generator",
     "get_curated_hack_generator",
     "get_cpp_generator",
+    "get_hafs_generator",
+    "get_z3ed_tool_generator",
 ]

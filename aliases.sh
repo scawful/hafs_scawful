@@ -85,6 +85,18 @@ cdctx() {
   cd "$(_hafs_context)" || return 1
 }
 
+cdoos() {
+  cd ~/Code/Oracle-of-Secrets || return 1
+}
+
+cdyaze() {
+  cd ~/Code/yaze || return 1
+}
+
+cdusdasm() {
+  cd ~/Code/usdasm || return 1
+}
+
 hafsenv() {
   local venv="${HAFS_VENV:-$(_hafs_root)/.venv}"
   if [ -f "$venv/bin/activate" ]; then
@@ -292,7 +304,7 @@ syshub() { syshelp "$@"; }
 hafs-help() {
   cat <<'EOF'
 Core:
-  cdhafs, cdtraining, cdlsp, cdctx, hafsenv
+  cdhafs, cdtraining, cdlsp, cdctx, cdoos, cdyaze, cdusdasm, hafsenv
 CLI:
   hafs-cli, hafs-tui, hc, hshell, ht, htw, htl, hn, hnl, hsvc
 Services:

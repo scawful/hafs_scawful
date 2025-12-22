@@ -1,0 +1,20 @@
+# Curated hack overrides (local review notes and adjustments).
+# This file overlays curated_hacks.toml without editing the base file.
+
+# Optional: override global curated_hacks settings
+# [curated_hacks]
+# max_items_per_hack = 200
+
+[[hack]]
+name = "poltergeist"
+review_status = "approved"
+# weight = 1.0
+# notes = "Add review notes or quality observations here."
+
+# Example: reduce weight or narrow to specific files
+[[hack]]
+name = "conn_pack"
+review_status = "hold"
+# weight = 0.25
+# include_globs = ["superbomb/**/*.asm"]
+# exclude_globs = ["**/*.ips"]
