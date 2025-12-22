@@ -1,0 +1,126 @@
+UrbanOutfitters.com > Waterfall Ruffle Shower Curtain	http://www.urbanoutfitters.com/urban/catalog/productdetail.jsp?itemdescription=true&itemCount=60&startValue=1&selectedProductColor=&sortby=&id=17708355&parentid=A_FURN_WHATSNEW&sortProperties=+subCategoryPosition,&navCount=60&navAction=poppushpush&color=&pushId=A_FURN_WHATSNEW&popId=APARTMENT_WHATSNEW&prepushId=
+Lipstick & Ruffles	http://www.lipstickandruffles.com/
+SALE Bohemian SUPER Fringie Double Size 2 by CricketsCreations	http://www.etsy.com/view_listing.php?listing_id=30041791&ref=sr_list_5&&ga_search_query=photography&ga_search_type=handmade&ga_page=5&includes[]=tags&includes[]=title
+Hip2Save - Not Your Grandma's Coupon Site	http://hip2save.com/
+zeldix	https://www.zeldix.net/
+65816 Manual	https://wiki.nesdev.com/w/images/7/76/Programmanual.pdf
+Timing | Super Famicom Development Wiki	https://wiki.superfamicom.org/timing
+65816 Reference | Super Famicom Development Wiki	https://wiki.superfamicom.org/65816-reference
+Setting Up a Programming Environment | Super Famicom Development Wiki	https://wiki.superfamicom.org/setting-up-a-programming-environment
+Jay's ASM Tutorial | Super Famicom Development Wiki	https://wiki.superfamicom.org/jay's-asm-tutorial
+Working with VRAM - Loading the Palette | Super Famicom Development Wiki	https://wiki.superfamicom.org/working-with-vram-loading-the-palette
+ASM Tutorial Part 1 | Super Famicom Development Wiki	https://wiki.superfamicom.org/asm-tutorial-part-1
+ASM Tutorial Part 2 | Super Famicom Development Wiki	https://wiki.superfamicom.org/asm-tutorial-part-2
+Registers | Super Famicom Development Wiki	https://wiki.superfamicom.org/registers
+Oracle of Secrets Data Sheet - Google Sheets	https://docs.google.com/spreadsheets/d/17mfAUalrYgu6Is1LNPlRBbqniAvRg5eNPOg7AQZ-b4U/edit?gid=0#gid=0
+Asar User Manual	https://rpghacker.github.io/asar/manual/index.html#archs
+Sprite Hitboxes	https://spannerisms.github.io/spritehitboxes/
+Sprites - TLoZ: ALTTP Hacking Resources	http://alttp.run/hacking/index.php?title=Sprites#Sprites
+[M68000 Assembler] Overworld_Hole: { ; routine used to find the entrance to send Link to when - Pastebin.com	https://pastebin.com/Mbi6LFAu
+spannerisms/ALttPNG	https://github.com/spannerisms/ALttPNG
+65816 Programming Primer	http://softpixel.com/~cwright/sianse/docs/65816NFO.HTM
+SNES Programming Guide – nesdoug	https://nesdoug.com/2020/03/19/snes-projects/
+SNES Development Manual : Nintendo of America : Free Download, Borrow, and Streaming : Internet Archive	https://archive.org/details/SNESDevManual/mode/2up
+65816 Basics – nesdoug	https://nesdoug.com/2020/04/03/65816-basics/
+RPGHacker/asar: (Now) official repository of the SNES assembler Asar, originally created by Alcaro	https://github.com/RPGHacker/asar
+ZScream Magic | ZScreamDungeon	https://zarby89.github.io/ZScreamDungeon/
+Introduction - Assembly for the SNES	https://ersanio.gitbook.io/assembly-for-the-snes/
+Orochimaru's Zelda 3 Hacking Compendium v1.4 - Zelda3 Compendium.pdf	https://darkshark.de/files/zelda/Zelda3%20Compendium.pdf
+Graphics Format - SnesLab	https://sneslab.net/wiki/Graphics_Format
+SNESConvert/main.c at master · Kannagi/SNESConvert · GitHub	https://github.com/Kannagi/SNESConvert/blob/master/main.c
+Custom / Edited - The Legend of Zelda Customs - Maple (The Minish Cap-Style) - The Spriters Resource	https://www.spriters-resource.com/custom_edited/thelegendofzeldacustoms/sheet/17379/
+Prerelease:The Legend of Zelda: A Link to the Past - The Cutting Room Floor	https://tcrf.net/Prerelease:The_Legend_of_Zelda:_A_Link_to_the_Past#Enemies
+GitHub - spannerisms/UndertaleBattleDemo	https://github.com/spannerisms/UndertaleBattleDemo
+spannerisms/selfdasm: The SNES ROM that disassembles itself	https://github.com/spannerisms/selfdasm
+SNES Hacking for Beginners - Google Docs	https://docs.google.com/document/d/1bJcqTpCQEwLagJhj39gOr2Gbl0CiOJEYjtr2YBSmyLs/edit#heading=h.z2ui2k3b347u
+Hyrule Magic Guide	https://www.geocities.ws/libercy/HyruleMagic/monologue.html
+Asar User Manual	https://rpghacker.github.io/asar/manual/
+ZScream: Suggestions, bugs, todo, refactor - Google Docs	https://docs.google.com/document/d/1OLSstEOkjZnmJFurNAspnWC4qRkOFl6M4sjPx2do8JU/edit
+65816 Programming Primer	https://softpixel.com/~cwright/sianse/docs/65816NFO.HTM#appena
+Learn Multi platform 65816 Assembly Programming... For Ultimate Power!	https://www.chibiakumas.com/65816/?noui=1
+ALTTP Custom Title Screen	http://lw2.minecraftnoob.com/Jared/titleScreen.html
+Scawful's ZSCream Changelist - Google Docs	https://docs.google.com/document/d/143IvBPDhHmSOCWfSUvqVvjGyM5W212UuH2G4Cl--0jg/edit
+Overworld Areas - TLoZ: ALTTP Hacking Resources	http://alttp.run/hacking/index.php?title=Overworld_Areas
+Festive Seed ALttPRandomizer Collection - Google Docs	https://docs.google.com/document/d/1GHRH2pjGXIN1_RraQj3PDzUSqUkhjINiHOWijVZIpbk/edit
+pelrun/Dispel: Disassembler for 65816/SNES rom images.	https://github.com/pelrun/Dispel
+ALttP Speedrunning Wiki	https://alttp-wiki.net/index.php/Main_Page
+Custom / Edited - The Legend of Zelda Customs - Pirates - The Spriters Resource	https://www.spriters-resource.com/custom_edited/thelegendofzeldacustoms/sheet/84228/
+vgm-disasm/snes/NSPC/Nintendo/Koji Kondo/Legend of Zelda - A Link to the Past.s at master · loveemu/vgm-disasm	https://github.com/loveemu/vgm-disasm/blob/master/snes/NSPC/Nintendo/Koji%20Kondo/Legend%20of%20Zelda%20-%20A%20Link%20to%20the%20Past.s
+snes/emulator/cpu65c816/cpu.go at main · alttpo/snes	https://github.com/alttpo/snes/blob/main/emulator/cpu65c816/cpu.go
+alttpo/mapgen: Go module for ALTTP specific things	https://github.com/alttpo/mapgen
+Development:The Legend of Zelda: A Link to the Past/Early Map Layouts - The Cutting Room Floor	https://tcrf.net/Development:The_Legend_of_Zelda:_A_Link_to_the_Past/Early_Map_Layouts
+Development:The Legend of Zelda: A Link to the Past/Entities - The Cutting Room Floor	https://tcrf.net/Development:The_Legend_of_Zelda:_A_Link_to_the_Past/Entities
+Proto:The Legend of Zelda: A Link to the Past/Mid-1991 Overdump - The Cutting Room Floor	https://tcrf.net/Proto:The_Legend_of_Zelda:_A_Link_to_the_Past/Mid-1991_Overdump
+ALttP Map Data - Google Sheets	https://docs.google.com/spreadsheets/d/1tNN1r7uWAGfekoN12XHKBVwtkGCJiUJGBla4PVv-jbA/edit#gid=1495947088
+gold star - The morning star weapon for Link - Page 2	https://www.zeldix.net/t172p25-the-morning-star-weapon-for-link?highlight=gold+star
+The All-in patch	https://www.zeldix.net/t308-the-all-in-patch
+Conditionals and Loops - Asar Manual	https://rpghacker.github.io/asar/asar_2_beta/conditionals.html
+Development:The Legend of Zelda: A Link to the Past/Entities - The Cutting Room Floor	https://tcrf.net/Development:The_Legend_of_Zelda:_A_Link_to_the_Past/Entities#DRGN1_-_Dragon
+8-bit and 16-bit mode | Assembly for the SNES	https://ersanio.gitbook.io/assembly-for-the-snes/the-basics/816
+Rate of streaming data to the SPC700? - nesdev.org	https://forums.nesdev.org/viewtopic.php?t=14634
+N-SPC Engine - SnesLab	https://sneslab.net/wiki/N-SPC_Engine
+N-SPC Engine/Nintendo/Koji Kondo - SnesLab	https://sneslab.net/wiki/N-SPC_Engine/Nintendo/Koji_Kondo
+N-SPC Engine/Nintendo/Koji Kondo/Prototype - SnesLab	https://sneslab.net/wiki/N-SPC_Engine/Nintendo/Koji_Kondo/Prototype
+Introduction | Assembly for the SNES	https://ersanio.gitbook.io/assembly-for-the-snes
+The Legend of Zelda: Oracle of Ages - Text Dump - Game Boy Color - By davogones - GameFAQs	https://gamefaqs.gamespot.com/gbc/472313-the-legend-of-zelda-oracle-of-ages/faqs/20237
+spannerisms/BRRSuiteGUI	https://github.com/spannerisms/BRRSuiteGUI
+Game Boy Advance - The Legend of Zelda: The Minish Cap - The Spriters Resource	https://www.spriters-resource.com/game_boy_advance/thelegendofzeldatheminishcap/
+Game Boy / GBC - The Legend of Zelda: Oracle of Seasons - The Spriters Resource	https://www.spriters-resource.com/game_boy_gbc/thelegendofzeldaoracleofseasons/
+Game Boy / GBC - The Legend of Zelda: Oracle of Ages - The Spriters Resource	https://www.spriters-resource.com/game_boy_gbc/thelegendofzeldaoracleofages/
+Game Boy / GBC - The Legend of Zelda: Link's Awakening / DX - The Spriters Resource	https://www.spriters-resource.com/game_boy_gbc/thelegendofzeldalinksawakeningdx/
+Bit shifting operations | Assembly for the SNES	https://ersanio.gitbook.io/assembly-for-the-snes/mathemathics-and-logic/shift
+LC_LZ2 - SnesLab	https://sneslab.net/wiki/LC_LZ2
+65816 Opcodes	https://undisbeliever.net/snesdev/65816-opcodes.html
+SPC700/IPL ROM - SnesLab	https://sneslab.net/wiki/SPC700/IPL_ROM
+PPU registers - SNESdev Wiki	https://snes.nesdev.org/wiki/PPU_registers#OAM_address
+Reading and writing PPU memory - SNESdev Wiki	https://snes.nesdev.org/wiki/Reading_and_writing_PPU_memory#cite_note-1
+Timing - SNESdev Wiki	https://snes.nesdev.org/wiki/Timing
+DMA registers - SNESdev Wiki	https://snes.nesdev.org/wiki/DMA_registers
+SPC-700 instruction set - SNESdev Wiki	https://snes.nesdev.org/wiki/SPC-700_instruction_set#Registers
+PPU Registers - SnesLab	https://sneslab.net/wiki/PPU_Registers
+SPC700 Reference | Super Famicom Development Wiki	https://wiki.superfamicom.org/spc700-reference#dsp-access-145
+EmulatorResources/SNESAccuracyTests - TASVideos	https://tasvideos.org/Emulatorresources/SNESaccuracytests
+Snes Central: blargg hardware tests	https://snescentral.com/article.php?id=1115
+Snes Central: Homebrew SNES Games/Demos	https://snescentral.com/homebrew.php
+Super NES Programming/SNES memory map - Wikibooks, open books for an open world	https://en.wikibooks.org/wiki/Super_NES_Programming/SNES_memory_map
+A Summary of 65816 Addressing Modes [MG's Apple II Site]	http://apple2.guidero.us/doku.php/mg_notes/65816_notes/addressing_modes
+Fullsnes - Nocash SNES Specs	https://problemkaputt.de/fullsnes.htm#snesapumaincpucommunicationport
+SPC700 Reference | Super Famicom Development Wiki	https://wiki.superfamicom.org/spc700-reference
+higan / snes-test-roms · GitLab	https://gitlab.com/higan/snes-test-roms
+snesdev/docs/spc700.txt at master · gilligan/snesdev	https://github.com/gilligan/snesdev/blob/master/docs/spc700.txt
+dinkc64/LakeSnes: A SNES emulator, in C	https://github.com/dinkc64/LakeSnes/
+HDMA Examples – nesdoug	https://nesdoug.com/2020/06/14/hdma-examples/
+Sprites - TLoZ: ALTTP Hacking Resources	http://alttp.run/hacking/index.php?title=Sprites
+How Was ALttP Built? - Google Sheets	https://docs.google.com/spreadsheets/d/1StEsmhsKXnghSvjmArU44gXe9ksYQo3trblysJdGu18/edit#gid=0
+ALttP Gigaleak Investigation - Google Sheets	https://docs.google.com/spreadsheets/d/1LEhUGGvcxZrNXMyH6g1D5At6JUWu4iZcQWy3D4TKDgI/edit#gid=1656916817
+User:Scawful/ALttP Graphical Data Draft - The Cutting Room Floor	https://tcrf.net/User:Scawful/ALttP_Graphical_Data_Draft
+Development:The Legend of Zelda: A Link to the Past - The Cutting Room Floor	about:reader?url=https%3A%2F%2Ftcrf.net%2FDevelopment%3AThe_Legend_of_Zelda%3A_A_Link_to_the_Past
+Development:The Legend of Zelda: A Link to the Past/Dungeons & Interiors - The Cutting Room Floor	https://tcrf.net/Development:The_Legend_of_Zelda:_A_Link_to_the_Past/Dungeons_%26_Interiors#August_1991_Prototype_Dungeons
+Development:The Legend of Zelda: A Link to the Past/Japanese Script - The Cutting Room Floor	https://tcrf.net/Development:The_Legend_of_Zelda:_A_Link_to_the_Past/Japanese_Script#003x:_Loyal_Sage
+Super Donkey - The Cutting Room Floor	https://tcrf.net/Super_Donkey
+Development:The Legend of Zelda: A Link to the Past/Overworld - The Cutting Room Floor	https://tcrf.net/Development:The_Legend_of_Zelda:_A_Link_to_the_Past/Overworld
+Development:The Legend of Zelda: A Link to the Past - The Cutting Room Floor	https://tcrf.net/Development:The_Legend_of_Zelda:_A_Link_to_the_Past
+Development:The Legend of Zelda: A Link to the Past/Early Plot Progression - The Cutting Room Floor	https://tcrf.net/Development:The_Legend_of_Zelda:_A_Link_to_the_Past/Early_Plot_Progression
+GitHub - alekmaul/pvsneslib: PVSnesLib : A small, open and free development kit for the Nintendo SNES	https://github.com/alekmaul/pvsneslib
+Index listing for libs/beast/example/websocket/server/chat-multi/ - 1.77.0	https://www.boost.org/doc/libs/1_77_0/libs/beast/example/websocket/server/chat-multi/
+c# - BSP dungeon generation is not generating corridors - Stack Overflow	https://stackoverflow.com/questions/56345921/bsp-dungeon-generation-is-not-generating-corridors
+Basic BSP Dungeon generation - RogueBasin	http://www.roguebasin.com/index.php?title=Basic_BSP_Dungeon_generation
+MySQL-RPG-Schema/create_tables.sql at master · jgoodman/MySQL-RPG-Schema	https://github.com/jgoodman/MySQL-RPG-Schema/blob/master/create_tables.sql
+How-to Hack the SNES Classic Mini on a Mac | SNES Classic Mini Mods & Hacks	https://snesclassicmods.com/how-to-hack-the-snes-classic-mini-on-a-mac/
+SNES Classic Mini Mods & Hacks | Modding and Hacking Tutorials for Your SNES Classic Mini	https://snesclassicmods.com/
+How-to Add More Games to SNES Classic Mini | SNES Classic Mini Mods & Hacks	https://snesclassicmods.com/how-to-add-more-games-to-snes-classic-mini/
+VirtualBox on Mac – Cannot add SNES Classic as USB filter/device : miniSNESmods	https://www.reddit.com/r/miniSNESmods/comments/bdn5ar/virtualbox_on_mac_cannot_add_snes_classic_as_usb/
+Led Matrix Editor	https://ledmatrix-editor.arduino.cc/
+The Little Schemer by Daniel P. Friedman	https://www.goodreads.com/book/show/548914.The_Little_Schemer
+CD leak	http://www.mediafire.com/file/3o71gocc7ow2bn3/Kanye_West_-_The_College_Dropout_%2528Early_Version%2529.zip/file
+Joliet	https://www.oldmapsonline.org/map/usgs/5531909
+Zelda (SSBU) - SmashWiki, the Super Smash Bros. wiki	https://www.ssbwiki.com/Zelda_(SSBU)
+Smash Bros Ultimate: Which Zelda is that? ALttP? ALBW? | kantopia	https://kantopia.wordpress.com/2018/06/23/smash-bros-ultimate-which-zelda-is-that-alttp-albw/
+[platinum] Pokémon Renegade Platinum - ROM - NDS ROM Hacks - Project Pokemon Forums	https://projectpokemon.org/home/forums/topic/52294-pok%C3%A9mon-renegade-platinum/
+sosuke3/VSCode65816: Syntax highlighting extension for Visual Studio Code	https://github.com/sosuke3/VSCode65816
+DanielOaks/65816-Assembly-TMlanguage: tmLanguage file for 65816 Assembly	https://github.com/DanielOaks/65816-Assembly-TMlanguage
+vicerust/65816-SNES-Assembly	https://github.com/vicerust/65816-SNES-Assembly
+Nintendo Music Format (N-SPC) | Super Famicom Development Wiki	https://wiki.superfamicom.org/nintendo-music-format-(n-spc)#notes
+Dr LUT	https://ppelikan.github.io/drlut/
+Making ALTTP Music with Assembly	https://spannerisms.github.io/asmmusic
+Kanye Instrumentals Mix by SUEDE KICKS | Free Listening on SoundCloud	https://soundcloud.com/espirituu/kanye-study-mix

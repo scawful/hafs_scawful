@@ -45,6 +45,16 @@ hafs-training-status
 hafs-windows-status
 ```
 
+### 📬 Agent Messaging
+
+```bash
+# Send an agent update to Halext + terminal mail
+hmsg "Campaign finished with 1.2K samples"
+
+# Sync plugin configs/docs/scripts to halext + Windows
+hpsync
+```
+
 ### 🔍 Training Analysis
 
 ```bash
