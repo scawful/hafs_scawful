@@ -251,7 +251,8 @@ class AsmDataGenerator(DataGenerator):
                 "       - Hardware timing considerations\n"
                 "   ```\n\n"
                 "QUALITY REQUIREMENTS:\n"
-                "- ALWAYS use the provided semantic labels in brackets for all hex addresses (e.g., LDA $2100 [INIDISP]).\n"
+                "- DO NOT put labels in brackets directly in the assembly code (e.g., NO 'LDA $2100 [INIDISP]').\n"
+                "- Symbols and labels MUST only appear in semicoloned comments.\n"
                 "- Maintain the Register Width (M/X) context shown in comments (e.g., ; M=8, X=16).\n"
                 "- Use proper 65816 syntax and mnemonics (LDA, STA, JSL, RTL, PHP, PLP, etc.)\n"
                 "- Include all addressing modes correctly (.b for 8-bit, .w for 16-bit, # for immediate)\n"
@@ -348,6 +349,11 @@ class AsmDataGenerator(DataGenerator):
                 teacher_prompt=str(prompt),
                 kg_entities=kg_entities,
             )
+
+            # Re-enrich output with width tracking and symbols after LLM generation
+            if self._preprocessor:
+                output = self._preprocessor.enrich(output)
+                sample.output = output
 
             # Validate ASM syntax
             if hasattr(self, "_asar_validator") and self._asar_validator:

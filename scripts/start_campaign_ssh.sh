@@ -20,6 +20,7 @@ PILOT="${PILOT:-false}"
 
 TS="$(date +%Y%m%d_%H%M%S)"
 LOG_FILE="${TRAINING_ROOT}/logs/campaign_${TARGET}_${TS}.log"
+ERR_FILE="${TRAINING_ROOT}/logs/campaign_${TARGET}_${TS}.err.log"
 
 ARG_LIST="'-m','hafs_scawful.scripts.training.generate_campaign','--target','${TARGET}'"
 if [ "$RESUME" = "true" ]; then
@@ -38,8 +39,9 @@ PS_SCRIPT=$(cat <<PS
 \$env:TRAINING_OUTPUT_DIR='${TRAINING_ROOT}/datasets';
 \$env:TRAINING_CHECKPOINT_DIR='${TRAINING_ROOT}/checkpoints';
 \$env:TRAINING_LOG_DIR='${TRAINING_ROOT}/logs';
-Start-Process -FilePath '${REMOTE_CODE_DIR}/.venv/Scripts/python.exe' -ArgumentList ${ARG_LIST} -RedirectStandardOutput '${LOG_FILE}' -RedirectStandardError '${LOG_FILE}' -WorkingDirectory '${REMOTE_CODE_DIR}' -NoNewWindow;
+Start-Process -FilePath '${REMOTE_CODE_DIR}/.venv/Scripts/python.exe' -ArgumentList ${ARG_LIST} -RedirectStandardOutput '${LOG_FILE}' -RedirectStandardError '${ERR_FILE}' -WorkingDirectory '${REMOTE_CODE_DIR}' -NoNewWindow;
 Write-Output 'LOG:${LOG_FILE}'
+Write-Output 'ERR:${ERR_FILE}'
 PS
 )
 PS_SCRIPT="${PS_SCRIPT//$'\n'/; }"

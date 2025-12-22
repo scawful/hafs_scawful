@@ -24,6 +24,7 @@ fi
 
 TS="$(date +%Y%m%d_%H%M%S)"
 LOG_FILE="${TRAINING_ROOT}/logs/training_${MODEL_NAME}_${TS}.log"
+ERR_FILE="${TRAINING_ROOT}/logs/training_${MODEL_NAME}_${TS}.err.log"
 
 PS_SCRIPT=$(cat <<PS
 \$env:HAFS_SCAWFUL_ROOT='${WINDOWS_PLUGIN_DIR}';
@@ -31,8 +32,9 @@ PS_SCRIPT=$(cat <<PS
 \$env:HAFS_DATASET_PATH='${DATASET_PATH}';
 \$env:HAFS_MODEL_NAME='${MODEL_NAME}';
 \$env:HAFS_MODEL_OUTPUT_DIR='${TRAINING_ROOT}/models/${MODEL_NAME}';
-Start-Process -FilePath '${REMOTE_CODE_DIR}/.venv/Scripts/python.exe' -ArgumentList '-m','hafs_scawful.scripts.train_model_windows','${DATASET_PATH}' -RedirectStandardOutput '${LOG_FILE}' -RedirectStandardError '${LOG_FILE}' -WorkingDirectory '${REMOTE_CODE_DIR}' -NoNewWindow;
+Start-Process -FilePath '${REMOTE_CODE_DIR}/.venv/Scripts/python.exe' -ArgumentList '-m','hafs_scawful.scripts.train_model_windows','${DATASET_PATH}' -RedirectStandardOutput '${LOG_FILE}' -RedirectStandardError '${ERR_FILE}' -WorkingDirectory '${REMOTE_CODE_DIR}' -NoNewWindow;
 Write-Output 'LOG:${LOG_FILE}'
+Write-Output 'ERR:${ERR_FILE}'
 PS
 )
 PS_SCRIPT="${PS_SCRIPT//$'\n'/; }"

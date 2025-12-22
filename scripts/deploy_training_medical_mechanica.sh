@@ -103,6 +103,7 @@ EOF
     TARGET=${2:-34500}
     TS="$(date +%Y%m%d_%H%M%S)"
     LOG_FILE="${D_DRIVE_DIR}/logs/campaign_${TARGET}_${TS}.log"
+    ERR_FILE="${D_DRIVE_DIR}/logs/campaign_${TARGET}_${TS}.err.log"
 
     echo "Launching dataset generation campaign..."
     echo "Target: $TARGET samples"
@@ -110,7 +111,7 @@ EOF
     echo ""
 
     # Launch campaign on GPU host
-    ssh "$REMOTE_USER@$REMOTE_HOST" "powershell -NoProfile -Command \"\$env:HAFS_SCAWFUL_ROOT='${WINDOWS_PLUGIN_DIR}'; \$env:PYTHONPATH='${REMOTE_DIR}/src;${WINDOWS_PLUGIN_DIR}/..'; \$env:TRAINING_OUTPUT_DIR='${D_DRIVE_DIR}/datasets'; \$env:TRAINING_CHECKPOINT_DIR='${D_DRIVE_DIR}/checkpoints'; \$env:TRAINING_LOG_DIR='${D_DRIVE_DIR}/logs'; Start-Process -FilePath '${REMOTE_DIR}/.venv/Scripts/python.exe' -ArgumentList '-m','hafs_scawful.scripts.training.generate_campaign','--target','${TARGET}','--export','--resume' -RedirectStandardOutput '${LOG_FILE}' -RedirectStandardError '${LOG_FILE}' -WorkingDirectory '${REMOTE_DIR}' -NoNewWindow; Write-Output '✓ Campaign launched'; Write-Output 'LOG:${LOG_FILE}'\""
+    ssh "$REMOTE_USER@$REMOTE_HOST" "powershell -NoProfile -Command \"\$env:HAFS_SCAWFUL_ROOT='${WINDOWS_PLUGIN_DIR}'; \$env:PYTHONPATH='${REMOTE_DIR}/src;${WINDOWS_PLUGIN_DIR}/..'; \$env:TRAINING_OUTPUT_DIR='${D_DRIVE_DIR}/datasets'; \$env:TRAINING_CHECKPOINT_DIR='${D_DRIVE_DIR}/checkpoints'; \$env:TRAINING_LOG_DIR='${D_DRIVE_DIR}/logs'; Start-Process -FilePath '${REMOTE_DIR}/.venv/Scripts/python.exe' -ArgumentList '-m','hafs_scawful.scripts.training.generate_campaign','--target','${TARGET}','--export','--resume' -RedirectStandardOutput '${LOG_FILE}' -RedirectStandardError '${ERR_FILE}' -WorkingDirectory '${REMOTE_DIR}' -NoNewWindow; Write-Output '✓ Campaign launched'; Write-Output 'LOG:${LOG_FILE}'; Write-Output 'ERR:${ERR_FILE}'\""
     ;;
 
   train)
@@ -118,6 +119,7 @@ EOF
     MODEL_NAME=${3:-"oracle-rauru-assembler"}
     TS="$(date +%Y%m%d_%H%M%S)"
     LOG_FILE="${D_DRIVE_DIR}/logs/training_${MODEL_NAME}_${TS}.log"
+    ERR_FILE="${D_DRIVE_DIR}/logs/training_${MODEL_NAME}_${TS}.err.log"
 
     echo "Launching model training..."
     echo "Dataset: $DATASET"
@@ -125,7 +127,7 @@ EOF
     echo "Output: $D_DRIVE_DIR/models/$MODEL_NAME"
     echo ""
 
-    ssh "$REMOTE_USER@$REMOTE_HOST" "powershell -NoProfile -Command \"\$env:HAFS_SCAWFUL_ROOT='${WINDOWS_PLUGIN_DIR}'; \$env:PYTHONPATH='${REMOTE_DIR}/src;${WINDOWS_PLUGIN_DIR}/..'; \$env:CUDA_VISIBLE_DEVICES='0'; \$env:HAFS_DATASET_PATH='${DATASET}'; \$env:HAFS_MODEL_NAME='${MODEL_NAME}'; \$env:HAFS_MODEL_OUTPUT_DIR='${D_DRIVE_DIR}/models/${MODEL_NAME}'; Start-Process -FilePath '${REMOTE_DIR}/.venv/Scripts/python.exe' -ArgumentList '-m','hafs_scawful.scripts.train_model_windows','${DATASET}' -RedirectStandardOutput '${LOG_FILE}' -RedirectStandardError '${LOG_FILE}' -WorkingDirectory '${REMOTE_DIR}' -NoNewWindow; Write-Output '✓ Training launched'; Write-Output 'LOG:${LOG_FILE}'\""
+    ssh "$REMOTE_USER@$REMOTE_HOST" "powershell -NoProfile -Command \"\$env:HAFS_SCAWFUL_ROOT='${WINDOWS_PLUGIN_DIR}'; \$env:PYTHONPATH='${REMOTE_DIR}/src;${WINDOWS_PLUGIN_DIR}/..'; \$env:CUDA_VISIBLE_DEVICES='0'; \$env:HAFS_DATASET_PATH='${DATASET}'; \$env:HAFS_MODEL_NAME='${MODEL_NAME}'; \$env:HAFS_MODEL_OUTPUT_DIR='${D_DRIVE_DIR}/models/${MODEL_NAME}'; Start-Process -FilePath '${REMOTE_DIR}/.venv/Scripts/python.exe' -ArgumentList '-m','hafs_scawful.scripts.train_model_windows','${DATASET}' -RedirectStandardOutput '${LOG_FILE}' -RedirectStandardError '${ERR_FILE}' -WorkingDirectory '${REMOTE_DIR}' -NoNewWindow; Write-Output '✓ Training launched'; Write-Output 'LOG:${LOG_FILE}'; Write-Output 'ERR:${ERR_FILE}'\""
     ;;
 
   status)

@@ -95,6 +95,7 @@ Write-Host ""
 Write-Host "[4/5] Building command..." -ForegroundColor Green
 $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 $logFile = Join-Path $DrivePaths.Logs "campaign_${Target}_${timestamp}.log"
+$errFile = Join-Path $DrivePaths.Logs "campaign_${Target}_${timestamp}.err.log"
 
 $pythonExe = "$HafsRoot\.venv\Scripts\python.exe"
 $arguments = "-m hafs_scawful.scripts.training.generate_campaign --target $Target"
@@ -106,6 +107,7 @@ if ($OutputName) { $arguments += " --output-name $OutputName" }
 
 Write-Host "  Command: $pythonExe $arguments"
 Write-Host "  Log: $logFile"
+Write-Host "  Err: $errFile"
 Write-Host ""
 
 # Launch campaign
@@ -118,7 +120,7 @@ $process = Start-Process `
     -ArgumentList $arguments `
     -WorkingDirectory $HafsRoot `
     -RedirectStandardOutput $logFile `
-    -RedirectStandardError $logFile `
+    -RedirectStandardError $errFile `
     -WindowStyle Hidden `
     -PassThru
 $pid = $process.Id
@@ -132,6 +134,7 @@ Write-Host "====================================================================
 Write-Host ""
 Write-Host "Process ID: $pid" -ForegroundColor Yellow
 Write-Host "Log file: $logFile" -ForegroundColor Yellow
+Write-Host "Error log: $errFile" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "Monitoring:" -ForegroundColor Yellow
 Write-Host "  Live log: Get-Content '$logFile' -Wait"
