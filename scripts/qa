@@ -1,0 +1,5 @@
+#!/bin/bash
+# Mobile-friendly Q&A shortcut
+
+cd ~/Code/hafs
+PYTHONPATH=src .venv/bin/python ~/Code/hafs_scawful/scripts/qa_by_number.py "$@"

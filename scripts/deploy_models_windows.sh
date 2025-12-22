@@ -3,20 +3,26 @@
 
 set -e
 
-WINDOWS_HOST="medical-mechanica"
-SCRIPTS_DIR="D:/hafs_training/scripts"
-MODELS_DIR="D:/hafs_training/models"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1090
+source "$SCRIPT_DIR/_plugin_env.sh"
+
+WINDOWS_HOST="${HAFS_WINDOWS_HOST:-medical-mechanica}"
+WINDOWS_IP="${HAFS_WINDOWS_IP:-$WINDOWS_HOST}"
+HAFS_ROOT="${HAFS_ROOT:-$HOME/Code/hafs}"
+SCRIPTS_DIR="${HAFS_WINDOWS_TRAINING:-D:/hafs_training}/scripts"
+MODELS_DIR="${HAFS_WINDOWS_TRAINING:-D:/hafs_training}/models"
 
 echo "=========================================="
-echo "Model Setup Deployment to medical-mechanica"
+echo "Model Setup Deployment to ${WINDOWS_HOST}"
 echo "=========================================="
 echo ""
 
 # Step 1: Copy setup scripts to Windows
 echo "[1/5] Copying setup scripts to Windows..."
-scp scripts/setup_windows_models.ps1 ${WINDOWS_HOST}:${SCRIPTS_DIR}/
-scp scripts/setup_finetuning_models.py ${WINDOWS_HOST}:${SCRIPTS_DIR}/
-scp config/models.toml ${WINDOWS_HOST}:D:/hafs_training/config/
+scp "$HAFS_ROOT/scripts/setup_windows_models.ps1" "${WINDOWS_HOST}:${SCRIPTS_DIR}/"
+scp "$HAFS_ROOT/scripts/setup_finetuning_models.py" "${WINDOWS_HOST}:${SCRIPTS_DIR}/"
+scp "$HAFS_ROOT/config/models.toml" "${WINDOWS_HOST}:D:/hafs_training/config/"
 echo "✓ Scripts copied"
 echo ""
 
@@ -31,7 +37,7 @@ echo ""
 read -p "Install Ollama models? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    ssh ${WINDOWS_HOST} << 'EOF'
+    ssh "${WINDOWS_HOST}" << 'EOF'
         # Install essential models (lower VRAM usage)
         ollama pull qwen2.5-coder:14b
         ollama pull qwen2.5-coder:7b
@@ -52,7 +58,7 @@ echo "[3/5] Setting up Python environment..."
 read -p "Setup Unsloth for fine-tuning? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    ssh ${WINDOWS_HOST} << 'EOF'
+    ssh "${WINDOWS_HOST}" << 'EOF'
         cd D:/hafs_training
 
         # Verify CUDA
@@ -84,7 +90,7 @@ read -p "Download fine-tuning models? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     # Run the Python setup script on Windows
-    ssh ${WINDOWS_HOST} "python ${SCRIPTS_DIR}/setup_finetuning_models.py --models recommended --setup-unsloth"
+    ssh "${WINDOWS_HOST}" "python ${SCRIPTS_DIR}/setup_finetuning_models.py --models recommended --setup-unsloth"
     echo "✓ Fine-tuning models downloaded"
 else
     echo "⊘ Skipped model downloads"
@@ -93,7 +99,7 @@ echo ""
 
 # Step 5: Verify setup
 echo "[5/5] Verifying setup..."
-ssh ${WINDOWS_HOST} << 'EOF'
+ssh "${WINDOWS_HOST}" << 'EOF'
     echo "=== Ollama Models ==="
     ollama list
 
@@ -116,7 +122,7 @@ echo "✓ Setup Complete!"
 echo "=========================================="
 echo ""
 echo "Next steps:"
-echo "  1. Test Ollama: curl http://100.104.53.21:11435/api/tags"
+echo "  1. Test Ollama: curl http://${WINDOWS_IP}:11435/api/tags"
 echo "  2. Run hybrid campaign: ./scripts/launch_hybrid_training.sh 100"
 echo "  3. Start fine-tuning: hafs training fine-tune --model qwen2.5-coder-14b"
 echo ""

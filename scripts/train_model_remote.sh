@@ -3,8 +3,16 @@
 
 set -e
 
+# Load plugin environment
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1090
+source "$SCRIPT_DIR/_plugin_env.sh"
+
 # Configuration
-WINDOWS_HOST="medical-mechanica"
+WINDOWS_HOST="${HAFS_WINDOWS_HOST:-medical-mechanica}"
+WINDOWS_CONTEXT="${HAFS_WINDOWS_CONTEXT:-D:/.context}"
+LOCAL_CONTEXT="${HAFS_CONTEXT:-$HOME/.context}"
+MOUNT_CONTEXT="${HAFS_MOUNT_MMD:-$HOME/Mounts/mm-d}/.context"
 DATASET_NAME="${1:-alttp_yaze_full_1000_20251221_195746}"
 BASE_MODEL="${2:-unsloth/qwen2.5-coder-1.5b-bnb-4bit}"
 QUALITY_TAG="${3:-alpha}"
@@ -40,7 +48,7 @@ echo "✓ Connected to GPU server"
 # Check dataset exists
 echo ""
 echo "[2/5] Verifying dataset..."
-DATASET_PATH="D:/.context/training/datasets/$DATASET_NAME"
+DATASET_PATH="${WINDOWS_CONTEXT}/training/datasets/$DATASET_NAME"
 ssh "$WINDOWS_HOST" << EOF
 if [ ! -f "$DATASET_PATH/train.jsonl" ]; then
     echo "✗ Dataset not found: $DATASET_PATH"
@@ -54,8 +62,8 @@ EOF
 if [ $? -ne 0 ]; then
     echo ""
     echo "Dataset not found on Windows. Syncing..."
-    rsync -avz ~/.context/training/datasets/alttp_yaze_full_1000_20251221_195746_20251221_224740/ \
-      /Users/scawful/Mounts/mm-d/.context/training/datasets/$DATASET_NAME/ \
+    rsync -avz "${LOCAL_CONTEXT}/training/datasets/${DATASET_NAME}/" \
+      "${MOUNT_CONTEXT}/training/datasets/${DATASET_NAME}/" \
       --exclude '__pycache__' --exclude '.DS_Store'
     echo "✓ Dataset synced"
 fi

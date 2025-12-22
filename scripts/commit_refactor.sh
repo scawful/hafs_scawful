@@ -1,5 +1,10 @@
 #!/bin/bash
-cd /Users/scawful/Code/hafs
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1090
+source "$SCRIPT_DIR/_plugin_env.sh"
+
+cd "${HAFS_ROOT:-$HOME/Code/hafs}"
 git add .
 git commit -m "refactor: decouple TUI/CLI and promote framework utilities
 

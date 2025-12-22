@@ -3,19 +3,59 @@ set -euo pipefail
 
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-HALEXT_HOST="${HALEXT_HOST:-halext-server}"
-HALEXT_DIR="${HALEXT_DIR:-/home/halext/hafs_scawful}"
+PLUGIN_CONFIG="${PLUGIN_CONFIG:-$SOURCE_DIR/config.toml}"
 
-WINDOWS_HOST="${WINDOWS_HOST:-medical-mechanica}"
-WINDOWS_DIR="${WINDOWS_DIR:-C:/hafs_scawful}"
+if [ -f "$PLUGIN_CONFIG" ]; then
+  eval "$(
+    PLUGIN_CONFIG="$PLUGIN_CONFIG" python3 - <<'PY'
+import os
+import shlex
+import tomllib
+from pathlib import Path
 
-HALEXT_MOUNT="${HALEXT_MOUNT:-/Users/scawful/Mounts/halext}"
-WINDOWS_MOUNT_C="${WINDOWS_MOUNT_C:-/Users/scawful/Mounts/mm-c}"
+path = Path(os.environ["PLUGIN_CONFIG"])
+with path.open("rb") as handle:
+    data = tomllib.load(handle)
 
-SYNC_ALL="${SYNC_ALL:-0}"
-SYNC_ITEMS="${SYNC_ITEMS:-config,docs}"
+sync = data.get("sync", {})
+mapping = {
+    "halext_host": "CONFIG_HALEXT_HOST",
+    "halext_dir": "CONFIG_HALEXT_DIR",
+    "halext_mount": "CONFIG_HALEXT_MOUNT",
+    "windows_host": "CONFIG_WINDOWS_HOST",
+    "windows_dir": "CONFIG_WINDOWS_DIR",
+    "windows_mount_c": "CONFIG_WINDOWS_MOUNT_C",
+    "sync_items": "CONFIG_SYNC_ITEMS",
+    "sync_all": "CONFIG_SYNC_ALL",
+    "use_mounts": "CONFIG_USE_MOUNTS",
+}
+
+for key, out in mapping.items():
+    if key not in sync:
+        continue
+    value = sync[key]
+    if isinstance(value, bool):
+        value = "1" if value else "0"
+    elif isinstance(value, list):
+        value = ",".join(str(item) for item in value)
+    print(f'{out}={shlex.quote(str(value))}')
+PY
+  )"
+fi
+
+HALEXT_HOST="${HALEXT_HOST:-${CONFIG_HALEXT_HOST:-halext-server}}"
+HALEXT_DIR="${HALEXT_DIR:-${CONFIG_HALEXT_DIR:-/home/halext/hafs_scawful}}"
+
+WINDOWS_HOST="${WINDOWS_HOST:-${CONFIG_WINDOWS_HOST:-medical-mechanica}}"
+WINDOWS_DIR="${WINDOWS_DIR:-${CONFIG_WINDOWS_DIR:-C:/hafs_scawful}}"
+
+HALEXT_MOUNT="${HALEXT_MOUNT:-${CONFIG_HALEXT_MOUNT:-/Users/scawful/Mounts/halext}}"
+WINDOWS_MOUNT_C="${WINDOWS_MOUNT_C:-${CONFIG_WINDOWS_MOUNT_C:-/Users/scawful/Mounts/mm-c}}"
+
+SYNC_ALL="${SYNC_ALL:-${CONFIG_SYNC_ALL:-0}}"
+SYNC_ITEMS="${SYNC_ITEMS:-${CONFIG_SYNC_ITEMS:-config,docs,config.toml,aliases.sh}}"
 DRY_RUN="${DRY_RUN:-0}"
-USE_MOUNTS="${USE_MOUNTS:-1}"
+USE_MOUNTS="${USE_MOUNTS:-${CONFIG_USE_MOUNTS:-1}}"
 
 IFS=',' read -r -a items <<< "$SYNC_ITEMS"
 if [ "$SYNC_ALL" = "1" ]; then

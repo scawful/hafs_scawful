@@ -15,15 +15,24 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HAFS_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+# shellcheck disable=SC1090
+source "$SCRIPT_DIR/_plugin_env.sh"
 
-REMOTE_HOST="medical-mechanica"
-REMOTE_USER="Administrator"
-REMOTE_DIR="C:/hafs"
-D_DRIVE_DIR="D:/hafs_training"
+HAFS_ROOT="${HAFS_ROOT:-$HOME/Code/hafs}"
+LOCAL_CONTEXT="${HAFS_CONTEXT:-$HOME/.context}"
+
+REMOTE_HOST="${HAFS_WINDOWS_HOST:-medical-mechanica}"
+REMOTE_USER="${HAFS_WINDOWS_USER:-Administrator}"
+REMOTE_DIR="${HAFS_WINDOWS_CODE_DIR:-C:/hafs}"
+D_DRIVE_DIR="${HAFS_WINDOWS_TRAINING:-D:/hafs_training}"
+WINDOWS_CONTEXT="${HAFS_WINDOWS_CONTEXT:-D:/.context}"
+WINDOWS_PLUGIN_DIR="${HAFS_WINDOWS_PLUGIN_DIR:-C:/hafs_scawful}"
+TRAINING_CONFIG_PATH="${WINDOWS_PLUGIN_DIR}/config/training.toml"
+SYNC_METHOD="${HAFS_CODE_SYNC_METHOD:-git}"
+REPO_URL="${HAFS_REPO_URL:-$(git -C "$HAFS_ROOT" config --get remote.origin.url 2>/dev/null)}"
 
 echo "========================================================================"
-echo "MEDICAL-MECHANICA TRAINING DEPLOYMENT"
+echo "GPU TRAINING DEPLOYMENT"
 echo "========================================================================"
 echo "Remote: $REMOTE_USER@$REMOTE_HOST"
 echo "Code: $REMOTE_DIR"
@@ -51,9 +60,21 @@ case "$COMMAND" in
 EOF
 
     echo ""
-    echo "[2/3] Syncing code to medical-mechanica..."
-    rsync -avz --exclude='.venv' --exclude='__pycache__' --exclude='.git' \
-      "$HAFS_ROOT/" "$REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR/"
+    echo "[2/3] Syncing code to ${REMOTE_HOST}..."
+    if [ "$SYNC_METHOD" = "git" ]; then
+      if ssh "$REMOTE_USER@$REMOTE_HOST" "test -d \"$REMOTE_DIR/.git\""; then
+        ssh "$REMOTE_USER@$REMOTE_HOST" "cd \"$REMOTE_DIR\" && git pull --ff-only"
+      else
+        if [ -z "$REPO_URL" ]; then
+          echo "✗ Missing repo URL. Set HAFS_REPO_URL in config.toml or export it."
+          exit 1
+        fi
+        ssh "$REMOTE_USER@$REMOTE_HOST" "git clone \"$REPO_URL\" \"$REMOTE_DIR\""
+      fi
+    else
+      rsync -avz --exclude='.venv' --exclude='__pycache__' --exclude='.git' \
+        "$HAFS_ROOT/" "$REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR/"
+    fi
 
     echo ""
     echo "[3/3] Installing dependencies..."
@@ -98,25 +119,25 @@ EOF
     echo "Output: $D_DRIVE_DIR/datasets"
     echo ""
 
-    # Launch campaign on medical-mechanica
+    # Launch campaign on GPU host
     ssh "$REMOTE_USER@$REMOTE_HOST" << EOF
       cd C:/hafs
 
       # Set environment variables
       set PYTHONPATH=src
-      set TRAINING_OUTPUT_DIR=D:/hafs_training/datasets
-      set TRAINING_CHECKPOINT_DIR=D:/hafs_training/checkpoints
-      set TRAINING_LOG_DIR=D:/hafs_training/logs
+      set TRAINING_OUTPUT_DIR=${D_DRIVE_DIR}/datasets
+      set TRAINING_CHECKPOINT_DIR=${D_DRIVE_DIR}/checkpoints
+      set TRAINING_LOG_DIR=${D_DRIVE_DIR}/logs
 
       # Launch campaign in background (Windows)
       start /B .venv/Scripts/python.exe -m agents.training.scripts.generate_campaign \
         --target $TARGET \
         --export \
         --resume \
-        > D:/hafs_training/logs/campaign_${TARGET}_\$(date +%Y%m%d_%H%M%S).log 2>&1
+        > ${D_DRIVE_DIR}/logs/campaign_${TARGET}_\$(date +%Y%m%d_%H%M%S).log 2>&1
 
-      echo "✓ Campaign launched on medical-mechanica"
-      echo "Monitor with: ssh $REMOTE_USER@$REMOTE_HOST 'tail -f D:/hafs_training/logs/campaign_*.log'"
+      echo "✓ Campaign launched on ${REMOTE_HOST}"
+      echo "Monitor with: ssh $REMOTE_USER@$REMOTE_HOST 'tail -f ${D_DRIVE_DIR}/logs/campaign_*.log'"
 EOF
     ;;
 
@@ -141,16 +162,16 @@ EOF
       .venv/Scripts/python.exe -m agents.training.scripts.train_model \
         --dataset "$DATASET" \
         --model-name "$MODEL_NAME" \
-        --output-dir "D:/hafs_training/models/$MODEL_NAME" \
-        --config config/training_medical_mechanica.toml \
-        > D:/hafs_training/logs/training_${MODEL_NAME}_\$(date +%Y%m%d_%H%M%S).log 2>&1 &
+        --output-dir "${D_DRIVE_DIR}/models/$MODEL_NAME" \
+        --config "${TRAINING_CONFIG_PATH}" \
+        > ${D_DRIVE_DIR}/logs/training_${MODEL_NAME}_\$(date +%Y%m%d_%H%M%S).log 2>&1 &
 
-      echo "✓ Training launched on medical-mechanica"
+      echo "✓ Training launched on ${REMOTE_HOST}"
 EOF
     ;;
 
   status)
-    echo "Checking medical-mechanica status..."
+    echo "Checking ${REMOTE_HOST} status..."
     echo ""
 
     ssh "$REMOTE_USER@$REMOTE_HOST" << 'EOF'
@@ -178,7 +199,7 @@ EOF
     ;;
 
   monitor)
-    echo "Monitoring campaign on medical-mechanica..."
+    echo "Monitoring campaign on ${REMOTE_HOST}..."
     echo "Press Ctrl+C to stop monitoring"
     echo ""
 
@@ -197,7 +218,7 @@ EOF
     ;;
 
   stop)
-    echo "Stopping training processes on medical-mechanica..."
+    echo "Stopping training processes on ${REMOTE_HOST}..."
 
     ssh "$REMOTE_USER@$REMOTE_HOST" << 'EOF'
       # Kill Python training processes
@@ -208,35 +229,35 @@ EOF
     ;;
 
   sync-datasets)
-    echo "Syncing datasets FROM medical-mechanica to local..."
+    echo "Syncing datasets FROM ${REMOTE_HOST} to local..."
     echo ""
 
     # Create local directory
-    mkdir -p "$HOME/.context/training/datasets_from_mechanica"
+    mkdir -p "$LOCAL_CONTEXT/training/datasets_from_mechanica"
 
     # Rsync datasets
     rsync -avzP --progress \
-      "$REMOTE_USER@$REMOTE_HOST:D:/hafs_training/datasets/" \
-      "$HOME/.context/training/datasets_from_mechanica/"
+      "$REMOTE_USER@$REMOTE_HOST:${D_DRIVE_DIR}/datasets/" \
+      "$LOCAL_CONTEXT/training/datasets_from_mechanica/"
 
     echo ""
-    echo "✓ Datasets synced to: $HOME/.context/training/datasets_from_mechanica/"
+    echo "✓ Datasets synced to: $LOCAL_CONTEXT/training/datasets_from_mechanica/"
     ;;
 
   sync-models)
-    echo "Syncing models FROM medical-mechanica to local..."
+    echo "Syncing models FROM ${REMOTE_HOST} to local..."
     echo ""
 
     # Create local directory
-    mkdir -p "$HOME/.context/training/models_from_mechanica"
+    mkdir -p "$LOCAL_CONTEXT/training/models_from_mechanica"
 
     # Rsync models
     rsync -avzP --progress \
-      "$REMOTE_USER@$REMOTE_HOST:D:/hafs_training/models/" \
-      "$HOME/.context/training/models_from_mechanica/"
+      "$REMOTE_USER@$REMOTE_HOST:${D_DRIVE_DIR}/models/" \
+      "$LOCAL_CONTEXT/training/models_from_mechanica/"
 
     echo ""
-    echo "✓ Models synced to: $HOME/.context/training/models_from_mechanica/"
+    echo "✓ Models synced to: $LOCAL_CONTEXT/training/models_from_mechanica/"
     ;;
 
   *)

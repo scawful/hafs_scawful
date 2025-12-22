@@ -5,6 +5,11 @@
 
 set -e
 
+# Load plugin environment
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC1090
+source "$SCRIPT_DIR/_plugin_env.sh"
+
 # Color codes
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -13,16 +18,16 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # Configuration
-REMOTE_HOST="${1:-mm}"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REMOTE_HOST="${1:-${HAFS_WINDOWS_HOST:-mm}}"
+HAFS_ROOT="${HAFS_ROOT:-$HOME/Code/hafs}"
 REMOTE_TEMP_DIR="C:/Users/\$env:USERNAME/AppData/Local/Temp/hafs_training_setup"
-REMOTE_INSTALL_PATH="D:/training"
+REMOTE_INSTALL_PATH="${HAFS_WINDOWS_TRAINING:-D:/training}"
 
 echo -e "${CYAN}========================================${NC}"
 echo -e "${CYAN}Remote Training Environment Setup${NC}"
 echo -e "${CYAN}========================================${NC}"
 echo -e "${GREEN}Target: ${REMOTE_HOST}${NC}"
-echo -e "${GREEN}Scripts: ${SCRIPT_DIR}${NC}\n"
+echo -e "${GREEN}Scripts: ${HAFS_ROOT}/scripts${NC}\n"
 
 # Check if SSH is available
 if ! command -v ssh &> /dev/null; then
@@ -47,11 +52,11 @@ echo -e "${GREEN}✓ Directory created${NC}\n"
 
 # Transfer installation script
 echo -e "${CYAN}[3/5] Transferring installation scripts...${NC}"
-scp "${SCRIPT_DIR}/install_training_env.ps1" \
+scp "${HAFS_ROOT}/scripts/install_training_env.ps1" \
     "${REMOTE_HOST}:${REMOTE_TEMP_DIR}/install_training_env.ps1"
 echo -e "${GREEN}✓ install_training_env.ps1 transferred${NC}"
 
-scp "${SCRIPT_DIR}/test_training_setup.py" \
+scp "${HAFS_ROOT}/scripts/test_training_setup.py" \
     "${REMOTE_HOST}:${REMOTE_TEMP_DIR}/test_training_setup.py"
 echo -e "${GREEN}✓ test_training_setup.py transferred${NC}\n"
 
