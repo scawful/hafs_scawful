@@ -40,7 +40,10 @@ Push plugin configs/docs to halext-server and the Windows GPU host:
 ~/Code/hafs_scawful/scripts/publish_plugin_configs.sh
 ```
 
-Set `SYNC_ALL=1` to include scripts.
+Options:
+- `DRY_RUN=1` to preview changes
+- `SYNC_ITEMS=config,docs` to choose what syncs
+- `SYNC_ALL=1` to include scripts
 
 ## Notes
 
