@@ -2,12 +2,18 @@ param(
     [string[]]$ProcessNames,
     [int]$PollSeconds = 10,
     [ValidateSet("pause", "priority", "both")][string]$Mode = "pause",
+    [switch]$ApplyGpuLimits,
+    [int]$GpuPower = 150,
+    [string]$GpuClock,
+    [switch]$ResetGpuOnResume = $true,
+    [string]$NvidiaSmiPath = $env:HAFS_NVIDIA_SMI,
     [string]$TrainingPython = $env:HAFS_WINDOWS_PYTHON,
     [string]$TrainingRoot = $env:HAFS_WINDOWS_TRAINING
 )
 
 if (-not $TrainingRoot) { $TrainingRoot = "D:/hafs_training" }
 if (-not $TrainingPython) { $TrainingPython = "D:/pytorch_env/Scripts/python.exe" }
+if (-not $NvidiaSmiPath) { $NvidiaSmiPath = "nvidia-smi" }
 
 if (-not $ProcessNames -or $ProcessNames.Count -eq 0) {
     if ($env:HAFS_GAME_PROCESS_NAMES) {
@@ -26,6 +32,11 @@ $null = New-Item -ItemType Directory -Force -Path $controlDir
 
 Write-Output "Watching for games: $($ProcessNames -join ', ')"
 Write-Output "Mode: $Mode"
+if ($ApplyGpuLimits) {
+    Write-Output "GPU limits: Power=$GpuPower Clock=$GpuClock ResetOnResume=$ResetGpuOnResume"
+}
+
+$gpuLimited = $false
 
 while ($true) {
     $game = Get-Process -Name $ProcessNames -ErrorAction SilentlyContinue
@@ -44,6 +55,11 @@ while ($true) {
                 Where-Object { $_.Path -eq $TrainingPython } |
                 ForEach-Object { $_.PriorityClass = "BelowNormal" }
         }
+
+        if ($ApplyGpuLimits -and -not $gpuLimited) {
+            & "$PSScriptRoot/set_gpu_limit.ps1" -Power $GpuPower -Clock $GpuClock -NvidiaSmiPath $NvidiaSmiPath | Out-Null
+            $gpuLimited = $true
+        }
     } else {
         if ($Mode -eq "pause" -or $Mode -eq "both") {
             if (Test-Path $pauseFlag) {
@@ -56,6 +72,11 @@ while ($true) {
             Get-Process -Name python -ErrorAction SilentlyContinue |
                 Where-Object { $_.Path -eq $TrainingPython } |
                 ForEach-Object { $_.PriorityClass = "Normal" }
+        }
+
+        if ($ApplyGpuLimits -and $gpuLimited -and $ResetGpuOnResume) {
+            & "$PSScriptRoot/set_gpu_limit.ps1" -Reset -NvidiaSmiPath $NvidiaSmiPath | Out-Null
+            $gpuLimited = $false
         }
     }
 
