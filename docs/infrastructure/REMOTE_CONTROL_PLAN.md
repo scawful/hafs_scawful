@@ -65,6 +65,7 @@ Implemented:
 - `scripts/windows/set_gpu_limit.ps1` (apply/reset GPU power/clock limits)
 - `scripts/windows/set_power_profile.ps1` (switch power plans)
 - `scripts/windows/system_status.ps1` (system, GPU, training, top processes)
+- `scripts/windows/hardware_report.ps1` (hardware inventory snapshot)
 - `scripts/windows/process_list.ps1` (filter processes by name/path/title)
 - `scripts/windows/nvidia_status.ps1` (GPU telemetry snapshot/loop)
 - `scripts/windows/install_game_watch_task.ps1` (auto-start watcher at logon)
@@ -78,11 +79,12 @@ Usage (examples):
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/pause_training.ps1`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_game_mode.ps1 -ProcessNames GameProcessName -Mode both -ApplyGpuLimits -GpuPower 150`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/system_status.ps1`
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/hardware_report.ps1`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/set_power_profile.ps1 -Mode gaming`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/install_game_watch_task.ps1 -ProcessNames TS4_DX9_x64 -ApplyGpuLimits`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_task_status.ps1`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/fancontrol_status.ps1`
-- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/fancontrol_switch.ps1 -Profile quiet`
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/fancontrol_switch.ps1 -Profile curve-quiet`
 - `syshelp windows` (menu of Windows remote controls)
 - Set default game processes via `HAFS_GAME_PROCESS_NAMES` (comma or semicolon separated).
 
