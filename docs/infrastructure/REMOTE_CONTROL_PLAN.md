@@ -74,6 +74,7 @@ Usage (examples):
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/start_training.ps1 -DatasetPath D:/hafs_training/datasets/euclid_asm_v1 -ModelName euclid-asm-qwen25-coder-1.5b-20251222`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/pause_training.ps1`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_game_mode.ps1 -ProcessNames GameProcessName -Mode both -ApplyGpuLimits -GpuPower 150`
+- Set default game processes via `HAFS_GAME_PROCESS_NAMES` (comma or semicolon separated).
 
 ## Safety Notes
 - Do not force fan curves below safe thresholds.
