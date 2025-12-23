@@ -26,7 +26,7 @@ if (-not (Test-Path $scriptPath)) {
 }
 
 $procArgs = ($procList | ForEach-Object { "'$_'" }) -join ","
-$arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`" -ProcessNames $procArgs -Mode $Mode"
+$arguments = "-NoProfile -NoLogo -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$scriptPath`" -ProcessNames $procArgs -Mode $Mode"
 if ($ApplyGpuLimits) {
     $arguments += " -ApplyGpuLimits -GpuPower $GpuPower"
 }

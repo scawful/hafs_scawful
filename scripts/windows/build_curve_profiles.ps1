@@ -16,9 +16,26 @@ function Clone-Object {
 }
 
 $profiles = @{
-    "curve-quiet"       = @{ Idle = 35; Min = 35; Max = 70; Load = 75; Step = 3; Deadband = 4; Response = 3 }
-    "curve-balanced"    = @{ Idle = 35; Min = 45; Max = 85; Load = 72; Step = 2; Deadband = 3; Response = 2 }
-    "curve-performance" = @{ Idle = 30; Min = 55; Max = 100; Load = 68; Step = 1; Deadband = 2; Response = 1 }
+    "curve-quiet" = @{
+        CPU = @{ Idle = 35; Min = 35; Max = 70; Load = 75; Step = 3; Deadband = 4; Response = 3 }
+        GPU = @{ Idle = 35; Min = 35; Max = 75; Load = 75; Step = 3; Deadband = 4; Response = 3 }
+    }
+    "curve-balanced" = @{
+        CPU = @{ Idle = 35; Min = 45; Max = 85; Load = 72; Step = 2; Deadband = 3; Response = 2 }
+        GPU = @{ Idle = 35; Min = 45; Max = 90; Load = 70; Step = 2; Deadband = 3; Response = 2 }
+    }
+    "curve-performance" = @{
+        CPU = @{ Idle = 30; Min = 55; Max = 100; Load = 68; Step = 1; Deadband = 2; Response = 1 }
+        GPU = @{ Idle = 30; Min = 60; Max = 100; Load = 65; Step = 1; Deadband = 2; Response = 1 }
+    }
+    "curve-training" = @{
+        CPU = @{ Idle = 35; Min = 50; Max = 100; Load = 70; Step = 1; Deadband = 2; Response = 1 }
+        GPU = @{ Idle = 35; Min = 65; Max = 100; Load = 63; Step = 1; Deadband = 2; Response = 1 }
+    }
+    "curve-gaming" = @{
+        CPU = @{ Idle = 35; Min = 45; Max = 90; Load = 70; Step = 2; Deadband = 2; Response = 1 }
+        GPU = @{ Idle = 30; Min = 55; Max = 100; Load = 62; Step = 1; Deadband = 1; Response = 1 }
+    }
 }
 
 $base = Get-Content -Raw $BasePath | ConvertFrom-Json
@@ -46,26 +63,28 @@ $written = @()
 foreach ($profileName in $profiles.Keys) {
     $cfg = Clone-Object $base
     $settings = $profiles[$profileName]
+    $cpuSettings = if ($settings.CPU) { $settings.CPU } else { $settings }
+    $gpuSettings = if ($settings.GPU) { $settings.GPU } else { $settings }
 
     $cpuCurve = Clone-Object $cpuBase
     $cpuCurve.Name = "CPU $profileName"
-    $cpuCurve.IdleTemperature = $settings.Idle
-    $cpuCurve.MinFanSpeed = $settings.Min
-    $cpuCurve.MaxFanSpeed = $settings.Max
-    $cpuCurve.LoadTemperature = $settings.Load
-    $cpuCurve.Step = $settings.Step
-    $cpuCurve.Deadband = $settings.Deadband
-    $cpuCurve.SelectedResponseTime = $settings.Response
+    $cpuCurve.IdleTemperature = $cpuSettings.Idle
+    $cpuCurve.MinFanSpeed = $cpuSettings.Min
+    $cpuCurve.MaxFanSpeed = $cpuSettings.Max
+    $cpuCurve.LoadTemperature = $cpuSettings.Load
+    $cpuCurve.Step = $cpuSettings.Step
+    $cpuCurve.Deadband = $cpuSettings.Deadband
+    $cpuCurve.SelectedResponseTime = $cpuSettings.Response
 
     $gpuCurve = Clone-Object $gpuBase
     $gpuCurve.Name = "GPU $profileName"
-    $gpuCurve.IdleTemperature = $settings.Idle
-    $gpuCurve.MinFanSpeed = $settings.Min
-    $gpuCurve.MaxFanSpeed = $settings.Max
-    $gpuCurve.LoadTemperature = $settings.Load
-    $gpuCurve.Step = $settings.Step
-    $gpuCurve.Deadband = $settings.Deadband
-    $gpuCurve.SelectedResponseTime = $settings.Response
+    $gpuCurve.IdleTemperature = $gpuSettings.Idle
+    $gpuCurve.MinFanSpeed = $gpuSettings.Min
+    $gpuCurve.MaxFanSpeed = $gpuSettings.Max
+    $gpuCurve.LoadTemperature = $gpuSettings.Load
+    $gpuCurve.Step = $gpuSettings.Step
+    $gpuCurve.Deadband = $gpuSettings.Deadband
+    $gpuCurve.SelectedResponseTime = $gpuSettings.Response
 
     $cfg.Main.FanCurves = @($cpuCurve, $gpuCurve)
 
