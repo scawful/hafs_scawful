@@ -1,5 +1,9 @@
 # Model Training Plan
 
+NOTE: This document is being consolidated. Source of truth:
+- docs/training/oracle_farore_secrets_plan.md
+- docs/training/model_catalog.md
+
 **Updated**: 2025-12-22
 **Status**: Active Development
 
@@ -28,7 +32,7 @@
     └───────────────┘        └─────────────┘          └─────────────┘
 
                     ┌─────────────────────────────────────┐
-                    │         triforce-sage               │
+                    │         master-sword                │
                     │   (Unified North Star Model)        │
                     │  Combines all domains in one 32B    │
                     └─────────────────────────────────────┘
@@ -76,8 +80,8 @@
 | Model | Purpose |
 |-------|---------|
 | `oracle-council` | MoE router + Gemini Flash classifier |
-| `triforce-sage` | Unified 32B north star model |
-| `master-sword` | (Alias) Production deployment name |
+| `master-sword` | Unified mid-term model |
+| `fierce-deity` | Long-term unified successor |
 
 ---
 
@@ -102,7 +106,7 @@ Task Types:
 | Source | Samples | Description |
 |--------|---------|-------------|
 | ALTTP Vanilla | 1,300 | Disassembly routines |
-| Gigaleak | 2,000 | Nintendo original source |
+| ALTTP historical | 2,000 | Nintendo original source |
 | Oracle of Secrets | 500 | ROM hack code |
 | Task Variants | 2,000 | debug/optimize/hook/doc |
 | **Total** | **~6,000** | Split 80/10/10 |
@@ -172,22 +176,22 @@ Requires Oracle of Secrets story dataset.
 
 ---
 
-## North Star: triforce-sage
+## Unified Model: master-sword
 
 The unified model combining all domains.
 
 ```
-Full name:    triforce-sage-qwen-32b
-Alias:        master-sword
+Full name:    master-sword-qwen-32b
+Successor:    fierce-deity
 Base model:   Qwen2.5-Coder-32B (or Magistral-24B)
 Purpose:      Cross-domain reasoning, unified ROM hacking assistant
 ```
 
-**When to use triforce-sage vs MoE:**
+**When to use master-sword vs MoE:**
 - Use **MoE** for pure tasks (ASM-only, graphics-only)
-- Use **triforce-sage** for cross-domain tasks (quest → implementation)
+- Use **master-sword** for cross-domain tasks (quest → implementation)
 
-See `ORACLE_FARORE_SECRETS_PLAN.md` for detailed roadmap.
+See `oracle_farore_secrets_plan.md` for detailed roadmap.
 
 ---
 
@@ -236,7 +240,7 @@ DOMAIN_THRESHOLDS = {
     "asm_optimize": 0.45,
     "asm_hook": 0.4,
     "asm_doc": 0.5,
-    "gigaleak": 0.5,
+    "alttp_historical": 0.5,
     "yaze": 0.5,
 
     # Knowledge domains
@@ -262,7 +266,7 @@ DOMAIN_THRESHOLDS = {
 | AsmOptimizeGenerator | asm_optimize | ~900 |
 | AsmHookGenerator | asm_hook | ~800 |
 | AsmDocGenerator | asm_doc | ~1,000 |
-| GigaleakDataGenerator | gigaleak | ~2,000 |
+| GigaleakDataGenerator | alttp_historical | ~2,000 |
 | OracleDataGenerator | oracle | ~500 |
 | Zelda3DisasmGenerator | zelda3 | ~1,500 |
 | CppDataGenerator | yaze | ~1,500 |
@@ -309,7 +313,7 @@ await synth.generate_unified_dataset(
 
 ### Phase 4: Unified Model
 - [ ] Combine all datasets
-- [ ] Train triforce-sage-32b
+- [ ] Train master-sword-32b
 - [ ] A/B test vs MoE system
 
 ---

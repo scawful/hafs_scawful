@@ -423,8 +423,8 @@ Total: **33K samples** (already in pipeline!)
 
 **ALTTP ASM Agent**:
 - `hyrule-asm-v1` (Hyrule = ALTTP kingdom)
-- `triforce-coder-v1` (Triforce = 3 strengths: ASM, ROM, Debug)
 - `master-sword-14b` (Master Sword = legendary item)
+- `fierce-deity-14b` (Long-term unified model name)
 - `lightworld-asm-v1` (Light World vs Dark World)
 
 **YAZE Tool Agent**:
@@ -439,7 +439,7 @@ Total: **33K samples** (already in pipeline!)
 - `bug-hunter-v1` (Bug Hunter = fixes issues)
 
 **MoE System**:
-- `triforce-moe-v1` (3 experts like 3 Triforce pieces)
+- `oracle-council-moe-v1` (oracle-council routing)
 - `hyrule-council-v1` (Council of experts)
 - `sage-collective-v1` (7 Sages in OoT)
 
@@ -467,7 +467,7 @@ test_perplexity = 3.2
 test_accuracy = 0.38
 version = "1.0.0"
 
-[models.triforce-moe-v1]
+[models.oracle-council-moe-v1]
 type = "mixture_of_experts"
 experts = ["hyrule-asm-v1", "yaze-sage-v1", "debug-oracle-v1"]
 classifier = "task-router-v1"
