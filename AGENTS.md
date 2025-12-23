@@ -29,6 +29,9 @@ This repo contains user-specific training workflows, domain generators, and Wind
 - `win-telemetry-install [interval]` (background GPU/CPU logger)
 - `win-telemetry-status` / `win-telemetry-remove`
 - `win-watch-conn [interval]` (Mac watchdog for mounts + SSH)
+- `win-watch-conn-install [interval]` (LaunchAgent installer)
+- `win-watch-conn-remove` (LaunchAgent removal)
+- `win-training-plan` (create + activate no-sleep training plan)
 
 ## Primary Docs
 - Host summary: `docs/MEDICAL_MECHANICA_SETUP_SUMMARY.md`

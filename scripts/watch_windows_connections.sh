@@ -48,11 +48,20 @@ while true; do
   if [ "$CHECK_MOUNTS" -eq 1 ] && [ "${#mounts[@]}" -gt 0 ]; then
     missing=0
     for mnt in "${mounts[@]}"; do
-      if mount | rg -F "on ${mnt}" >/dev/null 2>&1; then
-        :
+      if command -v rg >/dev/null 2>&1; then
+        if mount | rg -F "on ${mnt}" >/dev/null 2>&1; then
+          :
+        else
+          missing=1
+          echo "$(date '+%F %T') Mount missing: ${mnt}"
+        fi
       else
-        missing=1
-        echo "$(date '+%F %T') Mount missing: ${mnt}"
+        if mount | grep -F "on ${mnt}" >/dev/null 2>&1; then
+          :
+        else
+          missing=1
+          echo "$(date '+%F %T') Mount missing: ${mnt}"
+        fi
       fi
     done
 

@@ -75,6 +75,9 @@ Implemented:
 - `scripts/windows/install_telemetry_task.ps1` (auto-start telemetry)
 - `scripts/windows/remove_telemetry_task.ps1` (remove telemetry task)
 - `scripts/watch_windows_connections.sh` (Mac watchdog for SSH/mounts)
+- `scripts/install_windows_watchdog_launchagent.sh` (keep watchdog running)
+- `scripts/remove_windows_watchdog_launchagent.sh` (remove watchdog LaunchAgent)
+- `scripts/windows/create_training_power_plan.ps1` (no-sleep training plan)
 - `scripts/windows/install_game_watch_task.ps1` (auto-start watcher at logon)
 - `scripts/windows/remove_game_watch_task.ps1` (remove watcher task)
 - `scripts/windows/watch_task_status.ps1` (task state/last run)
@@ -93,6 +96,8 @@ Usage (examples):
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/set_power_profile.ps1 -Mode gaming`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/install_telemetry_task.ps1 -IntervalSec 10`
 - `~/Code/hafs_scawful/scripts/watch_windows_connections.sh 60`
+- `~/Code/hafs_scawful/scripts/install_windows_watchdog_launchagent.sh 60`
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/create_training_power_plan.ps1 -Activate`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/install_game_watch_task.ps1 -ProcessNames TS4_DX9_x64 -ApplyGpuLimits`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_task_status.ps1`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/fancontrol_status.ps1`

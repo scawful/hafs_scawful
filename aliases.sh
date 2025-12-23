@@ -284,6 +284,10 @@ win-services-fix() {
   win-ps "& 'C:/hafs_scawful/scripts/windows/ensure_services.ps1' -Fix"
 }
 
+win-training-plan() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/create_training_power_plan.ps1' -Activate"
+}
+
 win-update-harden() {
   local start="${1:-8}"
   local end="${2:-23}"
@@ -373,6 +377,15 @@ win-telemetry-status() {
 win-watch-conn() {
   local interval="${1:-60}"
   "$HAFS_PLUGIN_DIR/scripts/watch_windows_connections.sh" "$interval"
+}
+
+win-watch-conn-install() {
+  local interval="${1:-60}"
+  "$HAFS_PLUGIN_DIR/scripts/install_windows_watchdog_launchagent.sh" "$interval"
+}
+
+win-watch-conn-remove() {
+  "$HAFS_PLUGIN_DIR/scripts/remove_windows_watchdog_launchagent.sh"
 }
 
 hafs-logs() {
@@ -466,7 +479,8 @@ Windows:
   win-update-harden, win-update-restore, win-power, win-pause, win-resume, win-watch
   win-watch-install, win-watch-remove, win-watch-status, win-fan, win-fan-status
   win-telemetry, win-telemetry-install, win-telemetry-remove, win-telemetry-status
-  win-watch-conn
+  win-watch-conn, win-watch-conn-install, win-watch-conn-remove
+  win-training-plan
 Mounts/Logs:
   hafs-check-mounts, hafs-logs
 LSP:
