@@ -10,6 +10,11 @@ $configCandidates = @(
     "C:/ProgramData/FanControl/FanControl.json"
 )
 $configPath = $configCandidates | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+$portableCandidates = @(
+    "C:/Program Files/FanControl/Configurations",
+    "C:/Program Files (x86)/FanControl/Configurations"
+)
+$portableDir = $portableCandidates | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
 
 $proc = Get-Process -Name FanControl -ErrorAction SilentlyContinue
 if ($proc) {
@@ -18,7 +23,20 @@ if ($proc) {
     Write-Output "FanControl: not running"
 }
 
-if ($configPath) {
+if ($portableDir) {
+    Write-Output "Config: portable ($portableDir)"
+    $cachePath = Join-Path $portableDir "CACHE"
+    if (Test-Path $cachePath) {
+        try {
+            $cache = Get-Content -Raw $cachePath | ConvertFrom-Json
+            if ($cache.CurrentConfigFileName) {
+                Write-Output "Active profile: $($cache.CurrentConfigFileName)"
+            }
+        } catch {
+            Write-Output "Active profile: unknown (cache unreadable)"
+        }
+    }
+} elseif ($configPath) {
     Write-Output "Config: $configPath"
 } else {
     Write-Output "Config: not found (expected under %APPDATA% or %LOCALAPPDATA%)"
