@@ -31,6 +31,7 @@ This repo contains user-specific training workflows, domain generators, and Wind
 - `win-watch-conn [interval]` (Mac watchdog for mounts + SSH)
 - `win-watch-conn-install [interval]` (LaunchAgent installer)
 - `win-watch-conn-remove` (LaunchAgent removal)
+- `win-train-watch-install` / `win-train-watch-status` / `win-train-watch-remove`
 - `win-training-plan` (create + activate no-sleep training plan)
 
 ## Primary Docs

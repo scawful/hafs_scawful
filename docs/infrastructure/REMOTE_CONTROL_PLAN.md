@@ -78,6 +78,9 @@ Implemented:
 - `scripts/install_windows_watchdog_launchagent.sh` (keep watchdog running)
 - `scripts/remove_windows_watchdog_launchagent.sh` (remove watchdog LaunchAgent)
 - `scripts/windows/create_training_power_plan.ps1` (no-sleep training plan)
+- `scripts/windows/watch_training_mode.ps1` (auto switch energy mode when training runs)
+- `scripts/windows/install_training_watch_task.ps1` (auto-start training watch)
+- `scripts/windows/remove_training_watch_task.ps1` (remove training watch task)
 - `scripts/windows/install_game_watch_task.ps1` (auto-start watcher at logon)
 - `scripts/windows/remove_game_watch_task.ps1` (remove watcher task)
 - `scripts/windows/watch_task_status.ps1` (task state/last run)
@@ -98,6 +101,7 @@ Usage (examples):
 - `~/Code/hafs_scawful/scripts/watch_windows_connections.sh 60`
 - `~/Code/hafs_scawful/scripts/install_windows_watchdog_launchagent.sh 60`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/create_training_power_plan.ps1 -Activate`
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/install_training_watch_task.ps1`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/install_game_watch_task.ps1 -ProcessNames TS4_DX9_x64 -ApplyGpuLimits`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_task_status.ps1`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/fancontrol_status.ps1`

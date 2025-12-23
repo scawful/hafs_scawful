@@ -64,6 +64,7 @@ One command applies fan + power plan + GPU cap:
 - `win-watch-conn` (Mac watchdog for SSH/mounts)
 - `win-watch-conn-install` (LaunchAgent to keep watchdog running)
 - `win-training-plan` (create/activate no-sleep training power plan)
+- `win-train-watch-install` (auto-switch energy mode while training runs)
 
 ## Notes
 - PSU wattage is not reported by standard Windows APIs.

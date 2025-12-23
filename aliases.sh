@@ -388,6 +388,22 @@ win-watch-conn-remove() {
   "$HAFS_PLUGIN_DIR/scripts/remove_windows_watchdog_launchagent.sh"
 }
 
+win-train-watch() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/watch_training_mode.ps1'"
+}
+
+win-train-watch-install() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/install_training_watch_task.ps1'"
+}
+
+win-train-watch-remove() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/remove_training_watch_task.ps1'"
+}
+
+win-train-watch-status() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/watch_task_status.ps1' -TaskName hafs-training-watch"
+}
+
 hafs-logs() {
   local context="$(_hafs_context)"
   tail -n 100 "$context/logs/"*.log 2>/dev/null
@@ -480,6 +496,7 @@ Windows:
   win-watch-install, win-watch-remove, win-watch-status, win-fan, win-fan-status
   win-telemetry, win-telemetry-install, win-telemetry-remove, win-telemetry-status
   win-watch-conn, win-watch-conn-install, win-watch-conn-remove
+  win-train-watch, win-train-watch-install, win-train-watch-remove, win-train-watch-status
   win-training-plan
 Mounts/Logs:
   hafs-check-mounts, hafs-logs
