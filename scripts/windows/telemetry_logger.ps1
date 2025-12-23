@@ -1,7 +1,7 @@
 param(
     [string]$OutputDir = "D:/hafs_training/logs/telemetry",
     [int]$IntervalSec = 10,
-    [string]$FilePrefix = "telemetry",
+    [string]$FilePrefix = "telemetry-v2",
     [switch]$Once
 )
 
@@ -23,6 +23,20 @@ function Get-GpuTelemetry {
     }
 }
 
+function Get-HardwareMonitorSensors {
+    $namespaces = @("root/LibreHardwareMonitor", "root/OpenHardwareMonitor")
+    foreach ($ns in $namespaces) {
+        try {
+            $sensors = Get-CimInstance -Namespace $ns -ClassName Sensor -ErrorAction Stop
+            if ($sensors) {
+                return $sensors
+            }
+        } catch {
+        }
+    }
+    return @()
+}
+
 if (-not (Test-Path $OutputDir)) {
     New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
 }
@@ -40,7 +54,7 @@ try {
 $dateTag = Get-Date -Format "yyyyMMdd"
 $filePath = Join-Path $OutputDir ("{0}-{1}.csv" -f $FilePrefix, $dateTag)
 if (-not (Test-Path $filePath)) {
-    "timestamp,cpu_percent,mem_used_gb,mem_free_gb,mem_total_gb,gpu_name,gpu_util,gpu_mem_util,gpu_power_w,gpu_power_limit_w,gpu_temp_c,gpu_clock_mhz,gpu_fan_pct,gpu_mem_used_gb,gpu_mem_total_gb" |
+    "timestamp,cpu_percent,mem_used_gb,mem_free_gb,mem_total_gb,gpu_name,gpu_util,gpu_mem_util,gpu_power_w,gpu_power_limit_w,gpu_temp_c,gpu_clock_mhz,gpu_fan_pct,gpu_mem_used_gb,gpu_mem_total_gb,cpu_temp_c,cpu_temp_max_c,cpu_fan_rpm,fan_rpm_max,fan_rpm_avg,gpu_fan_rpm" |
         Set-Content -Path $filePath -Encoding UTF8
 }
 
@@ -77,7 +91,41 @@ do {
         $gpuMemTotalGb = ""
     }
 
-    $line = "$now,$([math]::Round($cpu,1)),$memUsedGb,$memFreeGb,$memTotalGb,$gpuName,$gpuUtil,$gpuMemUtil,$gpuPower,$gpuPowerLimit,$gpuTemp,$gpuClock,$gpuFan,$gpuMemUsedGb,$gpuMemTotalGb"
+    $sensors = Get-HardwareMonitorSensors
+    $cpuTemp = ""
+    $cpuTempMax = ""
+    $cpuFanRpm = ""
+    $fanRpmMax = ""
+    $fanRpmAvg = ""
+    $gpuFanRpm = ""
+    if ($sensors.Count -gt 0) {
+        $cpuTemps = $sensors | Where-Object { $_.SensorType -eq "Temperature" -and $_.Name -match "CPU|Tctl|Tdie|CCD" }
+        if ($cpuTemps) {
+            $cpuTempMax = [math]::Round(($cpuTemps | Measure-Object -Property Value -Maximum).Maximum, 1)
+            $primary = $cpuTemps | Where-Object { $_.Name -match "Package|Tctl|Tdie" } | Select-Object -First 1
+            $cpuTemp = if ($primary) { [math]::Round($primary.Value, 1) } else { $cpuTempMax }
+        }
+
+        $fanSensors = $sensors | Where-Object { $_.SensorType -eq "Fan" }
+        if ($fanSensors) {
+            $fanRpmMax = [math]::Round(($fanSensors | Measure-Object -Property Value -Maximum).Maximum, 0)
+            $fanRpmAvg = [math]::Round(($fanSensors | Measure-Object -Property Value -Average).Average, 0)
+            $cpuFan = $fanSensors | Where-Object { $_.Name -match "CPU Fan" } | Select-Object -First 1
+            if (-not $cpuFan) {
+                $cpuFan = $fanSensors | Where-Object { $_.Name -match "AIO" } | Select-Object -First 1
+            }
+            if ($cpuFan) {
+                $cpuFanRpm = [math]::Round($cpuFan.Value, 0)
+            }
+
+            $gpuFanSensor = $fanSensors | Where-Object { $_.Name -match "GPU" } | Select-Object -First 1
+            if ($gpuFanSensor) {
+                $gpuFanRpm = [math]::Round($gpuFanSensor.Value, 0)
+            }
+        }
+    }
+
+    $line = "$now,$([math]::Round($cpu,1)),$memUsedGb,$memFreeGb,$memTotalGb,$gpuName,$gpuUtil,$gpuMemUtil,$gpuPower,$gpuPowerLimit,$gpuTemp,$gpuClock,$gpuFan,$gpuMemUsedGb,$gpuMemTotalGb,$cpuTemp,$cpuTempMax,$cpuFanRpm,$fanRpmMax,$fanRpmAvg,$gpuFanRpm"
     Add-Content -Path $filePath -Value $line
 
     if (-not $Once) {

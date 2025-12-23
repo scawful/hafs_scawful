@@ -71,7 +71,7 @@ Implemented:
 - `scripts/windows/ensure_services.ps1` (check/start sshd + tailscale)
 - `scripts/windows/apply_energy_mode.ps1` (fan profile + power plan + GPU cap)
 - `scripts/windows/harden_windows_updates.ps1` (reduce auto-restart risk)
-- `scripts/windows/telemetry_logger.ps1` (GPU/CPU telemetry logger)
+- `scripts/windows/telemetry_logger.ps1` (GPU/CPU telemetry logger with temps + fan RPMs)
 - `scripts/windows/install_telemetry_task.ps1` (auto-start telemetry)
 - `scripts/windows/remove_telemetry_task.ps1` (remove telemetry task)
 - `scripts/watch_windows_connections.sh` (Mac watchdog for SSH/mounts)

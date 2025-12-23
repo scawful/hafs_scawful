@@ -61,6 +61,7 @@ One command applies fan + power plan + GPU cap:
 - `win-services` (check sshd + tailscale)
 - `win-update-harden` (avoid auto restarts + set active hours)
 - `win-telemetry-install` (background GPU/CPU logger)
+- Telemetry logs include CPU/GPU temps and fan RPMs (via LibreHardwareMonitor if running).
 - `win-watch-conn` (Mac watchdog for SSH/mounts)
 - `win-watch-conn-install` (LaunchAgent to keep watchdog running)
 - `win-training-plan` (create/activate no-sleep training power plan)
