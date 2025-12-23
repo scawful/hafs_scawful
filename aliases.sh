@@ -281,9 +281,10 @@ win-resume() {
 }
 
 win-watch() {
-  local processes="${HAFS_GAME_PROCESS_NAMES:-}"
+  local processes="${1:-${HAFS_GAME_PROCESS_NAMES:-}}"
   if [ -z "$processes" ]; then
-    echo "HAFS_GAME_PROCESS_NAMES not set (comma or semicolon separated)."
+    echo "Usage: win-watch <process_names>"
+    echo "Set HAFS_GAME_PROCESS_NAMES for default (comma or semicolon separated)."
     return 1
   fi
   win-ps "& 'C:/hafs_scawful/scripts/windows/watch_game_mode.ps1' -ProcessNames '${processes}' -Mode both -ApplyGpuLimits -GpuPower 150"
