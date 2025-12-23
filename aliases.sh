@@ -228,6 +228,67 @@ hafs-gpu() {
   ssh "$host" "nvidia-smi"
 }
 
+win-ps() {
+  local script="$HAFS_PLUGIN_DIR/scripts/win_ps.sh"
+  if [ ! -x "$script" ]; then
+    echo "Missing: $script"
+    return 1
+  fi
+  "$script" "$@"
+}
+
+win-wsl() {
+  local script="$HAFS_PLUGIN_DIR/scripts/wsl_ssh.sh"
+  if [ ! -x "$script" ]; then
+    echo "Missing: $script"
+    return 1
+  fi
+  "$script" "$@"
+}
+
+win-status() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/system_status.ps1'"
+}
+
+win-procs() {
+  local query="${*:-}"
+  if [ -z "$query" ]; then
+    echo "Usage: win-procs <name|pattern>"
+    return 1
+  fi
+  win-ps "& 'C:/hafs_scawful/scripts/windows/process_list.ps1' -Contains '${query}'"
+}
+
+win-gpu-status() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/nvidia_status.ps1'"
+}
+
+win-power() {
+  local mode="${1:-}"
+  if [ -z "$mode" ]; then
+    echo "Usage: win-power <gaming|training|balanced|high|power_saver>"
+    return 1
+  fi
+  win-ps "& 'C:/hafs_scawful/scripts/windows/set_power_profile.ps1' -Mode ${mode}"
+}
+
+win-pause() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/pause_training.ps1'"
+}
+
+win-resume() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/resume_training.ps1'"
+}
+
+win-watch() {
+  local processes="${HAFS_GAME_PROCESS_NAMES:-}"
+  if [ -z "$processes" ]; then
+    echo "HAFS_GAME_PROCESS_NAMES not set (comma or semicolon separated)."
+    return 1
+  fi
+  win-ps "& 'C:/hafs_scawful/scripts/windows/watch_game_mode.ps1' -ProcessNames '${processes}' -Mode both -ApplyGpuLimits -GpuPower 150"
+}
+
 hafs-logs() {
   local context="$(_hafs_context)"
   tail -n 100 "$context/logs/"*.log 2>/dev/null
@@ -314,7 +375,8 @@ Workflow:
 Training:
   hafs-training-status, hafs-latest-dataset, hafs-analyze-latest, hafs-analyze-rejected
 Windows:
-  hafs-check-windows, hafs-windows-status, hafs-gpu
+  hafs-check-windows, hafs-windows-status, hafs-gpu, win-ps, win-wsl, win-status
+  win-procs, win-gpu-status, win-power, win-pause, win-resume, win-watch
 Mounts/Logs:
   hafs-check-mounts, hafs-logs
 LSP:

@@ -74,6 +74,7 @@ Usage (examples):
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_game_mode.ps1 -ProcessNames GameProcessName -Mode both -ApplyGpuLimits -GpuPower 150`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/system_status.ps1`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/set_power_profile.ps1 -Mode gaming`
+- `syshelp windows` (menu of Windows remote controls)
 - Set default game processes via `HAFS_GAME_PROCESS_NAMES` (comma or semicolon separated).
 
 ## Safety Notes
