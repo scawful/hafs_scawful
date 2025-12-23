@@ -70,6 +70,8 @@ Implemented:
 - `scripts/windows/install_game_watch_task.ps1` (auto-start watcher at logon)
 - `scripts/windows/remove_game_watch_task.ps1` (remove watcher task)
 - `scripts/windows/watch_task_status.ps1` (task state/last run)
+- `scripts/windows/fancontrol_status.ps1` (FanControl status + profile paths)
+- `scripts/windows/fancontrol_switch.ps1` (switch FanControl profile)
 
 Usage (examples):
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/start_training.ps1 -DatasetPath D:/hafs_training/datasets/euclid_asm_v1 -ModelName euclid-asm-qwen25-coder-1.5b-20251222`
@@ -79,6 +81,8 @@ Usage (examples):
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/set_power_profile.ps1 -Mode gaming`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/install_game_watch_task.ps1 -ProcessNames TS4_DX9_x64 -ApplyGpuLimits`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_task_status.ps1`
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/fancontrol_status.ps1`
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/fancontrol_switch.ps1 -Profile quiet`
 - `syshelp windows` (menu of Windows remote controls)
 - Set default game processes via `HAFS_GAME_PROCESS_NAMES` (comma or semicolon separated).
 

@@ -308,6 +308,19 @@ win-watch-status() {
   win-ps "& 'C:/hafs_scawful/scripts/windows/watch_task_status.ps1'"
 }
 
+win-fan-status() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/fancontrol_status.ps1'"
+}
+
+win-fan() {
+  local profile="${1:-}"
+  if [ -z "$profile" ]; then
+    echo "Usage: win-fan <profile>"
+    return 1
+  fi
+  win-ps "& 'C:/hafs_scawful/scripts/windows/fancontrol_switch.ps1' -Profile ${profile}"
+}
+
 hafs-logs() {
   local context="$(_hafs_context)"
   tail -n 100 "$context/logs/"*.log 2>/dev/null
@@ -396,7 +409,7 @@ Training:
 Windows:
   hafs-check-windows, hafs-windows-status, hafs-gpu, win-ps, win-wsl, win-status
   win-procs, win-gpu-status, win-power, win-pause, win-resume, win-watch
-  win-watch-install, win-watch-remove, win-watch-status
+  win-watch-install, win-watch-remove, win-watch-status, win-fan, win-fan-status
 Mounts/Logs:
   hafs-check-mounts, hafs-logs
 LSP:

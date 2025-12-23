@@ -254,6 +254,19 @@ powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_t
 powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/remove_game_watch_task.ps1
 ```
 
+### FanControl Remote Switching
+
+1) Open FanControl once locally, create profiles (e.g., `quiet`, `performance`).
+2) Save/export each profile to:
+   - `C:\hafs_scawful\config\fancontrol\quiet.json`
+   - `C:\hafs_scawful\config\fancontrol\performance.json`
+3) Switch profiles remotely:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/fancontrol_status.ps1
+powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/fancontrol_switch.ps1 -Profile quiet
+```
+
 ### Copy Files
 
 ```bash
