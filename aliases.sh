@@ -284,6 +284,16 @@ win-services-fix() {
   win-ps "& 'C:/hafs_scawful/scripts/windows/ensure_services.ps1' -Fix"
 }
 
+win-update-harden() {
+  local start="${1:-8}"
+  local end="${2:-23}"
+  win-ps "& 'C:/hafs_scawful/scripts/windows/harden_windows_updates.ps1' -Apply -ActiveHoursStart ${start} -ActiveHoursEnd ${end}"
+}
+
+win-update-restore() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/harden_windows_updates.ps1' -Revert"
+}
+
 win-power() {
   local mode="${1:-}"
   if [ -z "$mode" ]; then
@@ -430,8 +440,8 @@ Training:
 Windows:
   hafs-check-windows, hafs-windows-status, hafs-gpu, win-ps, win-wsl, win-status
   win-procs, win-gpu-status, win-hw, win-mode, win-services, win-services-fix
-  win-power, win-pause, win-resume, win-watch, win-watch-install, win-watch-remove
-  win-watch-status, win-fan, win-fan-status
+  win-update-harden, win-update-restore, win-power, win-pause, win-resume, win-watch
+  win-watch-install, win-watch-remove, win-watch-status, win-fan, win-fan-status
 Mounts/Logs:
   hafs-check-mounts, hafs-logs
 LSP:

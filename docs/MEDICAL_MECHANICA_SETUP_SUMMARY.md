@@ -59,6 +59,7 @@ One command applies fan + power plan + GPU cap:
 - `win-fan curve-gaming` (swap fan curves)
 - `win-mode away` (one-shot energy mode)
 - `win-services` (check sshd + tailscale)
+- `win-update-harden` (avoid auto restarts + set active hours)
 
 ## Notes
 - PSU wattage is not reported by standard Windows APIs.

@@ -70,6 +70,7 @@ Implemented:
 - `scripts/windows/nvidia_status.ps1` (GPU telemetry snapshot/loop)
 - `scripts/windows/ensure_services.ps1` (check/start sshd + tailscale)
 - `scripts/windows/apply_energy_mode.ps1` (fan profile + power plan + GPU cap)
+- `scripts/windows/harden_windows_updates.ps1` (reduce auto-restart risk)
 - `scripts/windows/install_game_watch_task.ps1` (auto-start watcher at logon)
 - `scripts/windows/remove_game_watch_task.ps1` (remove watcher task)
 - `scripts/windows/watch_task_status.ps1` (task state/last run)
@@ -84,6 +85,7 @@ Usage (examples):
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/hardware_report.ps1`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/apply_energy_mode.ps1 -Mode training`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/ensure_services.ps1`
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/harden_windows_updates.ps1 -Apply`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/set_power_profile.ps1 -Mode gaming`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/install_game_watch_task.ps1 -ProcessNames TS4_DX9_x64 -ApplyGpuLimits`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_task_status.ps1`
