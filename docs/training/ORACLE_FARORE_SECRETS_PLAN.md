@@ -6,7 +6,7 @@ Canonical: This doc is the source of truth for training plans in hafs_scawful.
 
 ## Goals
 - Build reliable small specialists first (tool-use, ASM, LSP).
-- Use oracle-council routing to combine specialists.
+- Use oracle-council routing to combine specialists and MoE outputs.
 - Keep a clear path toward unified models without blocking near-term delivery.
 
 ## Model Hierarchy
@@ -27,11 +27,15 @@ oracle-council (router)
     - saria-voice
     - zelda-scribe
 
+MoE systems:
+- oracle-moe (oracle-din / oracle-nayru / oracle-farore)
+- triforce-moe (goddess-din / goddess-nayru / goddess-farore)
+
 Unified models:
 - master-sword (mid-term unified model)
-- fierce-deity (long-term unified model)
+- fierce-deity (long-term unified model, ambitious parameter size)
 
-Naming rule: submodels never include the oracle- prefix.
+Naming rule: submodels never include the oracle- prefix. goddess-* are MoE experts.
 
 ## Near-Term Priorities (Small Models)
 1) Tool-use specialist (3B)
@@ -116,6 +120,8 @@ D:\hafs_training\
 
 ## MoE vs Unified Usage
 - Use oracle-council routing for most tasks until unified models are ready.
+- Use oracle-moe for blended tasks across oracle families.
+- Use triforce-moe for goddess-variant synthesis.
 - Use master-sword for cross-domain tasks when it is trained.
 - fierce-deity is the long-term successor for full integration.
 
@@ -129,6 +135,9 @@ Phase 2: Expand specialists
 - seph-tilesmith
 - compression specialists
 - lore and documentation specialists
+- oracle-moe assembly
+- goddess-din / goddess-nayru / goddess-farore
+- triforce-moe assembly
 
 Phase 3: Unified model
 - master-sword (unified mid-term)

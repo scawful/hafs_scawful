@@ -15,6 +15,10 @@ This catalog lists model families, specialists, unified models, and name ideas.
 - oracle-nayru: knowledge and documentation.
 - oracle-farore: creation and narrative.
 
+## MoE Systems
+- oracle-moe: MoE over oracle-din / oracle-nayru / oracle-farore.
+- triforce-moe: MoE over goddess-din / goddess-nayru / goddess-farore.
+
 ## Near-Term Small Models (Priority)
 - euclid-asm (1.5B): 65816 ASM specialist.
 - Tool-use specialist (3B): command translation for hafs, yaze-mcp, z3ed.
