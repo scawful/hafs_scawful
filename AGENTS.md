@@ -18,6 +18,8 @@ This repo contains user-specific training workflows, domain generators, and Wind
 
 ## Common Aliases (macOS shell)
 - `win-status` / `win-hw` / `win-gpu-status`
+- `win-mode <gaming|training|balanced|overnight|away>` (power + GPU cap + fan profile)
+- `win-services` / `win-services-fix` (check/start sshd + tailscale)
 - `win-power <gaming|training|balanced|high|power_saver>`
 - `win-fan <profile>` (curve-quiet/balanced/performance/gaming/training/overnight/away)
 - `win-watch-install <process_names>` (auto pause + GPU limit)

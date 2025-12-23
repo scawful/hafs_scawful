@@ -40,6 +40,14 @@ Switch with `win-fan <profile>`:
 - `curve-gaming`, `curve-training`
 - `curve-overnight`, `curve-away`
 
+## Energy Modes
+One command applies fan + power plan + GPU cap:
+- `win-mode gaming` (curve-gaming + high performance + 170W cap)
+- `win-mode training` (curve-training + balanced + 150W cap)
+- `win-mode balanced` (curve-balanced + balanced + 140W cap)
+- `win-mode overnight` (curve-overnight + power saver + 110W cap)
+- `win-mode away` (curve-away + power saver + 90W cap)
+
 ## Scheduled Tasks
 - `hafs-game-watch`: watches for game processes and applies pause + GPU limit
 
@@ -49,6 +57,8 @@ Switch with `win-fan <profile>`:
 - `win-gpu-status` (GPU telemetry)
 - `win-power power_saver` (energy saving)
 - `win-fan curve-gaming` (swap fan curves)
+- `win-mode away` (one-shot energy mode)
+- `win-services` (check sshd + tailscale)
 
 ## Notes
 - PSU wattage is not reported by standard Windows APIs.

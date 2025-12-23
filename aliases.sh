@@ -267,6 +267,23 @@ win-hw() {
   win-ps "& 'C:/hafs_scawful/scripts/windows/hardware_report.ps1'"
 }
 
+win-mode() {
+  local mode="${1:-}"
+  if [ -z "$mode" ]; then
+    echo "Usage: win-mode <gaming|training|balanced|overnight|away>"
+    return 1
+  fi
+  win-ps "& 'C:/hafs_scawful/scripts/windows/apply_energy_mode.ps1' -Mode ${mode}"
+}
+
+win-services() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/ensure_services.ps1'"
+}
+
+win-services-fix() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/ensure_services.ps1' -Fix"
+}
+
 win-power() {
   local mode="${1:-}"
   if [ -z "$mode" ]; then
@@ -412,8 +429,9 @@ Training:
   hafs-training-status, hafs-latest-dataset, hafs-analyze-latest, hafs-analyze-rejected
 Windows:
   hafs-check-windows, hafs-windows-status, hafs-gpu, win-ps, win-wsl, win-status
-  win-procs, win-gpu-status, win-hw, win-power, win-pause, win-resume, win-watch
-  win-watch-install, win-watch-remove, win-watch-status, win-fan, win-fan-status
+  win-procs, win-gpu-status, win-hw, win-mode, win-services, win-services-fix
+  win-power, win-pause, win-resume, win-watch, win-watch-install, win-watch-remove
+  win-watch-status, win-fan, win-fan-status
 Mounts/Logs:
   hafs-check-mounts, hafs-logs
 LSP:
