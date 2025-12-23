@@ -5,8 +5,8 @@ param(
 if (-not $PluginRoot) { $PluginRoot = "C:/hafs_scawful" }
 
 $configCandidates = @(
-    Join-Path $env:APPDATA "FanControl\\FanControl.json",
-    Join-Path $env:LOCALAPPDATA "FanControl\\FanControl.json",
+    (Join-Path $env:APPDATA "FanControl\\FanControl.json"),
+    (Join-Path $env:LOCALAPPDATA "FanControl\\FanControl.json"),
     "C:/ProgramData/FanControl/FanControl.json"
 )
 $configPath = $configCandidates | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
