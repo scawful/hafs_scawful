@@ -4,6 +4,10 @@ param(
     [string]$Mode = "both",
     [switch]$ApplyGpuLimits,
     [int]$GpuPower = 150,
+    [switch]$ApplyEnergyMode,
+    [string]$EnergyModeGame = "gaming",
+    [string]$EnergyModeTraining = "training",
+    [string]$EnergyModeIdle = "balanced",
     [string]$PluginRoot = $env:HAFS_WINDOWS_PLUGIN_DIR
 )
 
@@ -29,6 +33,9 @@ $procArgs = ($procList | ForEach-Object { "'$_'" }) -join ","
 $arguments = "-NoProfile -NoLogo -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$scriptPath`" -ProcessNames $procArgs -Mode $Mode"
 if ($ApplyGpuLimits) {
     $arguments += " -ApplyGpuLimits -GpuPower $GpuPower"
+}
+if ($ApplyEnergyMode) {
+    $arguments += " -ApplyEnergyMode -EnergyModeGame $EnergyModeGame -EnergyModeTraining $EnergyModeTraining -EnergyModeIdle $EnergyModeIdle"
 }
 
 $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $arguments

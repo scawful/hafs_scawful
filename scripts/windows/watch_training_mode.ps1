@@ -5,6 +5,7 @@ param(
     [string]$ModeIdle = "balanced",
     [int]$MinSamples = 2,
     [string[]]$TrainingMarkers,
+    [string[]]$GameProcessNames,
     [string]$TrainingRoot = $env:HAFS_WINDOWS_TRAINING,
     [string]$LogPath
 )
@@ -41,6 +42,23 @@ if (-not $TrainingMarkers -or $TrainingMarkers.Count -eq 0) {
     ) | Where-Object { $_ }
 }
 
+if (-not $GameProcessNames -or $GameProcessNames.Count -eq 0) {
+    if ($env:HAFS_GAME_PROCESS_NAMES) {
+        $GameProcessNames = $env:HAFS_GAME_PROCESS_NAMES -split "[;,]"
+    }
+}
+
+if ($GameProcessNames -and $GameProcessNames.Count -eq 1) {
+    $raw = $GameProcessNames[0]
+    if ($raw -match "[;,]") {
+        $GameProcessNames = $raw -split "[;,]"
+    }
+}
+
+if ($GameProcessNames) {
+    $GameProcessNames = $GameProcessNames | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+}
+
 function Write-Log {
     param([string]$Message)
     $line = "$(Get-Date -Format s) $Message"
@@ -73,6 +91,10 @@ function Get-TrainingProcess {
     }
 }
 
+$controlDir = Join-Path $TrainingRoot "control"
+$gameFlag = Join-Path $controlDir "game_mode.flag"
+$null = New-Item -ItemType Directory -Force -Path $controlDir
+
 $state = "idle"
 $activeCount = 0
 $idleCount = 0
@@ -82,6 +104,24 @@ Write-Log "Markers: $($TrainingMarkers -join ', ')"
 Write-Log "Mode active: $ModeActive, idle: $ModeIdle"
 
 while ($true) {
+    $gameRunning = $false
+    if ($GameProcessNames -and $GameProcessNames.Count -gt 0) {
+        $game = Get-Process -Name $GameProcessNames -ErrorAction SilentlyContinue
+        $gameRunning = $null -ne $game
+    }
+    if (Test-Path $gameFlag) {
+        $gameRunning = $true
+    }
+
+    if ($gameRunning) {
+        if ($state -ne "game") {
+            $state = "game"
+            Write-Log "Game detected, holding training mode changes."
+        }
+        Start-Sleep -Seconds $PollSeconds
+        continue
+    }
+
     $matches = Get-TrainingProcess -Names $ProcessNames -Markers $TrainingMarkers
     $isTraining = $matches.Count -gt 0
 

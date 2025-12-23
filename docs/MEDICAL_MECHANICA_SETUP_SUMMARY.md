@@ -65,6 +65,7 @@ One command applies fan + power plan + GPU cap:
 - `win-watch-conn-install` (LaunchAgent to keep watchdog running)
 - `win-training-plan` (create/activate no-sleep training power plan)
 - `win-train-watch-install` (auto-switch energy mode while training runs)
+- `win-watch-install` (auto-switch to gaming mode while games run)
 
 ## Notes
 - PSU wattage is not reported by standard Windows APIs.

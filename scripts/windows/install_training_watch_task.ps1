@@ -5,6 +5,7 @@ param(
     [int]$MinSamples = 2,
     [string]$ModeActive = "training",
     [string]$ModeIdle = "balanced",
+    [string]$GameProcessNames = $env:HAFS_GAME_PROCESS_NAMES,
     [string]$PluginRoot = $env:HAFS_WINDOWS_PLUGIN_DIR
 )
 
@@ -22,6 +23,13 @@ if ($ProcessNames) {
     if ($procList) {
         $procArgs = ($procList | ForEach-Object { "'$_'" }) -join ","
         $arguments += " -ProcessNames $procArgs"
+    }
+}
+if ($GameProcessNames) {
+    $gameList = $GameProcessNames -split "[;,]" | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+    if ($gameList) {
+        $gameArgs = ($gameList | ForEach-Object { "'$_'" }) -join ","
+        $arguments += " -GameProcessNames $gameArgs"
     }
 }
 

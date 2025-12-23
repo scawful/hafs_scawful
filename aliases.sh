@@ -322,7 +322,7 @@ win-watch() {
     echo "Set HAFS_GAME_PROCESS_NAMES for default (comma or semicolon separated)."
     return 1
   fi
-  win-ps "& 'C:/hafs_scawful/scripts/windows/watch_game_mode.ps1' -ProcessNames '${processes}' -Mode both -ApplyGpuLimits -GpuPower 150"
+  win-ps "& 'C:/hafs_scawful/scripts/windows/watch_game_mode.ps1' -ProcessNames '${processes}' -Mode both -ApplyGpuLimits -GpuPower 150 -ApplyEnergyMode"
 }
 
 win-watch-install() {
@@ -332,7 +332,7 @@ win-watch-install() {
     echo "Set HAFS_GAME_PROCESS_NAMES for default (comma or semicolon separated)."
     return 1
   fi
-  win-ps "& 'C:/hafs_scawful/scripts/windows/install_game_watch_task.ps1' -ProcessNames '${processes}' -ApplyGpuLimits -GpuPower 150"
+  win-ps "& 'C:/hafs_scawful/scripts/windows/install_game_watch_task.ps1' -ProcessNames '${processes}' -ApplyGpuLimits -GpuPower 150 -ApplyEnergyMode"
 }
 
 win-watch-remove() {
