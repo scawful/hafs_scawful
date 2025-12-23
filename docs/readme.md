@@ -18,6 +18,14 @@ host-specific docs/configs to halext-server and the Windows GPU host.
 
 - [Model Training Roadmap](model_training_roadmap.md) - High-level AI strategy and plans
 
+## Technical Reference
+
+Detailed technical guides for training and infrastructure are located in the [Reference](reference/) folder:
+- [Training Scripts Guide](reference/training_scripts_guide.md)
+- [Distributed Campaign Status](reference/distributed_campaign_ready.md)
+- [Cross-Platform Path Reference](reference/cross_platform_quick_ref.md)
+- [Zelda Model Names](reference/zelda_model_names.md)
+
 ## Suggested Layout
 
 ```
