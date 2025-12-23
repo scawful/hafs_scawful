@@ -50,6 +50,11 @@ Load aliases and env:
 source ~/.config/hafs/plugins/hafs_scawful/aliases.sh
 ```
 
+## Agent Quickstart
+
+- See `AGENTS.md` for host inventory, paths, and aliases.
+- Host summary lives in `docs/MEDICAL_MECHANICA_SETUP_SUMMARY.md`.
+
 Mobile SSH shorthands (examples):
 ```bash
 hc        # chat with agents

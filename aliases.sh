@@ -263,6 +263,10 @@ win-gpu-status() {
   win-ps "& 'C:/hafs_scawful/scripts/windows/nvidia_status.ps1'"
 }
 
+win-hw() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/hardware_report.ps1'"
+}
+
 win-power() {
   local mode="${1:-}"
   if [ -z "$mode" ]; then
@@ -408,7 +412,7 @@ Training:
   hafs-training-status, hafs-latest-dataset, hafs-analyze-latest, hafs-analyze-rejected
 Windows:
   hafs-check-windows, hafs-windows-status, hafs-gpu, win-ps, win-wsl, win-status
-  win-procs, win-gpu-status, win-power, win-pause, win-resume, win-watch
+  win-procs, win-gpu-status, win-hw, win-power, win-pause, win-resume, win-watch
   win-watch-install, win-watch-remove, win-watch-status, win-fan, win-fan-status
 Mounts/Logs:
   hafs-check-mounts, hafs-logs
