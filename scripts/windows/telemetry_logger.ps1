@@ -2,7 +2,8 @@ param(
     [string]$OutputDir = "D:/hafs_training/logs/telemetry",
     [int]$IntervalSec = 10,
     [string]$FilePrefix = "telemetry-v2",
-    [switch]$Once
+    [switch]$Once,
+    [string]$LibreHardwareMonitorDll = $env:HAFS_LHM_DLL
 )
 
 function Get-GpuTelemetry {
@@ -24,6 +25,43 @@ function Get-GpuTelemetry {
 }
 
 function Get-HardwareMonitorSensors {
+    if (-not $script:LhmComputer) {
+        if (-not $LibreHardwareMonitorDll) {
+            $candidates = @()
+            $candidates += $env:HAFS_LHM_DLL
+            $candidates += (Get-ChildItem -Path "$env:LOCALAPPDATA\\Microsoft\\WinGet\\Packages" -Recurse -Filter "LibreHardwareMonitorLib.dll" -ErrorAction SilentlyContinue |
+                Select-Object -First 1 -ExpandProperty FullName)
+            $LibreHardwareMonitorDll = $candidates | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+        }
+
+        if ($LibreHardwareMonitorDll -and (Test-Path $LibreHardwareMonitorDll)) {
+            try {
+                Add-Type -Path $LibreHardwareMonitorDll -ErrorAction Stop
+                $computer = New-Object LibreHardwareMonitor.Hardware.Computer
+                $computer.IsCpuEnabled = $true
+                $computer.IsGpuEnabled = $true
+                $computer.IsMotherboardEnabled = $true
+                $computer.IsControllerEnabled = $true
+                $computer.Open()
+                $script:LhmComputer = $computer
+            } catch {
+                $script:LhmComputer = $null
+            }
+        }
+    }
+
+    if ($script:LhmComputer) {
+        foreach ($hw in $script:LhmComputer.Hardware) {
+            $hw.Update()
+            foreach ($sub in $hw.SubHardware) { $sub.Update() }
+        }
+        $sensors = foreach ($hw in $script:LhmComputer.Hardware) {
+            $hw.Sensors
+            foreach ($sub in $hw.SubHardware) { $sub.Sensors }
+        }
+        return $sensors
+    }
+
     $namespaces = @("root/LibreHardwareMonitor", "root/OpenHardwareMonitor")
     foreach ($ns in $namespaces) {
         try {
@@ -34,6 +72,7 @@ function Get-HardwareMonitorSensors {
         } catch {
         }
     }
+
     return @()
 }
 
