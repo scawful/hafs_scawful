@@ -132,7 +132,7 @@ python D:\hafs_training\scripts\setup_finetuning_models.py --models recommended
 | ASM | `deepseek-coder:6.7b` | `deepseek-coder:33b` | Low-level code understanding |
 | C++ | `qwen2.5-coder:14b` | `qwen2.5-coder:7b` | General code quality |
 | YAZE | `qwen2.5-coder:14b` | `codellama` | Emulator code |
-| Gigaleak | `deepseek-coder:6.7b` | `deepseek-coder:33b` | Original SNES source |
+| alttp_historical | `deepseek-coder:6.7b` | `deepseek-coder:33b` | Original SNES source |
 | Oracle | `qwen2.5-coder:14b` | `qwen3:14b` | ROM hack mix |
 | Text | `qwen2.5:14b` | `phi3.5` | Natural language |
 | Errors | `deepseek-r1:14b` | `deepseek-r1:8b` | Reasoning |
@@ -174,7 +174,7 @@ available = [
 asm = "deepseek-coder:6.7b"
 cpp = "qwen2.5-coder:14b"
 yaze = "qwen2.5-coder:14b"
-gigaleak = "deepseek-coder:6.7b"
+alttp_historical = "deepseek-coder:6.7b"
 oracle = "qwen2.5-coder:14b"
 text = "qwen2.5:14b"
 errors = "deepseek-r1:14b"

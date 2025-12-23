@@ -551,7 +551,7 @@ oracle-<name>-<role>-<base>-<date>
 
 Examples:
 - oracle-farore-general-qwen25-coder-15b-20251222
-- oracle-rauru-asm-qwen25-coder-15b-20251221
+- oracle-euclid-asm-asm-qwen25-coder-15b-20251221
 - oracle-sheik-debug-qwen25-coder-15b-20251220
 ```
 

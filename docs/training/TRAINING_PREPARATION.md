@@ -386,7 +386,7 @@ class MoEOrchestrator:
         Expert Outputs:
         {json.dumps(results, indent=2)}
 
-        Create a unified solution that integrates all expert insights.
+        Create a master-sword solution that integrates all expert insights.
         """
 
         response = await self.orchestrator.generate(
@@ -401,7 +401,7 @@ class MoEOrchestrator:
 **Benefits**:
 - **Specialization**: Each expert focuses on one domain
 - **Parallelization**: Multiple experts can work simultaneously
-- **Modularity**: Easy to add new experts (Oracle Expert, Gigaleak Expert)
+- **Modularity**: Easy to add new experts (Oracle Expert, alttp_historical Expert)
 - **Quality**: Fine-tuned experts outperform generalist models
 
 **Training Strategy for MoE**:
@@ -424,7 +424,7 @@ Total: **33K samples** (already in pipeline!)
 **ALTTP ASM Agent**:
 - `hyrule-asm-v1` (Hyrule = ALTTP kingdom)
 - `master-sword-14b` (Master Sword = legendary item)
-- `fierce-deity-14b` (Long-term unified model name)
+- `fierce-deity-14b` (Long-term master-sword name)
 - `lightworld-asm-v1` (Light World vs Dark World)
 
 **YAZE Tool Agent**:

@@ -44,7 +44,7 @@ Hybrid training system using:
 │                                                             │
 │  Output: Fine-tuned models                                 │
 │  → D:/.context/training/models/                            │
-│     - oracle-rauru-assembler-v1/                          │
+│     - oracle-euclid-asm-assembler-v1/                          │
 │     - oracle-yaze-expert-v1/                              │
 └─────────────────────────────────────────────────────────────┘
                             ↓ model deployment
@@ -68,8 +68,8 @@ Domain-specific thresholds (from `quality.py:623-631`):
 ```python
 DOMAIN_THRESHOLDS = {
     "asm": 0.4,        # ASM is hard - lower threshold
-    "gigaleak": 0.45,  # Original source
-    "oracle": 0.4,     # ROM hack - lower
+    "alttp_historical": 0.45,  # Original source
+    "oracle_secrets_hack": 0.4,     # ROM hack - lower
     "yaze": 0.5,       # C++ code - medium
     "cpp": 0.5,
     "errors": 0.3,
@@ -243,7 +243,7 @@ def main():
 
     # Training arguments
     training_args = TrainingArguments(
-        output_dir="D:/.context/training/models/oracle-rauru-assembler-v1",
+        output_dir="D:/.context/training/models/oracle-euclid-asm-assembler-v1",
         per_device_train_batch_size=2,
         gradient_accumulation_steps=4,
         num_train_epochs=3,
@@ -270,8 +270,8 @@ def main():
     trainer.train()
 
     # Save final model
-    model.save_pretrained("D:/.context/training/models/oracle-rauru-assembler-v1")
-    tokenizer.save_pretrained("D:/.context/training/models/oracle-rauru-assembler-v1")
+    model.save_pretrained("D:/.context/training/models/oracle-euclid-asm-assembler-v1")
+    tokenizer.save_pretrained("D:/.context/training/models/oracle-euclid-asm-assembler-v1")
 
 if __name__ == "__main__":
     main()
@@ -291,14 +291,14 @@ Get-Process -Name python | Select-Object CPU, WorkingSet, Path
 **Training Logs:**
 ```
 D:/.context/logs/training/
-├── oracle-rauru-v1.log
+├── oracle-euclid-asm-v1.log
 ├── oracle-yaze-v1.log
 └── tensorboard/
 ```
 
 **TensorBoard (optional):**
 ```bash
-tensorboard --logdir D:/.context/training/models/oracle-rauru-assembler-v1
+tensorboard --logdir D:/.context/training/models/oracle-euclid-asm-assembler-v1
 # View at http://localhost:6006
 ```
 
@@ -353,7 +353,7 @@ pip install unsloth transformers trl datasets accelerate
 # Start training
 python scripts/train_on_windows.py \
   --dataset D:/.context/training/datasets/oracle_rom_hack_7000_oracle.jsonl \
-  --output D:/.context/training/models/oracle-rauru-assembler-v1 \
+  --output D:/.context/training/models/oracle-euclid-asm-assembler-v1 \
   --epochs 3 \
   --batch-size 2
 
@@ -366,13 +366,13 @@ nvidia-smi -l 1
 ```bash
 # Test inference on Windows
 python scripts/test_model.py \
-  --model D:/.context/training/models/oracle-rauru-assembler-v1 \
+  --model D:/.context/training/models/oracle-euclid-asm-assembler-v1 \
   --prompt "Write a hook that redirects sprite loading to bank $32"
 
 # Copy model back to Mac (optional)
 rsync -avz --progress \
-  medical-mechanica:/D:/.context/training/models/oracle-rauru-assembler-v1/ \
-  ~/.context/training/models/oracle-rauru-assembler-v1/
+  medical-mechanica:/D:/.context/training/models/oracle-euclid-asm-assembler-v1/ \
+  ~/.context/training/models/oracle-euclid-asm-assembler-v1/
 ```
 
 ## Automation
@@ -484,7 +484,7 @@ from unsloth import merge_lora_adapters
 merged_model = merge_lora_adapters(
     base_model="unsloth/Qwen2.5-7B-bnb-4bit",
     adapters=[
-        "oracle-rauru-assembler-v1",
+        "oracle-euclid-asm-assembler-v1",
         "oracle-yaze-expert-v1"
     ],
     weights=[0.6, 0.4]  # 60% ASM, 40% YAZE

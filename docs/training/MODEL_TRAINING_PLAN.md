@@ -1,10 +1,10 @@
 # Model Training Plan
 
 NOTE: This document is being consolidated. Source of truth:
-- docs/training/oracle_farore_secrets_plan.md
+- docs/training/master_sword_plan.md
 - docs/training/model_catalog.md
 
-**Updated**: 2025-12-22
+**Updated**: 2025-12-23
 **Status**: Active Development
 
 ---
@@ -12,30 +12,22 @@ NOTE: This document is being consolidated. Source of truth:
 ## Architecture Overview
 
 ```
-                    ┌─────────────────────────────────────┐
-                    │          oracle-council              │
-                    │    (Gemini Flash + MoE Router)       │
-                    └──────────────┬──────────────────────┘
-                                   │
-         ┌─────────────────────────┼─────────────────────────┐
-         │                         │                         │
-    ┌────▼────┐              ┌─────▼─────┐             ┌─────▼─────┐
-    │oracle-  │              │ oracle-   │             │ oracle-   │
-    │  din    │              │  nayru    │             │  farore   │
-    │ (Power) │              │ (Wisdom)  │             │ (Courage) │
-    └────┬────┘              └─────┬─────┘             └─────┬─────┘
-         │                         │                         │
-    ┌────▼──────────┐        ┌─────▼───────┐          ┌──────▼──────┐
-    │ euclid-asm    │        │ docs/lore   │          │ oracle-of-  │
-    │ seph-tilesmith│        │ explanation │          │ secrets     │
-    │ koume-compress│        │ teaching    │          │ narrative   │
-    └───────────────┘        └─────────────┘          └─────────────┘
+                     ┌─────────────────────────────────────┐
+                     │          oracle-council             │
+                     │       (Council Selections)          │
+                     └──────────────┬──────────────────────┘
+                                    │
+                    ┌───────────────▼───────────────┐
+                    │       Oracle Family (Small)   │
+                    │   (Specialists & MoE Core)    │
+                    └───────────────────────────────┘
 
-                    ┌─────────────────────────────────────┐
-                    │         master-sword                │
-                    │   (Unified North Star Model)        │
-                    │  Combines all domains in one 32B    │
-                    └─────────────────────────────────────┘
+          ┌──────────────────────────────────────────────────┐
+          │                                                  │
+   ┌──────▼──────────────┐                    ┌──────────────▼──────┐
+   │ ALTTP Family (Med)  │                    │  Masks Family (Large)│
+   │    master-sword     │                    │    fierce-deity      │
+   └─────────────────────┘                    └──────────────────────┘
 ```
 
 ---
@@ -65,23 +57,24 @@ NOTE: This document is being consolidated. Source of truth:
 | Model | Purpose |
 |-------|---------|
 | `nayru-lorekeeper` | Canon, timeline, continuity |
-| `impa-archivist` | Consistency checks, citations |
+| `impa-scribe` | Consistency checks, citations |
 | `kaepora-teacher` | Code explanation, documentation |
 
 **Under oracle-farore (Courage/Creation):**
 | Model | Purpose |
 |-------|---------|
-| `farore-questweaver` | Quest design, world layout |
-| `saria-voice` | Dialogue, character voice |
-| `zelda-scribe` | UI copy, item text, quest logs |
+| `farore-questweaver` | Quest design, puzzles, logic |
+| `ocarina-maestro` | Audio, music, SPC700 |
+| `wind-waker` | Dynamic events, scripts |
+| `zelda-scribe` | UI copy, item text, logs |
 
 ### System Models
 
 | Model | Purpose |
 |-------|---------|
-| `oracle-council` | MoE router + Gemini Flash classifier |
-| `master-sword` | Unified mid-term model |
-| `fierce-deity` | Long-term unified successor |
+| `oracle-council` | Council selections + Gemini Flash classifier |
+| `master-sword` | Master Sword |
+| `fierce-deity` | Long-term successor |
 
 ---
 
@@ -107,7 +100,7 @@ Task Types:
 |--------|---------|-------------|
 | ALTTP Vanilla | 1,300 | Disassembly routines |
 | ALTTP historical | 2,000 | Nintendo original source |
-| Oracle of Secrets | 500 | ROM hack code |
+| oracle_secrets_hack | 500 | ROM hack code |
 | Task Variants | 2,000 | debug/optimize/hook/doc |
 | **Total** | **~6,000** | Split 80/10/10 |
 
@@ -176,9 +169,9 @@ Requires Oracle of Secrets story dataset.
 
 ---
 
-## Unified Model: master-sword
+## Stage 3: Master Sword
 
-The unified model combining all domains.
+The master-sword combining results from all domains.
 
 ```
 Full name:    master-sword-qwen-32b
@@ -191,7 +184,7 @@ Purpose:      Cross-domain reasoning, unified ROM hacking assistant
 - Use **MoE** for pure tasks (ASM-only, graphics-only)
 - Use **master-sword** for cross-domain tasks (quest → implementation)
 
-See `oracle_farore_secrets_plan.md` for detailed roadmap.
+See `master_sword_plan.md` for detailed roadmap.
 
 ---
 
@@ -266,8 +259,8 @@ DOMAIN_THRESHOLDS = {
 | AsmOptimizeGenerator | asm_optimize | ~900 |
 | AsmHookGenerator | asm_hook | ~800 |
 | AsmDocGenerator | asm_doc | ~1,000 |
-| GigaleakDataGenerator | alttp_historical | ~2,000 |
-| OracleDataGenerator | oracle | ~500 |
+| alttp_historicalDataGenerator | alttp_historical | ~2,000 |
+| OracleDataGenerator | oracle_secrets_hack | ~500 |
 | Zelda3DisasmGenerator | zelda3 | ~1,500 |
 | CppDataGenerator | yaze | ~1,500 |
 
@@ -283,7 +276,7 @@ synth = AsmSynthesizer()
 result = await synth.run_comparison(limit=10)
 synth.print_comparison_report(result)
 
-# Generate unified dataset
+# Generate master-sword dataset
 await synth.generate_unified_dataset(
     output_dir=Path("~/.context/training/datasets/asm_unified"),
     limit_per_type=500,
@@ -311,9 +304,9 @@ await synth.generate_unified_dataset(
 - [ ] Train farore-questweaver-4b
 - [ ] Train saria-voice-4b
 
-### Phase 4: Unified Model
-- [ ] Combine all datasets
-- [ ] Train master-sword-32b
+### Phase 4: Stage Pathways
+- [ ] Combine ALTTP-series datasets -> **master-sword**
+- [ ] Combine Masks-series datasets -> **fierce-deity** / **majora-mask**
 - [ ] A/B test vs MoE system
 
 ---

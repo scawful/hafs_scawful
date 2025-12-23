@@ -15,13 +15,13 @@ This document captures the journey from 1% to 62.7% quality pass rate and provid
 1. Mixed-domain threshold bug (all domains using default 0.7 instead of per-domain thresholds)
 2. Generic teacher prompts producing shallow outputs
 3. JSON parsing failures from teacher model (unescaped newlines)
-4. Gigaleak threshold (0.5) too strict for Gemini Flash capabilities
+4. alttp_historical threshold (0.5) too strict for Gemini Flash capabilities
 
 **Solution Path:**
 - Fixed threshold logic → 26% pass rate
 - Enhanced prompts → 33% pass rate
 - Robust JSON parsing → 33% pass rate (reduced failures)
-- Lowered Gigaleak threshold to 0.45 → **62.7% pass rate** ✓
+- Lowered alttp_historical threshold to 0.45 → **62.7% pass rate** ✓
 
 **Key Insight:** Quality issues were **systemic** (infrastructure bugs, prompt engineering) rather than fundamental data problems.
 
@@ -35,14 +35,14 @@ This document captures the journey from 1% to 62.7% quality pass rate and provid
 | Threshold Fix | 26% | Per-domain thresholds working | Mixed-domain bug |
 | Enhanced Prompts | 33% | Structured teacher prompts | Shallow outputs |
 | JSON Robustness | 33% | Robust JSON extraction | Parsing failures |
-| Lower Gigaleak | **62.7%** | Threshold 0.5 → 0.45 | Teacher model capabilities |
+| Lower alttp_historical | **62.7%** | Threshold 0.5 → 0.45 | Teacher model capabilities |
 
 **Validated Configuration (62.7% pass rate):**
 ```python
 DOMAIN_THRESHOLDS = {
     "asm": 0.4,       # 65816 assembly - hard domain
-    "gigaleak": 0.45, # Original Nintendo source - adjusted for Gemini Flash
-    "oracle": 0.4,    # ROM hack modifications - hard domain
+    "alttp_historical": 0.45, # Original Nintendo source - adjusted for Gemini Flash
+    "oracle_secrets_hack": 0.4,    # ROM hack modifications - hard domain
     "yaze": 0.5,      # C++ tools - medium
     "cpp": 0.5,       # C++ code - medium
     "errors": 0.3,    # Error diagnostics - easier
@@ -261,7 +261,7 @@ def extract_json_from_response(response: str) -> Optional[dict[str, Any]]:
 
 **Integration:**
 ```python
-# In all generators (asm_generator.py, gigaleak_generator.py, oracle_generator.py):
+# In all generators (asm_generator.py, alttp_historical_generator.py, oracle_generator.py):
 from agents.training.json_utils import extract_json_from_response
 
 # Replace brittle parsing:
@@ -290,7 +290,7 @@ if not data:
 3. **Sample Manual Review:** Read 5-10 rejected samples near threshold
 4. **Adjust Threshold:** If samples look good but rejected, lower threshold by 0.05
 
-### Gigaleak Threshold Case Study
+### alttp_historical Threshold Case Study
 
 **Initial:** 0.5 threshold → 33% pass rate
 **Score Distribution:**
@@ -652,7 +652,7 @@ watch -n 60 'wc -l ~/.context/training/datasets/*/train.jsonl'
 # Run threshold sweep
 for threshold in [0.35, 0.40, 0.45, 0.50, 0.55]:
     result = await curator.curate_dataset(
-        domains=["gigaleak"],
+        domains=["alttp_historical"],
         target_count=100,
         quality_threshold=threshold,
     )

@@ -166,7 +166,7 @@ The campaign now uses domain-aware quality thresholds (fixed 2025-12-21):
 ```toml
 [campaign.thresholds]
 asm = 0.4        # ASM is hard - lower threshold
-gigaleak = 0.45  # Original source
+alttp_historical = 0.45  # Original source
 oracle = 0.4     # ROM hack
 yaze = 0.5       # C++ code
 cpp = 0.5

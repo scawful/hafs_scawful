@@ -33,11 +33,11 @@ python scripts/train.py --list-presets
 ### Train Oracle Expert
 
 ```bash
-# Train oracle-rauru-assembler on Mac MPS
-python scripts/train.py oracle-rauru-mac
+# Train euclid-asm on Mac MPS
+python scripts/train.py euclid-asm-mac
 
 # Train on cloud GPU
-python scripts/train.py oracle-rauru-cloud
+python scripts/train.py euclid-asm-cloud
 ```
 
 That's it! The config handles everything else.
@@ -75,8 +75,8 @@ Available profiles:
 Define specialized AI agents:
 
 ```toml
-[experts.oracle-rauru-assembler]
-display_name = "Oracle: Rauru Assembler"
+[experts.euclid-asm]
+display_name = "Oracle: Euclid ASM"
 role = "asm"
 group = "rom-tooling"
 base_model = "Qwen/Qwen2.5-Coder-1.5B"
@@ -131,8 +131,8 @@ warmup_steps = 100
 Complete training configurations combining all components:
 
 ```toml
-[presets.oracle-rauru-mac]
-expert = "oracle-rauru-assembler"
+[presets.euclid-asm-mac]
+expert = "euclid-asm"
 hardware = "mac-mps"
 dataset = "alttp_yaze_full"
 hyperparameters = "default"
@@ -164,18 +164,18 @@ python scripts/train.py --list-hardware
 **Mac M1 Training:**
 ```bash
 # Use the mac preset (automatically configured for MPS constraints)
-python scripts/train.py oracle-rauru-mac
+python scripts/train.py euclid-asm-mac
 ```
 
 **Cloud GPU Training:**
 ```bash
 # Use cloud preset (higher batch size, full LoRA rank)
-python scripts/train.py oracle-rauru-cloud
+python scripts/train.py euclid-asm-cloud
 ```
 
 **Verbose Logging:**
 ```bash
-python scripts/train.py oracle-rauru-mac --verbose
+python scripts/train.py euclid-asm-mac --verbose
 ```
 
 ### Custom Configuration
@@ -186,7 +186,7 @@ Edit `config/training.toml`:
 
 ```toml
 [presets.my-custom-training]
-expert = "oracle-sheik-debugger"
+expert = "sheik-debugger"
 hardware = "mac-mps"
 dataset = "alttp_yaze_full"
 hyperparameters = "production"  # 3 epochs instead of 1
@@ -226,7 +226,7 @@ recommended_gradient_accumulation = 2
 ### Add New Oracle Expert
 
 ```toml
-[experts.oracle-purah-profiler]
+[experts.purah-profiler]
 display_name = "Oracle: Purah Profiler"
 role = "performance"
 group = "rom-tooling"
@@ -258,8 +258,8 @@ domains = ["asm", "debugging"]
 ### Create Preset for New Combinations
 
 ```toml
-[presets.oracle-purah-cloud]
-expert = "oracle-purah-profiler"
+[presets.purah-cloud]
+expert = "purah-profiler"
 hardware = "cloud-rtx-4090"
 dataset = "my_dataset"
 hyperparameters = "production"
@@ -278,7 +278,7 @@ gradient_accumulation = 2
 Training produces:
 
 ```
-~/Code/hafs/models/oracle-rauru-assembler-qwen25-coder-15b-20251222/
+~/Code/hafs/models/euclid-asm-qwen25-coder-15b-20251222/
 ├── adapter_config.json          # LoRA configuration
 ├── adapter_model.bin            # LoRA weights
 ├── config.json                  # Model configuration
@@ -293,7 +293,7 @@ Training produces:
 ```json
 {
   "expert": {
-    "name": "Oracle: Rauru Assembler",
+    "name": "Oracle: Euclid Assembler",
     "role": "asm",
     "group": "rom-tooling",
     "specialization": "65816 assembly, ALTTP routines, ROM patching"
@@ -352,7 +352,7 @@ Problems:
 
 ```bash
 # Config-based training
-python scripts/train.py oracle-rauru-mac
+python scripts/train.py euclid-asm-mac
 ```
 
 Benefits:
@@ -377,7 +377,7 @@ from hafs.training.config_trainer import ConfigTrainer
 trainer = ConfigTrainer()
 
 # Train with preset
-output_dir = trainer.train("oracle-rauru-mac")
+output_dir = trainer.train("euclid-asm-mac")
 
 print(f"Model saved to: {output_dir}")
 ```
@@ -386,7 +386,7 @@ print(f"Model saved to: {output_dir}")
 
 ```bash
 # Use custom config file
-python scripts/train.py oracle-rauru-mac --config my_config.toml
+python scripts/train.py euclid-asm-mac --config my_config.toml
 ```
 
 ### Dynamic Preset Building
@@ -397,7 +397,7 @@ from hafs.training.config_trainer import ConfigTrainer
 trainer = ConfigTrainer()
 
 # Build config from preset
-config = trainer.build_training_config("oracle-rauru-mac")
+config = trainer.build_training_config("euclid-asm-mac")
 
 # Modify config
 config.learning_rate = 3e-4
@@ -414,7 +414,7 @@ trainer.train_with_config(config)
 ### Preset Not Found
 
 ```
-Error: Preset 'oracle-rauru-mac' not found
+Error: Preset 'euclid-asm-mac' not found
 ```
 
 **Solution**: Check available presets:
@@ -431,7 +431,7 @@ RuntimeError: Hardware ... is unsupported: CUDA capability sm_120 not supported 
 **Solution**: Use a different hardware profile:
 ```bash
 # Use Mac MPS instead
-python scripts/train.py oracle-rauru-mac
+python scripts/train.py euclid-asm-mac
 
 # Or wait for PyTorch sm_120 support
 ```
@@ -455,7 +455,7 @@ Or create a custom preset with lower settings.
 
 ## Best Practices
 
-1. **Start with existing presets** - Use `oracle-rauru-mac` or `oracle-rauru-cloud` as templates
+1. **Start with existing presets** - Use `euclid-asm-mac` or `euclid-asm-cloud` as templates
 2. **Test on small datasets first** - Verify config before full training
 3. **Document custom presets** - Add comments in `training.toml`
 4. **Version control config** - Commit `training.toml` changes
@@ -490,7 +490,7 @@ Or create a custom preset with lower settings.
 
 **Usage**:
 ```bash
-python scripts/train.py oracle-rauru-mac
+python scripts/train.py euclid-asm-mac
 ```
 
 **Status**: ✓ Ready to use (replaces `train_model_mac.py`, `train_zelda_unsloth.py`, etc.)

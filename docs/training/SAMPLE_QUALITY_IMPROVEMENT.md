@@ -12,7 +12,7 @@ Different codebases have different characteristics:
 |--------|---------|-----------|
 | **zelda3 disassembly** | High | Well-documented but vanilla-only, needs Oracle context |
 | **Oracle-of-Secrets** | Medium | ROM hack code, inconsistent comments, mixed quality |
-| **alttp-gigaleak** | Very High | Nintendo source with Japanese comments, needs translation context |
+| **alttp-alttp_historical** | Very High | Nintendo source with Japanese comments, needs translation context |
 | **YAZE C++ code** | Medium | Tool code, not game logic - needs relevance filtering |
 | **book-of-mudora** | High | Documentation, but needs code examples to be actionable |
 | **hyrule-historian** | Medium | Community guides, varying technical depth |
@@ -138,7 +138,7 @@ python scripts/analyze_sample_sources.py \
 
 ## Phase 2: Source-Specific Improvement Strategies
 
-### 2.1 High-Quality Sources (zelda3, gigaleak, book-of-mudora)
+### 2.1 High-Quality Sources (zelda3, alttp_historical, book-of-mudora)
 
 **Strategy**: Extract more samples with richer context
 
@@ -716,7 +716,7 @@ Rank sources by authority:
 
 SOURCE_AUTHORITY = {
     # Tier 1: Official/High Authority (0.9-1.0)
-    'alttp-gigaleak': 1.0,          # Nintendo source code
+    'alttp-alttp_historical': 1.0,          # Nintendo source code
     'zelda3/': 0.95,                 # Community-verified disassembly
 
     # Tier 2: Reliable Community (0.7-0.89)

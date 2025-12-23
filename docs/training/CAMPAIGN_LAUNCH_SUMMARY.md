@@ -18,10 +18,10 @@ Successfully launched a **34,500 sample** training data generation campaign afte
 | Threshold Fix | 26% | Fixed per-domain threshold logic |
 | Enhanced Prompts | 33% | Added structured teacher requirements |
 | JSON Robustness | 33% | Reduced parsing failures |
-| Lowered Gigaleak | **62.7%** ✓ | Validated quality threshold |
+| Lowered alttp_historical | **62.7%** ✓ | Validated quality threshold |
 
 **Final Configuration:**
-- Gigaleak: 0.45 threshold (adjusted for Gemini Flash capabilities)
+- alttp_historical: 0.45 threshold (adjusted for Gemini Flash capabilities)
 - ASM: 0.4, Oracle: 0.4, Errors: 0.3, YAZE/CPP: 0.5
 - Robust JSON parsing with multi-stage fallback
 - Structured teacher prompts (150-350 word outputs)
@@ -39,7 +39,7 @@ Successfully launched a **34,500 sample** training data generation campaign afte
 **Domain Allocation:**
 ```
 asm:      15,007 samples (43.5%) - ALTTP 65816 assembly
-gigaleak:  8,004 samples (23.2%) - Nintendo original source
+alttp_historical:  8,004 samples (23.2%) - Nintendo original source
 oracle:    4,002 samples (11.6%) - ROM hack modifications
 yaze:      6,003 samples (17.4%) - C++ emulator tools
 errors:    1,483 samples (4.3%)  - Error diagnostics
@@ -188,7 +188,7 @@ cat ~/.context/training/datasets/alttp_yaze_full_*/train.jsonl | \
 
 Datasets auto-exported (--export flag):
 - **ALTTP ASM Dataset:** `~/.context/training/datasets/alttp_yaze_full_*_asm/`
-  - ~24K samples (asm + gigaleak + oracle + errors)
+  - ~24K samples (asm + alttp_historical + oracle + errors)
   - 80% train / 10% val / 10% test splits
   - Format: Qwen2.5-Coder-14B instruction tuning
 
@@ -227,7 +227,7 @@ Test on held-out samples, evaluate:
 - Memory: ~45% (knowledge bases loaded)
 - Disk: ~120 GB free
 - Embedding Service: Running
-- Knowledge Bases: 6 loaded (vanilla, hack, oracle, gigaleak, yaze, errors)
+- Knowledge Bases: 6 loaded (vanilla, hack, oracle, alttp_historical, yaze, errors)
 
 **Expected During Campaign:**
 - CPU: 50-70% (Gemini API calls + quality scoring)
@@ -246,8 +246,8 @@ Test on held-out samples, evaluate:
 ### Code - Training Infrastructure
 - `src/agents/training/health_check.py` - System health monitoring
 - `src/agents/training/json_utils.py` - Robust JSON extraction
-- `src/agents/training/quality.py` - Updated thresholds (Gigaleak 0.45)
-- `src/agents/training/generators/gigaleak_generator.py` - Enhanced prompts
+- `src/agents/training/quality.py` - Updated thresholds (alttp_historical 0.45)
+- `src/agents/training/generators/alttp_historical_generator.py` - Enhanced prompts
 - `src/agents/training/generators/asm_generator.py` - Enhanced prompts
 - `src/agents/training/generators/oracle_generator.py` - Enhanced prompts
 

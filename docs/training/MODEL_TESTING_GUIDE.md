@@ -172,18 +172,18 @@ python3 scripts/run_test_suite.py \
 
 ### 3.2 Comparison Testing
 
-Compare oracle-farore vs oracle-rauru vs base model:
+Compare oracle-farore vs oracle-euclid-asm vs base model:
 
 ```python
 # scripts/compare_models.py
 models = [
     "Qwen/Qwen2.5-Coder-1.5B",  # Base
-    "oracle-rauru",              # ASM specialist
+    "oracle-euclid-asm",              # ASM specialist
     "oracle-farore",             # General Oracle expert
 ]
 
 test_prompts = [
-    "Write ASM code for a JSR instruction",  # ASM (rauru should excel)
+    "Write ASM code for a JSR instruction",  # ASM (euclid-asm should excel)
     "Explain the Oracle secrets system",      # General (farore should excel)
     "How do you add a new item?",            # Both should do well
 ]
@@ -218,7 +218,7 @@ python3 scripts/evaluate_perplexity.py \
 
 ### 4.1 Test Against Known Issues
 
-If oracle-rauru had issues, test if oracle-farore avoids them:
+If oracle-euclid-asm had issues, test if oracle-farore avoids them:
 
 ```bash
 # Test prompts that exposed previous model weaknesses
@@ -294,8 +294,8 @@ hafs nodes chat --node oracle-farore --task "Design a new dungeon secret"
 - ✓ No hallucination of non-existent Oracle features
 
 ### Stretch Goal (Excellent)
-- ✓ Comparable to oracle-rauru on ASM tasks
-- ✓ Superior to oracle-rauru on game design tasks
+- ✓ Comparable to oracle-euclid-asm on ASM tasks
+- ✓ Superior to oracle-euclid-asm on game design tasks
 - ✓ Perplexity < 2.0 on test set
 - ✓ Passes all regression tests
 

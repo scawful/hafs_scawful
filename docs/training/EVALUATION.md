@@ -273,7 +273,7 @@ echo "✓ Evaluation complete: $OUTPUT_DIR/report.md"
 
 **Date:** 2025-12-21
 **Model:** hafs-coder:14b (LoRA fine-tune on Qwen2.5-Coder-14B)
-**Training Data:** 10,000 samples (ASM, Gigaleak, Oracle, YAZE, errors, text)
+**Training Data:** 10,000 samples (ASM, alttp_historical, Oracle, YAZE, errors, text)
 
 ## Automatic Metrics
 

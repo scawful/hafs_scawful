@@ -113,7 +113,7 @@ overall_quality = (diversity + kg_consistency + (1 - hallucination) + coherence)
   "instruction": "Explain how Oracle-of-Secrets implements custom sprite loading to expand sprite variety beyond vanilla ALTTP's 128 sprite limit",
   "input": "Vanilla ALTTP loads sprite graphics from banks $09-$0B using a simple lookup table indexed by sprite ID (0x00-0x7F). The Oracle ROM hack needs to support 256 sprites (0x00-0xFF) and uses custom sprite banks in expanded ROM space ($32-$35).",
   "output": "**Vanilla Behavior:**\nIn the original ALTTP, sprite graphics loading occurs at $0D:B4E0 in the LoadSpriteGfx routine. The game uses sprite ID as a direct index into a table at $0D:B500, which maps to graphics banks $09-$0B. This limits the game to 128 unique sprites (7-bit ID).\n\n**Hook Implementation:**\nOracle redirects this routine using a JSL hook:\n```asm\n; Vanilla code at $0D:B4E0 (5 bytes)\norg $0DB4E0\n    JSL OracleCustomSpriteLoader  ; Jump to bank $32 (4 bytes)\n    NOP                           ; Fill remaining byte\n```\n\n**Custom Sprite Loader (Bank $32):**\n```asm\norg $32F000\nOracleCustomSpriteLoader:\n    ; Expand sprite ID from 7-bit to 8-bit\n    PHP                  ; Save processor status\n    REP #$20             ; 16-bit A\n    LDA.b $00            ; Load sprite ID from DP\n    AND.w #$00FF         ; Mask to 8 bits (0x00-0xFF)\n    \n    ; Use room number as bank selector\n    XBA                  ; Swap bytes\n    LDA.b $A0            ; Load current room number\n    LSR A                ; Divide by 4 (bank groups)\n    LSR A\n    AND.w #$0003         ; Limit to 4 banks ($32-$35)\n    XBA                  ; Restore sprite ID\n    \n    ; Calculate graphics address\n    ASL A                ; Multiply ID by 2 (word index)\n    TAX                  ; Transfer to index\n    LDA.l SpriteGfxTable,x  ; Load address from expanded table\n    STA.b $02            ; Store target address\n    \n    PLP                  ; Restore status\n    RTL                  ; Return to vanilla code\n\nSpriteGfxTable:\n    ; 256 entries x 2 bytes = 512 bytes\n    .dw $3200, $3210, $3220, ...  ; Graphics addresses in banks $32-$35\n```\n\n**Why This Approach:**\n1. **JSL Hook:** Allows jumping to expanded ROM (bank $32+) while preserving return address\n2. **Room-Based Banking:** Distributes sprites across 4 banks based on room number, avoiding bank overflow\n3. **Backward Compatible:** Sprite IDs 0x00-0x7F still map to vanilla graphics for compatibility\n4. **Expandable:** Can easily add more banks ($36+) by changing the AND mask\n\n**Integration:**\n- Called by: Sprite initialization ($0D:8000), dynamic sprite spawner ($0D:8500)\n- Requires: Custom graphics data in banks $32-$35 (must be included in ROM build)\n- Tested: Load each sprite ID in test rooms, verify graphics display correctly\n\n**Common Pitfalls:**\n- Forgetting to include graphics data in banks $32-$35 (causes glitched sprites)\n- Not preserving processor status (P register) - causes A/X/Y width mismatches\n- Using LDA.w instead of LDA.l for long addressing (wrong bank)\n",
-  "domain": "oracle",
+  "domain": "oracle_secrets_hack",
   "quality_score": 0.78
 }
 ```
@@ -205,7 +205,7 @@ Generate JSON:
       }
     ]
   },
-  "oracle": { ... },
+  "oracle_secrets_hack": { ... },
   "yaze": { ... }
 }
 ```
@@ -397,7 +397,7 @@ EXAMPLE 2 (Anti-Pattern - DON'T DO THIS):
         "incomplete_code: 25%"
       ]
     },
-    "oracle": {
+    "oracle_secrets_hack": {
       "generated": 7000,
       "passed": 4900,
       "pass_rate": 0.70,
