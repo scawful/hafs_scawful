@@ -33,7 +33,11 @@ if ($ApplyGpuLimits) {
 
 $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $arguments
 $trigger = New-ScheduledTaskTrigger -AtLogOn
-$userId = if ($env:UserDomain) { "$env:UserDomain\\$env:UserName" } else { $env:UserName }
+$userId = (& whoami 2>$null)
+if (-not $userId) {
+    $domain = if ($env:UserDomain) { $env:UserDomain } else { $env:COMPUTERNAME }
+    $userId = if ($domain) { "$domain\\$env:UserName" } else { $env:UserName }
+}
 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
 
 if (Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue) {
