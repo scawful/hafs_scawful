@@ -17,32 +17,32 @@ function Clone-Object {
 
 $profiles = @{
     "curve-quiet" = @{
-        CPU = @{ Idle = 35; Min = 35; Max = 70; Load = 75; Step = 3; Deadband = 4; Response = 3 }
-        GPU = @{ Idle = 35; Min = 35; Max = 75; Load = 75; Step = 3; Deadband = 4; Response = 3 }
+        CPU = @{ Idle = 35; Min = 35; Max = 75; Load = 78; Step = 3; Deadband = 4; Response = 3 }
+        GPU = @{ Idle = 35; Min = 35; Max = 80; Load = 78; Step = 3; Deadband = 4; Response = 3 }
     }
     "curve-balanced" = @{
-        CPU = @{ Idle = 35; Min = 45; Max = 85; Load = 72; Step = 2; Deadband = 3; Response = 2 }
-        GPU = @{ Idle = 35; Min = 45; Max = 90; Load = 70; Step = 2; Deadband = 3; Response = 2 }
+        CPU = @{ Idle = 35; Min = 45; Max = 85; Load = 76; Step = 2; Deadband = 3; Response = 2 }
+        GPU = @{ Idle = 35; Min = 45; Max = 90; Load = 75; Step = 2; Deadband = 3; Response = 2 }
     }
     "curve-performance" = @{
         CPU = @{ Idle = 30; Min = 55; Max = 100; Load = 68; Step = 1; Deadband = 2; Response = 1 }
         GPU = @{ Idle = 30; Min = 60; Max = 100; Load = 65; Step = 1; Deadband = 2; Response = 1 }
     }
     "curve-training" = @{
-        CPU = @{ Idle = 35; Min = 50; Max = 100; Load = 70; Step = 1; Deadband = 2; Response = 1 }
-        GPU = @{ Idle = 35; Min = 65; Max = 100; Load = 63; Step = 1; Deadband = 2; Response = 1 }
+        CPU = @{ Idle = 35; Min = 50; Max = 100; Load = 72; Step = 1; Deadband = 2; Response = 1 }
+        GPU = @{ Idle = 35; Min = 70; Max = 100; Load = 65; Step = 1; Deadband = 2; Response = 1 }
     }
     "curve-gaming" = @{
-        CPU = @{ Idle = 35; Min = 45; Max = 90; Load = 70; Step = 2; Deadband = 2; Response = 1 }
-        GPU = @{ Idle = 30; Min = 55; Max = 100; Load = 62; Step = 1; Deadband = 1; Response = 1 }
+        CPU = @{ Idle = 35; Min = 45; Max = 90; Load = 72; Step = 2; Deadband = 2; Response = 1 }
+        GPU = @{ Idle = 30; Min = 60; Max = 100; Load = 63; Step = 1; Deadband = 1; Response = 1 }
     }
     "curve-overnight" = @{
-        CPU = @{ Idle = 35; Min = 30; Max = 70; Load = 78; Step = 4; Deadband = 5; Response = 4 }
-        GPU = @{ Idle = 35; Min = 30; Max = 75; Load = 78; Step = 4; Deadband = 5; Response = 4 }
+        CPU = @{ Idle = 35; Min = 35; Max = 65; Load = 82; Step = 4; Deadband = 5; Response = 4 }
+        GPU = @{ Idle = 35; Min = 35; Max = 70; Load = 82; Step = 4; Deadband = 5; Response = 4 }
     }
     "curve-away" = @{
-        CPU = @{ Idle = 35; Min = 30; Max = 65; Load = 80; Step = 5; Deadband = 6; Response = 5 }
-        GPU = @{ Idle = 35; Min = 30; Max = 70; Load = 80; Step = 5; Deadband = 6; Response = 5 }
+        CPU = @{ Idle = 35; Min = 35; Max = 60; Load = 84; Step = 5; Deadband = 6; Response = 5 }
+        GPU = @{ Idle = 35; Min = 35; Max = 65; Load = 84; Step = 5; Deadband = 6; Response = 5 }
     }
 }
 
