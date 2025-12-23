@@ -40,14 +40,26 @@ if (Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue) {
     Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false
 }
 
+$registered = $false
 try {
-    $principal = New-ScheduledTaskPrincipal -UserId $userId -LogonType InteractiveToken -RunLevel Highest
-    Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Description "hAFS game watch (pause/throttle training)" | Out-Null
+    $principal = New-ScheduledTaskPrincipal -UserId $userId -LogonType Interactive -RunLevel Highest
+    Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Description "hAFS game watch (pause/throttle training)" -ErrorAction Stop | Out-Null
+    $registered = $true
 } catch {
-    $principal = New-ScheduledTaskPrincipal -UserId $userId -LogonType InteractiveToken -RunLevel Limited
-    Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Description "hAFS game watch (pause/throttle training)" | Out-Null
+    $principal = New-ScheduledTaskPrincipal -UserId $userId -LogonType Interactive -RunLevel Limited
+    Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Description "hAFS game watch (pause/throttle training)" -ErrorAction Stop | Out-Null
+    $registered = $true
     Write-Output "Registered with limited run level."
 }
 
-Start-ScheduledTask -TaskName $TaskName | Out-Null
-Write-Output "Installed task: $TaskName"
+if (-not $registered) {
+    Write-Error "Failed to register task."
+    exit 1
+}
+
+try {
+    Start-ScheduledTask -TaskName $TaskName -ErrorAction Stop | Out-Null
+    Write-Output "Installed task: $TaskName"
+} catch {
+    Write-Output "Installed task: $TaskName (failed to start: $($_.Exception.Message))"
+}
