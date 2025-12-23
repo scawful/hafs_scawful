@@ -241,6 +241,19 @@ scripts/win_ps.sh "Get-Process | Select-Object -First 5 Id,ProcessName"
 scripts/win_ps.sh "& 'C:/hafs_scawful/scripts/windows/system_status.ps1'"
 ```
 
+### Auto-Start Game Watcher (Scheduled Task)
+
+```powershell
+# Install watcher at logon (pauses/throttles training when a game runs)
+powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/install_game_watch_task.ps1 -ProcessNames TS4_DX9_x64 -ApplyGpuLimits -GpuPower 150
+
+# Check watcher status
+powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_task_status.ps1
+
+# Remove watcher
+powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/remove_game_watch_task.ps1
+```
+
 ### Copy Files
 
 ```bash

@@ -67,6 +67,9 @@ Implemented:
 - `scripts/windows/system_status.ps1` (system, GPU, training, top processes)
 - `scripts/windows/process_list.ps1` (filter processes by name/path/title)
 - `scripts/windows/nvidia_status.ps1` (GPU telemetry snapshot/loop)
+- `scripts/windows/install_game_watch_task.ps1` (auto-start watcher at logon)
+- `scripts/windows/remove_game_watch_task.ps1` (remove watcher task)
+- `scripts/windows/watch_task_status.ps1` (task state/last run)
 
 Usage (examples):
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/start_training.ps1 -DatasetPath D:/hafs_training/datasets/euclid_asm_v1 -ModelName euclid-asm-qwen25-coder-1.5b-20251222`
@@ -74,6 +77,8 @@ Usage (examples):
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_game_mode.ps1 -ProcessNames GameProcessName -Mode both -ApplyGpuLimits -GpuPower 150`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/system_status.ps1`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/set_power_profile.ps1 -Mode gaming`
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/install_game_watch_task.ps1 -ProcessNames TS4_DX9_x64 -ApplyGpuLimits`
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_task_status.ps1`
 - `syshelp windows` (menu of Windows remote controls)
 - Set default game processes via `HAFS_GAME_PROCESS_NAMES` (comma or semicolon separated).
 

@@ -21,6 +21,17 @@ if (-not $ProcessNames -or $ProcessNames.Count -eq 0) {
     }
 }
 
+if ($ProcessNames -and $ProcessNames.Count -eq 1) {
+    $raw = $ProcessNames[0]
+    if ($raw -match "[;,]") {
+        $ProcessNames = $raw -split "[;,]"
+    }
+}
+
+if ($ProcessNames) {
+    $ProcessNames = $ProcessNames | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+}
+
 if (-not $ProcessNames -or $ProcessNames.Count -eq 0) {
     Write-Error "Set -ProcessNames or HAFS_GAME_PROCESS_NAMES (comma or semicolon separated)."
     exit 1

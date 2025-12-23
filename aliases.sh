@@ -290,6 +290,24 @@ win-watch() {
   win-ps "& 'C:/hafs_scawful/scripts/windows/watch_game_mode.ps1' -ProcessNames '${processes}' -Mode both -ApplyGpuLimits -GpuPower 150"
 }
 
+win-watch-install() {
+  local processes="${1:-${HAFS_GAME_PROCESS_NAMES:-}}"
+  if [ -z "$processes" ]; then
+    echo "Usage: win-watch-install <process_names>"
+    echo "Set HAFS_GAME_PROCESS_NAMES for default (comma or semicolon separated)."
+    return 1
+  fi
+  win-ps "& 'C:/hafs_scawful/scripts/windows/install_game_watch_task.ps1' -ProcessNames '${processes}' -ApplyGpuLimits -GpuPower 150"
+}
+
+win-watch-remove() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/remove_game_watch_task.ps1'"
+}
+
+win-watch-status() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/watch_task_status.ps1'"
+}
+
 hafs-logs() {
   local context="$(_hafs_context)"
   tail -n 100 "$context/logs/"*.log 2>/dev/null
@@ -378,6 +396,7 @@ Training:
 Windows:
   hafs-check-windows, hafs-windows-status, hafs-gpu, win-ps, win-wsl, win-status
   win-procs, win-gpu-status, win-power, win-pause, win-resume, win-watch
+  win-watch-install, win-watch-remove, win-watch-status
 Mounts/Logs:
   hafs-check-mounts, hafs-logs
 LSP:
