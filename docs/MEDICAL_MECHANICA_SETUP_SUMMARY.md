@@ -60,6 +60,8 @@ One command applies fan + power plan + GPU cap:
 - `win-mode away` (one-shot energy mode)
 - `win-services` (check sshd + tailscale)
 - `win-update-harden` (avoid auto restarts + set active hours)
+- `win-telemetry-install` (background GPU/CPU logger)
+- `win-watch-conn` (Mac watchdog for SSH/mounts)
 
 ## Notes
 - PSU wattage is not reported by standard Windows APIs.

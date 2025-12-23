@@ -352,6 +352,29 @@ win-fan() {
   win-ps "& 'C:/hafs_scawful/scripts/windows/fancontrol_switch.ps1' -Profile ${profile}"
 }
 
+win-telemetry() {
+  local interval="${1:-10}"
+  win-ps "& 'C:/hafs_scawful/scripts/windows/telemetry_logger.ps1' -IntervalSec ${interval}"
+}
+
+win-telemetry-install() {
+  local interval="${1:-10}"
+  win-ps "& 'C:/hafs_scawful/scripts/windows/install_telemetry_task.ps1' -IntervalSec ${interval}"
+}
+
+win-telemetry-remove() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/remove_telemetry_task.ps1'"
+}
+
+win-telemetry-status() {
+  win-ps "& 'C:/hafs_scawful/scripts/windows/watch_task_status.ps1' -TaskName hafs-telemetry-logger"
+}
+
+win-watch-conn() {
+  local interval="${1:-60}"
+  "$HAFS_PLUGIN_DIR/scripts/watch_windows_connections.sh" "$interval"
+}
+
 hafs-logs() {
   local context="$(_hafs_context)"
   tail -n 100 "$context/logs/"*.log 2>/dev/null
@@ -442,6 +465,8 @@ Windows:
   win-procs, win-gpu-status, win-hw, win-mode, win-services, win-services-fix
   win-update-harden, win-update-restore, win-power, win-pause, win-resume, win-watch
   win-watch-install, win-watch-remove, win-watch-status, win-fan, win-fan-status
+  win-telemetry, win-telemetry-install, win-telemetry-remove, win-telemetry-status
+  win-watch-conn
 Mounts/Logs:
   hafs-check-mounts, hafs-logs
 LSP:

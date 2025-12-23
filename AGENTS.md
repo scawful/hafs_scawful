@@ -26,6 +26,9 @@ This repo contains user-specific training workflows, domain generators, and Wind
 - `win-fan <profile>` (curve-quiet/balanced/performance/gaming/training/overnight/away)
 - `win-watch-install <process_names>` (auto pause + GPU limit)
 - `win-pause` / `win-resume`
+- `win-telemetry-install [interval]` (background GPU/CPU logger)
+- `win-telemetry-status` / `win-telemetry-remove`
+- `win-watch-conn [interval]` (Mac watchdog for mounts + SSH)
 
 ## Primary Docs
 - Host summary: `docs/MEDICAL_MECHANICA_SETUP_SUMMARY.md`
