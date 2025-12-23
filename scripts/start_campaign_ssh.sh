@@ -12,38 +12,36 @@ REMOTE_USER="${HAFS_WINDOWS_USER:-starw}"
 REMOTE_CODE_DIR="${HAFS_WINDOWS_CODE_DIR:-C:/hafs}"
 WINDOWS_PLUGIN_DIR="${HAFS_WINDOWS_PLUGIN_DIR:-C:/hafs_scawful}"
 TRAINING_ROOT="${HAFS_WINDOWS_TRAINING:-D:/hafs_training}"
+PYTHON_EXE="${HAFS_WINDOWS_PYTHON:-${REMOTE_CODE_DIR}/.venv/Scripts/python.exe}"
 
 TARGET="${1:-34500}"
 RESUME="${RESUME:-true}"
 EXPORT="${EXPORT:-true}"
 PILOT="${PILOT:-false}"
 
-TS="$(date +%Y%m%d_%H%M%S)"
-LOG_FILE="${TRAINING_ROOT}/logs/campaign_${TARGET}_${TS}.log"
-ERR_FILE="${TRAINING_ROOT}/logs/campaign_${TARGET}_${TS}.err.log"
-
-ARG_LIST="'-m','hafs_scawful.scripts.training.generate_campaign','--target','${TARGET}'"
 if [ "$RESUME" = "true" ]; then
-  ARG_LIST="${ARG_LIST},'--resume'"
+  RESUME_FLAG="\$true"
+else
+  RESUME_FLAG="\$false"
 fi
+
 if [ "$EXPORT" = "true" ]; then
-  ARG_LIST="${ARG_LIST},'--export'"
+  EXPORT_FLAG="\$true"
+else
+  EXPORT_FLAG="\$false"
 fi
+
 if [ "$PILOT" = "true" ]; then
-  ARG_LIST="${ARG_LIST},'--pilot'"
+  PILOT_FLAG="\$true"
+else
+  PILOT_FLAG="\$false"
 fi
 
 PS_SCRIPT=$(cat <<PS
-\$env:HAFS_SCAWFUL_ROOT='${WINDOWS_PLUGIN_DIR}';
-\$env:PYTHONPATH='${REMOTE_CODE_DIR}/src;${WINDOWS_PLUGIN_DIR}/..';
-\$env:TRAINING_OUTPUT_DIR='${TRAINING_ROOT}/datasets';
-\$env:TRAINING_CHECKPOINT_DIR='${TRAINING_ROOT}/checkpoints';
-\$env:TRAINING_LOG_DIR='${TRAINING_ROOT}/logs';
-Start-Process -FilePath '${REMOTE_CODE_DIR}/.venv/Scripts/python.exe' -ArgumentList ${ARG_LIST} -RedirectStandardOutput '${LOG_FILE}' -RedirectStandardError '${ERR_FILE}' -WorkingDirectory '${REMOTE_CODE_DIR}' -NoNewWindow;
-Write-Output 'LOG:${LOG_FILE}'
-Write-Output 'ERR:${ERR_FILE}'
+& '${WINDOWS_PLUGIN_DIR}/scripts/windows/start_campaign.ps1' -Target '${TARGET}' -Resume:${RESUME_FLAG} -Export:${EXPORT_FLAG} -Pilot:${PILOT_FLAG} -TrainingRoot '${TRAINING_ROOT}' -CodeRoot '${REMOTE_CODE_DIR}' -PluginRoot '${WINDOWS_PLUGIN_DIR}' -PythonExe '${PYTHON_EXE}'
 PS
 )
 PS_SCRIPT="${PS_SCRIPT//$'\n'/; }"
+PS_B64=$(printf "%s" "$PS_SCRIPT" | iconv -t UTF-16LE | base64 | tr -d '\n')
 
-ssh "${REMOTE_USER}@${REMOTE_HOST}" "powershell -NoProfile -Command \"${PS_SCRIPT}\""
+ssh "${REMOTE_USER}@${REMOTE_HOST}" "powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand ${PS_B64}"

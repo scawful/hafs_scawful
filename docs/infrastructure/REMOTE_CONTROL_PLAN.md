@@ -56,13 +56,23 @@
 - Alternative: `LibreHardwareMonitor` + custom script
 
 ## Proposed Scripts (Plugin)
+Implemented:
+- `scripts/windows/start_training.ps1` (launch training with logs + pid file)
+- `scripts/windows/start_campaign.ps1` (launch generation campaign with logs + pid file)
+- `scripts/windows/pause_training.ps1` (create pause flag)
+- `scripts/windows/resume_training.ps1` (remove pause flag)
+- `scripts/windows/watch_game_mode.ps1` (auto pause/priority while games run)
+
+Pending:
 - `scripts/windows/set_power_profile.ps1`
   - Inputs: `--mode training|gaming`
 - `scripts/windows/set_gpu_limit.ps1`
   - Inputs: `--power 150`, `--clock 1200`
-- `scripts/windows/pause_training.ps1`
-  - Uses `pssuspend` or flag file
-- `scripts/windows/resume_training.ps1`
+
+Usage (examples):
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/start_training.ps1 -DatasetPath D:/hafs_training/datasets/euclid_asm_v1 -ModelName euclid-asm-qwen25-coder-1.5b-20251222`
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/pause_training.ps1`
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_game_mode.ps1 -ProcessNames GameProcessName -Mode both`
 
 ## Safety Notes
 - Do not force fan curves below safe thresholds.

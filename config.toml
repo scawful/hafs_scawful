@@ -12,6 +12,7 @@ HAFS_WINDOWS_CONTEXT = "D:/.context"
 HAFS_WINDOWS_CODE_DIR = "C:/hafs"
 HAFS_WINDOWS_TRAINING = "D:/hafs_training"
 HAFS_WINDOWS_PLUGIN_DIR = "C:/hafs_scawful"
+HAFS_WINDOWS_PYTHON = "D:/pytorch_env/Scripts/python.exe"
 HAFS_CODE_SYNC_METHOD = "git"
 
 HAFS_MOUNT_MMC = "/Users/scawful/Mounts/mm-c"

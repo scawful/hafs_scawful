@@ -12,6 +12,7 @@ REMOTE_USER="${HAFS_WINDOWS_USER:-starw}"
 REMOTE_CODE_DIR="${HAFS_WINDOWS_CODE_DIR:-C:/hafs}"
 WINDOWS_PLUGIN_DIR="${HAFS_WINDOWS_PLUGIN_DIR:-C:/hafs_scawful}"
 TRAINING_ROOT="${HAFS_WINDOWS_TRAINING:-D:/hafs_training}"
+PYTHON_EXE="${HAFS_WINDOWS_PYTHON:-${REMOTE_CODE_DIR}/.venv/Scripts/python.exe}"
 
 DATASET_PATH="${1:-}"
 MODEL_NAME="${2:-}"
@@ -22,21 +23,11 @@ if [ -z "$DATASET_PATH" ] || [ -z "$MODEL_NAME" ]; then
   exit 1
 fi
 
-TS="$(date +%Y%m%d_%H%M%S)"
-LOG_FILE="${TRAINING_ROOT}/logs/training_${MODEL_NAME}_${TS}.log"
-ERR_FILE="${TRAINING_ROOT}/logs/training_${MODEL_NAME}_${TS}.err.log"
-
 PS_SCRIPT=$(cat <<PS
-\$env:HAFS_SCAWFUL_ROOT='${WINDOWS_PLUGIN_DIR}';
-\$env:PYTHONPATH='${REMOTE_CODE_DIR}/src;${WINDOWS_PLUGIN_DIR}/..';
-\$env:HAFS_DATASET_PATH='${DATASET_PATH}';
-\$env:HAFS_MODEL_NAME='${MODEL_NAME}';
-\$env:HAFS_MODEL_OUTPUT_DIR='${TRAINING_ROOT}/models/${MODEL_NAME}';
-Start-Process -FilePath '${REMOTE_CODE_DIR}/.venv/Scripts/python.exe' -ArgumentList '-m','hafs_scawful.scripts.train_model_windows','${DATASET_PATH}' -RedirectStandardOutput '${LOG_FILE}' -RedirectStandardError '${ERR_FILE}' -WorkingDirectory '${REMOTE_CODE_DIR}' -NoNewWindow;
-Write-Output 'LOG:${LOG_FILE}'
-Write-Output 'ERR:${ERR_FILE}'
+& '${WINDOWS_PLUGIN_DIR}/scripts/windows/start_training.ps1' -DatasetPath '${DATASET_PATH}' -ModelName '${MODEL_NAME}' -TrainingRoot '${TRAINING_ROOT}' -CodeRoot '${REMOTE_CODE_DIR}' -PluginRoot '${WINDOWS_PLUGIN_DIR}' -PythonExe '${PYTHON_EXE}'
 PS
 )
 PS_SCRIPT="${PS_SCRIPT//$'\n'/; }"
+PS_B64=$(printf "%s" "$PS_SCRIPT" | iconv -t UTF-16LE | base64 | tr -d '\n')
 
-ssh "${REMOTE_USER}@${REMOTE_HOST}" "powershell -NoProfile -Command \"${PS_SCRIPT}\""
+ssh "${REMOTE_USER}@${REMOTE_HOST}" "powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand ${PS_B64}"

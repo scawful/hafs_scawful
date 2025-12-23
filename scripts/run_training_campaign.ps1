@@ -97,7 +97,7 @@ $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 $logFile = Join-Path $DrivePaths.Logs "campaign_${Target}_${timestamp}.log"
 $errFile = Join-Path $DrivePaths.Logs "campaign_${Target}_${timestamp}.err.log"
 
-$pythonExe = "$HafsRoot\.venv\Scripts\python.exe"
+$pythonExe = if ($env:HAFS_WINDOWS_PYTHON) { $env:HAFS_WINDOWS_PYTHON } else { "$HafsRoot\.venv\Scripts\python.exe" }
 $arguments = "-m hafs_scawful.scripts.training.generate_campaign --target $Target"
 
 if ($Resume) { $arguments += " --resume" }

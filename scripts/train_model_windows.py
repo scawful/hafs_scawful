@@ -7,6 +7,7 @@ Usage: python train_model_windows.py <dataset_name> <base_model> <quality_tag>
 import os
 import sys
 import json
+import time
 from pathlib import Path
 from datetime import datetime
 
@@ -68,7 +69,7 @@ if stats_file.exists():
 print("[1/6] Loading libraries...")
 try:
     from unsloth import FastLanguageModel
-    from transformers import TrainingArguments
+    from transformers import TrainingArguments, TrainerCallback
     from trl import SFTTrainer
     from datasets import load_dataset
     print("✓ Imports successful")
@@ -151,6 +152,43 @@ def format_sample(example):
 
 dataset = dataset.map(format_sample)
 
+# Pause control
+CONTROL_DIR = Path(os.environ.get("HAFS_TRAINING_CONTROL_DIR", "D:/hafs_training/control"))
+CONTROL_DIR.mkdir(parents=True, exist_ok=True)
+PAUSE_FLAG = CONTROL_DIR / "pause.flag"
+
+class PauseTrainingCallback(TrainerCallback):
+    def __init__(self, pause_flag: Path, poll_seconds: int = 10):
+        self.pause_flag = pause_flag
+        self.poll_seconds = poll_seconds
+        self.trainer = None
+        self._paused = False
+
+    def bind(self, trainer) -> None:
+        self.trainer = trainer
+
+    def on_step_end(self, args, state, control, **kwargs):
+        if not self.pause_flag.exists():
+            if self._paused:
+                print("Pause flag cleared. Resuming training.", flush=True)
+            self._paused = False
+            return
+
+        if not self._paused:
+            print("Pause flag detected. Saving checkpoint and pausing.", flush=True)
+            if self.trainer is not None:
+                self.trainer.save_state()
+                self.trainer.save_model()
+            self._paused = True
+
+        while self.pause_flag.exists():
+            time.sleep(self.poll_seconds)
+
+        print("Pause flag cleared. Resuming training.", flush=True)
+        self._paused = False
+
+pause_callback = PauseTrainingCallback(PAUSE_FLAG)
+
 # Training configuration
 print("[5/6] Training model...")
 print(f"  Max steps: 500")
@@ -165,6 +203,7 @@ trainer = SFTTrainer(
     train_dataset=dataset,
     dataset_text_field="text",
     max_seq_length=2048,
+    callbacks=[pause_callback],
     args=TrainingArguments(
         output_dir=str(OUTPUT_DIR),
         per_device_train_batch_size=2,
@@ -181,6 +220,7 @@ trainer = SFTTrainer(
         report_to="none",  # Disable wandb
     ),
 )
+pause_callback.bind(trainer)
 
 # Resume support (set HAFS_RESUME_FROM=latest or a checkpoint path)
 def _resolve_resume_checkpoint(output_dir: Path) -> str | None:
