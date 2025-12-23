@@ -63,17 +63,17 @@ Implemented:
 - `scripts/windows/resume_training.ps1` (remove pause flag)
 - `scripts/windows/watch_game_mode.ps1` (auto pause/priority while games run)
 - `scripts/windows/set_gpu_limit.ps1` (apply/reset GPU power/clock limits)
-
-Pending:
-- `scripts/windows/set_power_profile.ps1`
-  - Inputs: `--mode training|gaming`
-- `scripts/windows/set_gpu_limit.ps1`
-  - Inputs: `--power 150`, `--clock 1200`
+- `scripts/windows/set_power_profile.ps1` (switch power plans)
+- `scripts/windows/system_status.ps1` (system, GPU, training, top processes)
+- `scripts/windows/process_list.ps1` (filter processes by name/path/title)
+- `scripts/windows/nvidia_status.ps1` (GPU telemetry snapshot/loop)
 
 Usage (examples):
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/start_training.ps1 -DatasetPath D:/hafs_training/datasets/euclid_asm_v1 -ModelName euclid-asm-qwen25-coder-1.5b-20251222`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/pause_training.ps1`
 - `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/watch_game_mode.ps1 -ProcessNames GameProcessName -Mode both -ApplyGpuLimits -GpuPower 150`
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/system_status.ps1`
+- `powershell -ExecutionPolicy Bypass -File C:/hafs_scawful/scripts/windows/set_power_profile.ps1 -Mode gaming`
 - Set default game processes via `HAFS_GAME_PROCESS_NAMES` (comma or semicolon separated).
 
 ## Safety Notes
@@ -84,4 +84,4 @@ Usage (examples):
 ## Next Actions
 1. Decide between `pssuspend` vs flag-file pause.
 2. Choose fan tool (`FanControl` vs `LibreHardwareMonitor`).
-3. Implement the PowerShell scripts in `scripts/windows/`.
+3. Define FanControl profiles and wire profile switching into the game watcher.

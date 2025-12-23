@@ -232,6 +232,15 @@ scripts/wsl_ssh.sh "uname -a"
 scripts/wsl_ssh.sh "htop"
 ```
 
+### PowerShell Helpers (Encoded)
+
+Use the encoded wrapper to avoid PowerShell quoting issues:
+
+```bash
+scripts/win_ps.sh "Get-Process | Select-Object -First 5 Id,ProcessName"
+scripts/win_ps.sh "& 'C:/hafs_scawful/scripts/windows/system_status.ps1'"
+```
+
 ### Copy Files
 
 ```bash
