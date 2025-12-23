@@ -14,6 +14,10 @@ host-specific docs/configs to halext-server and the Windows GPU host.
 - Local paths and mount points
 - Private docs and operational checklists
 
+## Roadmaps
+
+- [Model Training Roadmap](model_training_roadmap.md) - High-level AI strategy and plans
+
 ## Suggested Layout
 
 ```

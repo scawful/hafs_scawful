@@ -219,6 +219,19 @@ ls ~/Mounts/mm-c/hafs
 ls ~/Mounts/mm-d/hafs_training
 ```
 
+### WSL Access (Unix Shell)
+
+Use the wrapper to run Linux commands inside WSL over SSH:
+
+```bash
+# Interactive shell
+scripts/wsl_ssh.sh
+
+# One-off command
+scripts/wsl_ssh.sh "uname -a"
+scripts/wsl_ssh.sh "htop"
+```
+
 ### Copy Files
 
 ```bash
