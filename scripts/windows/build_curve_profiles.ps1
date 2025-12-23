@@ -36,6 +36,14 @@ $profiles = @{
         CPU = @{ Idle = 35; Min = 45; Max = 90; Load = 70; Step = 2; Deadband = 2; Response = 1 }
         GPU = @{ Idle = 30; Min = 55; Max = 100; Load = 62; Step = 1; Deadband = 1; Response = 1 }
     }
+    "curve-overnight" = @{
+        CPU = @{ Idle = 35; Min = 30; Max = 70; Load = 78; Step = 4; Deadband = 5; Response = 4 }
+        GPU = @{ Idle = 35; Min = 30; Max = 75; Load = 78; Step = 4; Deadband = 5; Response = 4 }
+    }
+    "curve-away" = @{
+        CPU = @{ Idle = 35; Min = 30; Max = 65; Load = 80; Step = 5; Deadband = 6; Response = 5 }
+        GPU = @{ Idle = 35; Min = 30; Max = 70; Load = 80; Step = 5; Deadband = 6; Response = 5 }
+    }
 }
 
 $base = Get-Content -Raw $BasePath | ConvertFrom-Json
